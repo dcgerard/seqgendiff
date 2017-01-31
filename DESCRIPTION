@@ -1,0 +1,13 @@
+Package: seqgendiff
+Type: Package
+Title: Sequence Generation for Differential Expression Analysis
+Version: 0.1.0
+Authors@R: person("David", "Gerard", email = "dcgerard@uchicago.edu", role = c("aut", "cre"))
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL (>=3)
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/dcgerard/seqgendiff
+BugReports: http://github.com/dcgerard/seqgendiff/issues
+RoxygenNote: 5.0.1
