@@ -112,6 +112,9 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
   if (nsignal > 0) {
     signal_params$n <- nsignal
     signal_vec      <- do.call(what = signal_fun, args = signal_params) ## log2-fold change
+
+    assertthat::are_equal(length(signal_vec), nsignal)
+
     which_signal    <- sample(1:ncol(submat), nsignal) # location of signal
     sign_vec        <- sign(signal_vec) # sign of signal
     bin_probs       <- 2 ^ -abs(signal_vec) # binomial prob
@@ -130,6 +133,7 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     beta[which_signal] <- signal_vec
   } else if (nsignal == 0 & abs(prop_null - 1) > 10 ^ -6) {
     warning('no genes were given signal since (1 - prop_null) * ngene was very close to zero')
+    beta <- rep(0, ngene)
   } else {
     beta <- rep(0, ngene)
   }
