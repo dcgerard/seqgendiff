@@ -51,7 +51,16 @@ A list with the following elements:
 }
 }
 \description{
-Apply Poisson thinning to a matrix of count data.
+Given a matrix of RNA-seq counts, this function will randomly select two groups of
+samples and add signal to a known proportion of the genes. This signal
+is the log (base 2) effect size of the group indicator in a linear model.
+The user may specify the distribution of the effects.
+}
+\details{
+The Poisson thinning approach first randomly assigns samples to be in one of two groups. Then,
+given this assignment, will Binomially sample counts with a sample size of the gene expression
+counts and a probability that is a function of the effect size. For details, see
+Gerard and Stephens (2017).
 }
 \author{
 David Gerard
