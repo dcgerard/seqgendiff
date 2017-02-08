@@ -15,18 +15,33 @@ test_that("poisthin input works", {
   gvec[sample(1:ncol(mat), size = ngene)] <- TRUE
   prop_null <- 0.9
 
-  pout <- poisthin(mat = mat, nsamp = nsamp, ngene = ngene,
-                   gselect = "max",
-                   gvec = NULL,
-                   skip_gene = 0,
-                   signal_fun = stats::rnorm,
-                   signal_params = list(mean = 0, sd = 1),
-                   prop_null = 0.5)
+  args <- list(mat = mat, nsamp = nsamp, ngene = ngene,
+               gselect = "max",
+               gvec = NULL,
+               skip_gene = 1,
+               signal_fun = stats::rnorm,
+               signal_params = list(mean = 0, sd = 1),
+               prop_null = 0.5)
+
+  pout <- do.call(what = poisthin, args = args)
   expect_equal(mean(pout$beta == 0), 0.5)
+  expect_equal(ngene, ncol(pout$Y))
+  expect_equal(nsamp, nrow(pout$Y))
+
+  args$gselect <- "rand_max"
+  pout <- do.call(what = poisthin, args = args)
+  expect_equal(ngene, ncol(pout$Y))
+  expect_equal(nsamp, nrow(pout$Y))
+
+  args$gselect <- "random"
+  pout <- do.call(what = poisthin, args = args)
+  expect_equal(ngene, ncol(pout$Y))
+  expect_equal(nsamp, nrow(pout$Y))
+
 }
 )
 
-test_that("pois thin returns about the correct effect sizes", {
+test_that("poisthin returns about the correct effect sizes", {
   set.seed(15)
   mat <- matrix(stats::rpois(n = 10000, lambda = 1000), ncol = 1)
   true_esize <- 0.5
@@ -43,3 +58,34 @@ test_that("pois thin returns about the correct effect sizes", {
   expect_equal(esize, true_esize, tolerance = 0.002)
 }
 )
+
+
+
+test_that("poisthin input works with many zeros", {
+  ## Generate example data ---------------------------------------------------
+  n <- 100
+  p <- 1000
+  nsamp <- 10
+  ngene <- 100
+  mat <- matrix(stats::rpois(n = n * p, lambda = 1), nrow = n)
+  skip_gene <- 0
+  signal_fun <- stats::rnorm
+  signal_params <- list(mean = 0, sd = 1)
+  gselect <- "max"
+  gvec <- rep(FALSE, length = ncol(mat))
+  gvec[sample(1:ncol(mat), size = ngene)] <- TRUE
+  prop_null <- 0.9
+
+  args <- list(mat = mat, nsamp = nsamp, ngene = ngene,
+               gselect = "max",
+               gvec = NULL,
+               skip_gene = 1,
+               signal_fun = stats::rnorm,
+               signal_params = list(mean = 0, sd = 1),
+               prop_null = 1)
+
+  pout <- do.call(what = poisthin, args = args)
+
+}
+)
+

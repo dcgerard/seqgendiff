@@ -1,6 +1,8 @@
 
 #' Apply Poisson thinning to a matrix of count data.
 #'
+#'
+#'
 #' @param mat A matrix of count data. The rows index the individuals and
 #'     the columns index the genes.
 #' @param nsamp The number of samples to select from \code{mat}.
@@ -20,9 +22,17 @@
 #'     a vector of samples.
 #' @param signal_params A list of additional arguments to pass to \code{signal_fun}.
 #' @param skip_gene The number of maximally expressed genes to skip.
+#'     Not used if \code{gselect = "custom"}.
 #' @param prop_null The proportion of genes that are null.
 #'
 #' @return A list with the following elements:
+#' \itemize{
+#'  \item{\code{Y}: }{A matrix of altered counts with \code{nsamp} rows
+#'        and \code{ngene} columns.}
+#'  \item{\code{X}: }{A design matrix. The first column contains a vector ones (for an
+#'        intercept term) and the second column contains an indicator for group membership.}
+#'  \item{\code{beta}: }{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
+#' }
 #'
 #' @author David Gerard
 #'
@@ -60,22 +70,27 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
   }
 
   ## subset matrix -----------------------------------------------------------
-  if (gselect == "max" | gselect == "rand_max") {
-    med_express <- apply(mat, 2, stats::median)
-    mean_express <- colMeans(mat)
-    order_vec <- order(med_express, mean_express)
-  }
+  med_express <- apply(mat, 2, stats::median)
+  mean_express <- colMeans(mat)
+  order_vec <- order(med_express, mean_express, decreasing = TRUE)
 
   if (gselect == "max") {
-    gindices <- order_vec[1:ngene]
+    gindices <- order_vec[(skip_gene + 1):(skip_gene + ngene)]
   } else if (gselect == "rand_max") {
     first_zero <- match(0, med_express)
-    max_gene <- min(c(first_zero, 2 * ngene, ncol(mat)), na.rm = TRUE)
-    gindices <- sample(x = order_vec[1:max_gene], size = ngene)
+    max_gene <- min(c(first_zero, 2 * ngene + skip_gene, ncol(mat)), na.rm = TRUE)
+    if (max_gene < ngene + skip_gene) {
+      warning("including some low-expressed genes in the sample.")
+      max_gene <- ngene + skip_gene
+    }
+    gindices <- sample(x = order_vec[(skip_gene + 1):max_gene], size = ngene)
   } else if (gselect == "random") {
-    gindices <- sample(x = sample(1:ncol(mat)), size = ngene)
+    gindices <- sample(x = sample(order_vec[-(1:(skip_gene + 1))]), size = ngene)
   } else if (gselect == "custom") {
     gindices <- (1:ncol(mat))[gvec]
+    if (skip_gene > 0) {
+      warning('ignoring skip_gene because gselect = "custom"')
+    }
   }
 
   samp_indices <- sample(1:nrow(mat), size = nsamp)
@@ -105,7 +120,7 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     }
     beta <- rep(0, ngene)
     beta[which_signal] <- signal_vec
-  } else if (nsignal == 0 & abs(prop_null - 1) < 10 ^ -6) {
+  } else if (nsignal == 0 & abs(prop_null - 1) > 10 ^ -6) {
     warning('no genes were given signal since (1 - prop_null) * ngene was very close to zero')
   } else {
     beta <- rep(0, ngene)

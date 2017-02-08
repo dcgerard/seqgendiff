@@ -29,7 +29,8 @@ by mean expression.}
 indicates inclusion into the smaller dataset. Hence, \code{sum(gvec)} should
 equal \code{ngene}.}
 
-\item{skip_gene}{The number of maximally expressed genes to skip.}
+\item{skip_gene}{The number of maximally expressed genes to skip.
+Not used if \code{gselect = "custom"}.}
 
 \item{signal_fun}{A function that returns the signal. This should take as
 input \code{n} for the number of samples to return and then return only
@@ -41,6 +42,13 @@ a vector of samples.}
 }
 \value{
 A list with the following elements:
+\itemize{
+ \item{\code{Y}: }{A matrix of altered counts with \code{nsamp} rows
+       and \code{ngene} columns.}
+ \item{\code{X}: }{A design matrix. The first column contains a vector ones (for an
+       intercept term) and the second column contains an indicator for group membership.}
+ \item{\code{beta}: }{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
+}
 }
 \description{
 Apply Poisson thinning to a matrix of count data.
