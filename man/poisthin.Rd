@@ -5,7 +5,7 @@
 \title{Apply Poisson thinning to a matrix of count data.}
 \usage{
 poisthin(mat, nsamp = nrow(mat), ngene = ncol(mat), gselect = c("max",
-  "random", "rand_max", "custom"), gvec = NULL, skip_gene = 0,
+  "random", "rand_max", "custom", "mean_max"), gvec = NULL, skip_gene = 0,
   signal_fun = stats::rnorm, signal_params = list(mean = 0, sd = 1),
   prop_null = 1)
 }
@@ -18,9 +18,10 @@ the columns index the genes.}
 \item{ngene}{The number of genes to select from \code{mat}.}
 
 \item{gselect}{How should we select the subset of genes? Should we choose
-the \code{ngene} most expressed genes (\code{"max"}), a random sample
+the \code{ngene} most median expressed genes (\code{"max"}), a random sample
 of the genes (\code{"random"}), a random sample of the most expressed
-genes (\code{"rand_max"}), or a user-provided list (\code{"custom"})?
+genes (\code{"rand_max"}), a user-provided list (\code{"custom"}), or by maximum
+mean expression level (\code{"mean_max"})?
 If \code{"custom"}, then \code{gvec} should be specified. Expression levels
 of a gene are measured by median expression across individuals with ties broken
 by mean expression.}

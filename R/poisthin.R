@@ -124,13 +124,13 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     bin_probs       <- 2 ^ -abs(signal_vec) # binomial prob
 
     submat[group_indicator, which_signal[sign_vec > 0]] <-
-      matrix(rbinom(n = sum(sign_vec > 0) * nsamp / 2,
+      matrix(stats::rbinom(n = sum(sign_vec > 0) * nsamp / 2,
                     size = c(submat[group_indicator, which_signal[sign_vec > 0]]),
                     prob = rep(bin_probs[sign_vec > 0], each = nsamp / 2)),
              nrow = nsamp / 2)
 
     submat[!group_indicator, which_signal[sign_vec < 0]] <-
-      matrix(rbinom(n = sum(sign_vec < 0) * nsamp / 2,
+      matrix(stats::rbinom(n = sum(sign_vec < 0) * nsamp / 2,
                     size = c(submat[!group_indicator, which_signal[sign_vec < 0]]),
                     prob = rep(bin_probs[sign_vec < 0], each = nsamp / 2)),
              nrow = nsamp / 2)
