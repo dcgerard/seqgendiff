@@ -44,7 +44,7 @@ test_that("poisthin input works", {
 test_that("poisthin returns about the correct effect sizes", {
   set.seed(15)
   mat <- matrix(stats::rpois(n = 10000, lambda = 1000), ncol = 1)
-  true_esize <- 0.5
+  true_esize <- 2
   signal_fun <- function(n, true_esize) { rep(true_esize, n) }
   pout <- poisthin(mat = mat, nsamp = nrow(mat), ngene = 1,
                    signal_fun = signal_fun,

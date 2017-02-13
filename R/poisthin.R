@@ -16,9 +16,10 @@
 #' @param nsamp The number of samples to select from \code{mat}.
 #' @param ngene The number of genes to select from \code{mat}.
 #' @param gselect How should we select the subset of genes? Should we choose
-#'     the \code{ngene} most expressed genes (\code{"max"}), a random sample
+#'     the \code{ngene} most median expressed genes (\code{"max"}), a random sample
 #'     of the genes (\code{"random"}), a random sample of the most expressed
-#'     genes (\code{"rand_max"}), or a user-provided list (\code{"custom"})?
+#'     genes (\code{"rand_max"}), a user-provided list (\code{"custom"}), or by maximum
+#'     mean expression level (\code{"mean_max"})?
 #'     If \code{"custom"}, then \code{gvec} should be specified. Expression levels
 #'     of a gene are measured by median expression across individuals with ties broken
 #'     by mean expression.
@@ -46,7 +47,7 @@
 #'
 #' @export
 poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
-                     gselect = c("max", "random", "rand_max", "custom"),
+                     gselect = c("max", "random", "rand_max", "custom", "mean_max"),
                      gvec = NULL,
                      skip_gene = 0,
                      signal_fun = stats::rnorm,
@@ -54,10 +55,6 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
                      prop_null = 1) {
 
   ## Check Input -------------------------------------------------------------
-  nsamp     <- as.integer(nsamp)
-  ngene     <- as.integer(ngene)
-  skip_gene <- as.integer(skip_gene)
-
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(nsamp <= nrow(mat))
   assertthat::assert_that(ngene + skip_gene <= ncol(mat))
@@ -99,13 +96,20 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     if (skip_gene > 0) {
       warning('ignoring skip_gene because gselect = "custom"')
     }
+  } else if (gselect == "mean_max") {
+    order_vec_means <- order(mean_express, decreasing = TRUE)
+    gindices <- order_vec_means[(skip_gene + 1):(skip_gene + ngene)]
   }
+
 
   samp_indices <- sample(1:nrow(mat), size = nsamp)
 
+  gindices <- sort(gindices)
+  samp_indices <- sort(samp_indices)
+
   submat <- mat[samp_indices, gindices, drop = FALSE]
-  group_indicator <- rep(0, length = nsamp)
-  group_indicator[sample(1:nsamp, size = floor(nsamp / 2))] <- 1
+  group_indicator <- rep(FALSE, length = nsamp)
+  group_indicator[sample(1:nsamp, size = floor(nsamp / 2))] <- TRUE
 
   ## Draw signal -------------------------------------------------------------
   nsignal <- round(ngene * (1 - prop_null))
@@ -115,20 +119,33 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
 
     assertthat::are_equal(length(signal_vec), nsignal)
 
-    which_signal    <- sample(1:ncol(submat), nsignal) # location of signal
+    which_signal    <- sort(sample(1:ncol(submat), nsignal)) # location of signal
     sign_vec        <- sign(signal_vec) # sign of signal
     bin_probs       <- 2 ^ -abs(signal_vec) # binomial prob
-    for (gn in 1:length(signal_vec)) {
-      if (sign_vec[gn] == 1) {
-        current_count <- submat[group_indicator == 1, which_signal[gn]]
-        submat[group_indicator == 1, which_signal[gn]] <-
-          sapply(current_count, FUN = stats::rbinom, n = 1, prob = bin_probs[gn])
-      } else if (sign_vec[gn] == -1) {
-        current_count <- submat[group_indicator == 0, which_signal[gn]]
-        submat[group_indicator == 0, which_signal[gn]] <-
-          sapply(current_count, FUN = stats::rbinom, n = 1, prob = bin_probs[gn])
-      }
-    }
+
+    submat[group_indicator, which_signal[sign_vec > 0]] <-
+      matrix(rbinom(n = sum(sign_vec > 0) * nsamp / 2,
+                    size = c(submat[group_indicator, which_signal[sign_vec > 0]]),
+                    prob = rep(bin_probs[sign_vec > 0], each = nsamp / 2)),
+             nrow = nsamp / 2)
+
+    submat[!group_indicator, which_signal[sign_vec < 0]] <-
+      matrix(rbinom(n = sum(sign_vec < 0) * nsamp / 2,
+                    size = c(submat[!group_indicator, which_signal[sign_vec < 0]]),
+                    prob = rep(bin_probs[sign_vec < 0], each = nsamp / 2)),
+             nrow = nsamp / 2)
+
+    # for (gn in 1:length(signal_vec)) {
+    #   if (sign_vec[gn] == 1) {
+    #     current_count <- submat[group_indicator, which_signal[gn]]
+    #     submat[group_indicator, which_signal[gn]] <-
+    #       sapply(current_count, FUN = stats::rbinom, n = 1, prob = bin_probs[gn])
+    #   } else if (sign_vec[gn] == -1) {
+    #     current_count <- submat[!group_indicator, which_signal[gn]]
+    #     submat[!group_indicator, which_signal[gn]] <-
+    #       sapply(current_count, FUN = stats::rbinom, n = 1, prob = bin_probs[gn])
+    #   }
+    # }
     beta <- rep(0, ngene)
     beta[which_signal] <- signal_vec
   } else if (nsignal == 0 & abs(prop_null - 1) > 10 ^ -6) {
