@@ -147,7 +147,7 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     #   }
     # }
     beta <- rep(0, ngene)
-    beta[which_signal] <- signal_vec
+    beta[which_signal] <- -1 * signal_vec ## -1 because of way design matrix is created
   } else if (nsignal == 0 & abs(prop_null - 1) > 10 ^ -6) {
     warning('no genes were given signal since (1 - prop_null) * ngene was very close to zero')
     beta <- rep(0, ngene)

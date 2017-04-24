@@ -9,7 +9,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/dcgerard/seqgendiff
 BugReports: http://github.com/dcgerard/seqgendiff/issues
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: covr,
     testthat
 Imports: assertthat

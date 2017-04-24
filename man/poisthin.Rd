@@ -66,4 +66,3 @@ Gerard and Stephens (2017).
 \author{
 David Gerard
 }
-
