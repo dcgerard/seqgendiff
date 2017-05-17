@@ -33,6 +33,8 @@
 #' @param skip_gene The number of maximally expressed genes to skip.
 #'     Not used if \code{gselect = "custom"}.
 #' @param prop_null The proportion of genes that are null.
+#' @param alpha If \eqn{b} is an effect and \eqn{s} is an empirical standard deviation, then
+#'     we model \eqn{b/s^\alpha} as being exchangeable.
 #'
 #' @return A list with the following elements:
 #' \itemize{
@@ -52,7 +54,8 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
                      skip_gene = 0,
                      signal_fun = stats::rnorm,
                      signal_params = list(mean = 0, sd = 1),
-                     prop_null = 1) {
+                     prop_null = 1,
+                     alpha = 0) {
 
   ## Check Input -------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
@@ -119,9 +122,17 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
 
     assertthat::are_equal(length(signal_vec), nsignal)
 
-    which_signal    <- sort(sample(1:ncol(submat), nsignal)) # location of signal
-    sign_vec        <- sign(signal_vec) # sign of signal
-    bin_probs       <- 2 ^ -abs(signal_vec) # binomial prob
+    which_signal <- sort(sample(1:ncol(submat), nsignal)) # location of signal
+
+    ## Deal with alpha here ----------------------------
+    if (abs(alpha) > 10 ^ -6) {
+      sd_vec <- apply(log2(submat[, which_signal, drop = FALSE] + 1), 2, stats::sd)
+      assertthat::are_equal(length(sd_vec), length(signal_vec))
+      signal_vec <- signal_vec * sd_vec
+    }
+
+    sign_vec  <- sign(signal_vec) # sign of signal
+    bin_probs <- 2 ^ -abs(signal_vec) # binomial prob
 
     submat[group_indicator, which_signal[sign_vec > 0]] <-
       matrix(stats::rbinom(n = sum(sign_vec > 0) * nsamp / 2,

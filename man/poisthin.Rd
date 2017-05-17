@@ -7,7 +7,7 @@
 poisthin(mat, nsamp = nrow(mat), ngene = ncol(mat), gselect = c("max",
   "random", "rand_max", "custom", "mean_max"), gvec = NULL, skip_gene = 0,
   signal_fun = stats::rnorm, signal_params = list(mean = 0, sd = 1),
-  prop_null = 1)
+  prop_null = 1, alpha = 0)
 }
 \arguments{
 \item{mat}{A matrix of count data. The rows index the individuals and
@@ -40,6 +40,9 @@ a vector of samples.}
 \item{signal_params}{A list of additional arguments to pass to \code{signal_fun}.}
 
 \item{prop_null}{The proportion of genes that are null.}
+
+\item{alpha}{If \eqn{b} is an effect and \eqn{s} is an empirical standard deviation, then
+we model \eqn{b/s^\alpha} as being exchangeable.}
 }
 \value{
 A list with the following elements:
