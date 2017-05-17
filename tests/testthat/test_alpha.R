@@ -10,7 +10,7 @@ test_that("alpha = 1 is approximately correct", {
                    signal_params = list(true_esize = true_esize),
                    prop_null = 0, alpha = 1)
 
-  sdhat <- apply(log2(mat + 1), 2, sd)
+  sdhat <- apply(log2(mat + 1), 2, sd) / sqrt(nrow(mat))
 
   ly <- log2(pout$Y + 1)
   esize <- mean(ly[pout$X[, 2] == 0], na.rm = TRUE) - mean(ly[pout$X[, 2] == 1], na.rm = TRUE)
@@ -28,7 +28,7 @@ test_that("alpha = 0.5 is approximately correct", {
                    signal_params = list(true_esize = true_esize),
                    prop_null = 0, alpha = 0.5)
 
-  sdhat <- apply(log2(mat + 1), 2, sd)
+  sdhat <- apply(log2(mat + 1), 2, sd) / sqrt(nrow(mat)) ## sd of the mean
 
   ly <- log2(pout$Y + 1)
   esize <- mean(ly[pout$X[, 2] == 0], na.rm = TRUE) - mean(ly[pout$X[, 2] == 1], na.rm = TRUE)

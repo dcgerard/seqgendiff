@@ -126,7 +126,7 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
 
     ## Deal with alpha here ----------------------------
     if (abs(alpha) > 10 ^ -6) {
-      sd_vec <- apply(log2(submat[, which_signal, drop = FALSE] + 1), 2, stats::sd)
+      sd_vec <- apply(log2(submat[, which_signal, drop = FALSE] + 1), 2, stats::sd) / sqrt(nrow(submat))
       assertthat::are_equal(length(sd_vec), length(signal_vec))
       signal_vec <- signal_vec * (sd_vec ^ alpha)
     }
