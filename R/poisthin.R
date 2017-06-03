@@ -93,7 +93,7 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     }
     gindices <- sample(x = order_vec[(skip_gene + 1):max_gene], size = ngene)
   } else if (gselect == "random") {
-    gindices <- sample(x = sample(order_vec[-(1:(skip_gene + 1))]), size = ngene)
+    gindices <- sample(x = sample(order_vec[(skip_gene + 1):(skip_gene + ngene)]), size = ngene)
   } else if (gselect == "custom") {
     gindices <- (1:ncol(mat))[gvec]
     if (skip_gene > 0) {
