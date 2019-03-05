@@ -2,14 +2,16 @@ Package: seqgendiff
 Type: Package
 Title: Sequence Generation for Differential Expression Analysis
 Version: 0.1.0
-Authors@R: person("David", "Gerard", email = "dcgerard@uchicago.edu", role = c("aut", "cre"))
+Authors@R: person("David", "Gerard", email = "dgerard@american.edu", role = c("aut", "cre"))
 Description: Modifies/generates RNA-seq data for use in simulations.
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/dcgerard/seqgendiff
 BugReports: http://github.com/dcgerard/seqgendiff/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests: covr,
     testthat
-Imports: assertthat
+Imports: 
+    assertthat,
+    irlba

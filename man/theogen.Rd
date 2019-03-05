@@ -4,8 +4,8 @@
 \alias{theogen}
 \title{Simulate RNA seq data via a factor-augmented regression model on the log-counts.}
 \usage{
-theogen(nsamp, ngene, signal_fun = stats::rnorm, signal_params = list(mean =
-  0, sd = 1), prop_null = 1)
+theogen(nsamp, ngene, signal_fun = stats::rnorm,
+  signal_params = list(mean = 0, sd = 1), prop_null = 1)
 }
 \arguments{
 \item{nsamp}{The sample size.}

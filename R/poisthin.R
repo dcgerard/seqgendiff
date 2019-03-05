@@ -171,3 +171,223 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
 
   return(return_list)
 }
+
+
+
+
+
+#' Group assignment that is correlated with latent factors.
+#'
+#' We extract latent factors from the log of \code{mat} using an SVD, then
+#' generate an underlying group-assignment variable from a conditional
+#' normal distribution (conditional on the latent factors). This underlying
+#' group-assignment variable is used to assign groups.
+#'
+#' If \code{nfac} is provided, then \code{corvec} must be the same length as \code{nfac}.
+#' If \code{nfac} is not provided, then it is assumed that the first \code{nfac}
+#' elements of \code{corvec} are the underlying correlations, if \code{nfac} turns out to be
+#' smaller than the length of \code{corvec}. If \code{nfac} turns
+#' out to be larger than the length of \code{corvec}, then the factors without
+#' defined correlations are assumed to have correlation 0.
+#'
+#' @param mat A matrix of count data. The rows index the individuals and
+#'     the columns index the genes.
+#' @param nfac The number of latent factors. If \code{NULL}, then we will
+#'     use \code{\link{EigenDiff}} to choose the number of latent
+#'     factors.
+#' @param corvec The vector of correlations. \code{corvec[i]} is the correlation
+#'     between latent factor \code{i} and the underlying group-assignment variable.
+#'     You can think of the correlations in \code{corvec} as a kind of "tetrachoric
+#'     correlation." If \code{NULL}, then it assumes independence between
+#'     factors and group assignment.
+#' @param return What should we return? Just the group assignment
+#'     (\code{"group"}) or a list of a bunch of things (\code{"full"}).
+#'
+#' @return A list with some or all of the following elements:
+#'     \describe{
+#'       \item{\code{x}}{The vector of group assignments. \code{0L} indicates
+#'           membership to one group and \code{1L} indicates membership to
+#'           the other group.}
+#'       \item{\code{nfac}}{The number of assumed latent factors.}
+#'       \item{\code{facmat}}{A matrix, whose columns contain the latent factors.}
+#'       \item{\code{groupfac}}{The underlying group-assignment factor.}
+#'       \item{\code{corvec}}{The correlation vector.}
+#'     }
+#'     If \code{return = "group"}, then the list only contains \code{x}.
+#'
+#'
+#' @author David Gerard
+#'
+#' @export
+corassign <- function(mat,
+                      nfac   = NULL,
+                      corvec = NULL,
+                      return = c("group", "full")) {
+
+  ## Check input --------------------------------------------------------------
+  return <- match.arg(return)
+  assertthat::assert_that(is.matrix(mat))
+  assertthat::assert_that(all(!is.na(mat)))
+  assertthat::assert_that(all(mat >= 0))
+
+  if (!is.null(nfac)) {
+    stopifnot(is.numeric(nfac))
+    stopifnot(length(nfac) == 1)
+    stopifnot(nfac >= 0)
+  }
+
+  if (!is.null(corvec)) {
+    stopifnot(is.numeric(corvec))
+    stopifnot(crossprod(corvec) < 1)
+  }
+
+  n <- nrow(mat)
+  p <- ncol(mat)
+
+  ## Get residuals ------------------------------------------------------------
+  resmat <- stats::resid(stats::lm(log2(mat + 1) ~ 1))
+
+  ## Find number of latent factors if not provided ----------------------------
+  if (is.null(nfac)) {
+    nfac <- EigenDiff(resmat)
+
+    ## Pad or delete corvec where necessary.
+    if (is.null(corvec)) {
+      corvec <- rep_len(x = 0, length.out = nfac)
+    } else if (nfac < length(corvec)) {
+      corvec <- corvec[seq_len(nfac)]
+      message(paste0("Only using first ", nfac, " elements of corvec."))
+    } else if (nfac > length(corvec)) {
+      npad <- nfac - length(corvec)
+      corvec <- c(corvec, rep_len(0, npad))
+      message(paste0("Padding last ", npad, " (of ", nfac, " elements) of corvec with 0's."))
+    } else {
+      message(paste0("Using all ", length(corvec), " elements of corvec."))
+    }
+  } else {
+    if (is.null(corvec)) {
+      corvec <- rep_len(x = 0, length.out = nfac)
+    } else {
+      stopifnot(nfac == length(corvec))
+    }
+  }
+
+  ## Generate group assignment depending on if nfac == 0 and corvec == 0
+  if (nfac == 0) {
+    aslist <- uncorassign(n, return = "full")
+    x <- aslist$x
+    w <- aslist$groupfac
+    if (return == "full") {
+      facmat <- matrix(nrow = n, ncol = 0)
+    }
+  } else if (all(corvec == 0)) {
+    aslist <- uncorassign(n, return = "full")
+    x <- aslist$x
+    w <- aslist$groupfac
+    if (return == "full") { ## tiny optimization
+      facmat <- irlba::irlba(A = resmat, nv = 0, nu = nfac)$u * sqrt(n)
+    }
+  } else {
+    ## Get factors and normalize ----------------------------------------------
+    facmat <- irlba::irlba(A = resmat, nv = 0, nu = nfac)$u * sqrt(n)
+
+    ## Generate assignment factor ---------------------------------------------
+    w <- stats::rnorm(n    = n,
+                      mean = c(facmat %*% corvec),
+                      sd   = sqrt(1 - c(crossprod(corvec))))
+
+    ## Group assignment based on assignment factor and return -----------------
+    x <- ifelse(w > 0, 1L, 0L)
+  }
+
+  ## Return -------------------------------------------------------------------
+  return_list   <- list()
+  return_list$x <- x
+  if (return == "full") {
+    return_list$nfac     <- nfac
+    return_list$facmat   <- facmat
+    return_list$groupfac <- w
+    return_list$corvec   <- corvec
+  }
+  return(return_list)
+}
+
+
+#' Group assignment independent of anything.
+#'
+#' @param n The sample size.
+#' @param return Should we just return a list with just the
+#'     vector of assignment (\code{"group"})
+#'     or a list with the vector of assignments and the vector of latent
+#'     variables (\code{"full"})?
+#'
+#' @return A list with some or all of the following elements.
+#'     \describe{
+#'       \item{\code{x}}{The group assignment. \code{1L} for one group and
+#'            \code{0L} for the other group.}
+#'       \item{\code{w}}{The latent assignment vector (only returned if
+#'            \code{return = "full"}). Negative corresponds to one group
+#'            and positive corresponds to the other group.}
+#'     }
+#'
+#' @author David Gerard
+uncorassign <- function(n,
+                        return = c("group", "full")) {
+  assertthat::assert_that(n > 0)
+  return <- match.arg(return)
+  ret_vec   <- list()
+  if (return == "group") {
+    ret_vec$x <- sample(x       = c(0L, 1L),
+                        size    = n,
+                        replace = TRUE)
+  } else if (return == "full") {
+    ret_vec$groupfac <- stats::rnorm(n = n)
+    ret_vec$x <- ifelse(ret_vec$groupfac > 0, 1L, 0L)
+  }
+  return(ret_vec)
+}
+
+
+#' Copied code from `cate::EigenDiff` with minor changes.
+#'
+#' I fix an error where default `rmax` can sometimes be greater than dimension
+#' of `Y`. I also increase the performance by only calculating the
+#' singular values (not the singular vectors).
+#'
+#' @param Y A matrix to estimate the rank.
+#' @param rmax The maximum rank.
+#' @param niter The maximum number of iterations.
+#'
+#' @references Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
+#'     Factor Analysis and Confounder Adjusted Testing and Estimation.
+#'     R package version 1.0.4. https://CRAN.R-project.org/package=cate
+#'
+#' @author David Gerard
+EigenDiff <- function (Y,
+                       rmax = min(3 * sqrt(nrow(Y)), nrow(Y), ncol(Y)),
+                       niter = 10)
+{
+  n <- nrow(Y)
+  p <- ncol(Y)
+  ev <- svd(Y, nu = 0, nv = 0)$d^2/n
+  n <- length(ev)
+  j <- rmax + 1
+  diffs <- ev - c(ev[-1], 0)
+  for (i in 1:niter) {
+    y <- ev[j:(j + 4)]
+    x <- ((j - 1):(j + 3))^(2/3)
+    lm.coef <- stats::lm(y ~ x)
+    delta <- 2 * abs(lm.coef$coef[2])
+    idx <- which(diffs[1:rmax] > delta)
+    if (length(idx) == 0) {
+      hatr <- 0
+    } else {
+      hatr <- max(idx)
+    }
+    newj = hatr + 1
+    if (newj == j)
+      break
+    j = newj
+  }
+  return(hatr)
+}
