@@ -1,4 +1,4 @@
-context("test alpha")
+context("Alpha")
 
 test_that("alpha = 1 is approximately correct", {
   set.seed(15)

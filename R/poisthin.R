@@ -35,6 +35,17 @@
 #' @param prop_null The proportion of genes that are null.
 #' @param alpha If \eqn{b} is an effect and \eqn{s} is an empirical standard deviation, then
 #'     we model \eqn{b/s^\alpha} as being exchangeable.
+#' @param group_assign How should we assign groups? Exactly half in one group
+#'     and exactly half in the other (or one less in the other if the number
+#'     of individuals is odd) (\code{"half"}), with a Bernoulli(0.5)
+#'     distribution (\code{"random"}), or correlated with latent factors
+#'     (\code{"cor"})? If \code{group_assign = "cor"}, then you have to specify
+#'     \code{corvec}.
+#' @param corvec A vector of correlations. \code{corvec[i]} is the correlation
+#'     of the latent group assignment vector with the ith latent confounder.
+#'     Only used if \code{group_assign = "cor"}. This vector is constrained
+#'     so that \code{crossprod(corvec) < 1}. The number of latent factors
+#'     is taken to be the length of corvec.
 #'
 #' @return A list with the following elements:
 #' \itemize{
@@ -43,19 +54,30 @@
 #'  \item{\code{X}: }{A design matrix. The first column contains a vector ones (for an
 #'        intercept term) and the second column contains an indicator for group membership.}
 #'  \item{\code{beta}: }{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
+#'  \item{\code{corassign}:}{The output from the call to \code{\link{corassign}}.
+#'        Only returned if \code{group_assign = "cor"}.}
 #' }
 #'
 #' @author David Gerard
 #'
+#' @references Gerard, D., & Stephens, M. (2017).
+#'     Unifying and generalizing methods for removing unwanted variation based
+#'     on negative controls. arXiv preprint arXiv:1705.08393.
+#'
 #' @export
-poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
-                     gselect = c("max", "random", "rand_max", "custom", "mean_max"),
-                     gvec = NULL,
-                     skip_gene = 0,
-                     signal_fun = stats::rnorm,
+poisthin <- function(mat,
+                     nsamp         = nrow(mat),
+                     ngene         = ncol(mat),
+                     gselect       = c("max", "random", "rand_max",
+                                       "custom", "mean_max"),
+                     gvec          = NULL,
+                     skip_gene     = 0,
+                     signal_fun    = stats::rnorm,
                      signal_params = list(mean = 0, sd = 1),
-                     prop_null = 1,
-                     alpha = 0) {
+                     prop_null     = 1,
+                     alpha         = 0,
+                     group_assign  = c("half", "random", "cor"),
+                     corvec        = NULL) {
 
   ## Check Input -------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
@@ -68,16 +90,26 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
   gselect <- match.arg(gselect)
 
   if (gselect == "custom") {
-    assertthat::assert_that(is.logical(gvec))
-    assertthat::are_equal(length(gvec), ncol(mat))
-    assertthat::are_equal(sum(gvec), ngene)
+    stopifnot(is.logical(gvec))
+    stopifnot(length(gvec) == ncol(mat))
+    stopifnot(sum(gvec) == ngene)
   } else {
     if (!is.null(gvec)) {
       warning('gvec is specified but being ignored since gselect is not "custom"')
     }
   }
 
-  ## subset matrix -----------------------------------------------------------
+  group_assign <- match.arg(group_assign)
+  if (group_assign == "cor") {
+    stopifnot(!is.null(corvec))
+    stopifnot(is.numeric(corvec))
+    stopifnot(length(corvec) < min(nsamp, ngene))
+    stopifnot(crossprod(corvec) < 1)
+  } else {
+    stopifnot(is.null(corvec))
+  }
+
+  ## get gene indices ---------------------------------------------------------
   med_express <- apply(mat, 2, stats::median)
   mean_express <- colMeans(mat)
   order_vec <- order(med_express, mean_express, decreasing = TRUE)
@@ -104,15 +136,28 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     gindices <- order_vec_means[(skip_gene + 1):(skip_gene + ngene)]
   }
 
-
-  samp_indices <- sample(1:nrow(mat), size = nsamp)
-
+  ## Get submat --------------------------------------------------------------
   gindices <- sort(gindices)
-  samp_indices <- sort(samp_indices)
-
+  samp_indices <- sort(sample(1:nrow(mat), size = nsamp))
   submat <- mat[samp_indices, gindices, drop = FALSE]
-  group_indicator <- rep(FALSE, length = nsamp)
-  group_indicator[sample(1:nsamp, size = floor(nsamp / 2))] <- TRUE
+
+  ## Group assignment --------------------------------------------------------
+  if (group_assign == "half") {
+    group_indicator <- rep(FALSE, length = nsamp)
+    group_indicator[sample(1:nsamp, size = floor(nsamp / 2))] <- TRUE
+  } else if (group_assign == "random") {
+    group_indicator <- sample(x = c(TRUE, FALSE),
+                              size = nsamp,
+                              replace = TRUE)
+  } else if (group_assign == "cor") {
+    cout <- corassign(mat    = submat,
+                     nfac   = length(corvec),
+                     corvec = corvec,
+                     return = "full")
+    group_indicator <- cout$x == 1L
+  } else {
+    stop("poisthin: how did you get here?")
+  }
 
   ## Draw signal -------------------------------------------------------------
   nsignal <- round(ngene * (1 - prop_null))
@@ -120,7 +165,7 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     signal_params$n <- nsignal
     signal_vec      <- do.call(what = signal_fun, args = signal_params) ## log2-fold change
 
-    assertthat::are_equal(length(signal_vec), nsignal)
+    stopifnot(length(signal_vec) == nsignal)
 
     which_signal <- sort(sample(1:ncol(submat), nsignal)) # location of signal
 
@@ -134,29 +179,21 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
     sign_vec  <- sign(signal_vec) # sign of signal
     bin_probs <- 2 ^ -abs(signal_vec) # binomial prob
 
+    ng1 <- sum(group_indicator)
+    ng2 <- sum(!group_indicator)
+
     submat[group_indicator, which_signal[sign_vec > 0]] <-
-      matrix(stats::rbinom(n = sum(sign_vec > 0) * nsamp / 2,
-                    size = c(submat[group_indicator, which_signal[sign_vec > 0]]),
-                    prob = rep(bin_probs[sign_vec > 0], each = nsamp / 2)),
-             nrow = nsamp / 2)
+      matrix(stats::rbinom(n    = sum(sign_vec > 0) * ng1,
+                           size = c(submat[group_indicator, which_signal[sign_vec > 0]]),
+                           prob = rep(bin_probs[sign_vec > 0], each = ng1)),
+             nrow = ng1)
 
     submat[!group_indicator, which_signal[sign_vec < 0]] <-
-      matrix(stats::rbinom(n = sum(sign_vec < 0) * nsamp / 2,
-                    size = c(submat[!group_indicator, which_signal[sign_vec < 0]]),
-                    prob = rep(bin_probs[sign_vec < 0], each = nsamp / 2)),
-             nrow = nsamp / 2)
+      matrix(stats::rbinom(n    = sum(sign_vec < 0) * ng2,
+                           size = c(submat[!group_indicator, which_signal[sign_vec < 0]]),
+                           prob = rep(bin_probs[sign_vec < 0], each = ng2)),
+             nrow = ng2)
 
-    # for (gn in 1:length(signal_vec)) {
-    #   if (sign_vec[gn] == 1) {
-    #     current_count <- submat[group_indicator, which_signal[gn]]
-    #     submat[group_indicator, which_signal[gn]] <-
-    #       sapply(current_count, FUN = stats::rbinom, n = 1, prob = bin_probs[gn])
-    #   } else if (sign_vec[gn] == -1) {
-    #     current_count <- submat[!group_indicator, which_signal[gn]]
-    #     submat[!group_indicator, which_signal[gn]] <-
-    #       sapply(current_count, FUN = stats::rbinom, n = 1, prob = bin_probs[gn])
-    #   }
-    # }
     beta <- rep(0, ngene)
     beta[which_signal] <- -1 * signal_vec ## -1 because of way design matrix is created
   } else if (nsignal == 0 & abs(prop_null - 1) > 10 ^ -6) {
@@ -169,11 +206,12 @@ poisthin <- function(mat, nsamp = nrow(mat), ngene = ncol(mat),
   X <- stats::model.matrix(~group_indicator)
   return_list <- list(Y = submat, X = X, beta = beta)
 
+  if (group_assign == "cor") {
+    return_list$corassign <- cout
+  }
+
   return(return_list)
 }
-
-
-
 
 
 #' Group assignment that is correlated with latent factors.
@@ -234,6 +272,7 @@ corassign <- function(mat,
     stopifnot(is.numeric(nfac))
     stopifnot(length(nfac) == 1)
     stopifnot(nfac >= 0)
+    stopifnot(nfac < min(nrow(mat), ncol(mat)))
   }
 
   if (!is.null(corvec)) {

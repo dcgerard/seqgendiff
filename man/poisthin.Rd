@@ -7,7 +7,8 @@
 poisthin(mat, nsamp = nrow(mat), ngene = ncol(mat),
   gselect = c("max", "random", "rand_max", "custom", "mean_max"),
   gvec = NULL, skip_gene = 0, signal_fun = stats::rnorm,
-  signal_params = list(mean = 0, sd = 1), prop_null = 1, alpha = 0)
+  signal_params = list(mean = 0, sd = 1), prop_null = 1, alpha = 0,
+  group_assign = c("half", "random", "cor"), corvec = NULL)
 }
 \arguments{
 \item{mat}{A matrix of count data. The rows index the individuals and
@@ -43,6 +44,19 @@ a vector of samples.}
 
 \item{alpha}{If \eqn{b} is an effect and \eqn{s} is an empirical standard deviation, then
 we model \eqn{b/s^\alpha} as being exchangeable.}
+
+\item{group_assign}{How should we assign groups? Exactly half in one group
+and exactly half in the other (or one less in the other if the number
+of individuals is odd) (\code{"half"}), with a Bernoulli(0.5)
+distribution (\code{"random"}), or correlated with latent factors
+(\code{"cor"})? If \code{group_assign = "cor"}, then you have to specify
+\code{corvec}.}
+
+\item{corvec}{A vector of correlations. \code{corvec[i]} is the correlation
+of the latent group assignment vector with the ith latent confounder.
+Only used if \code{group_assign = "cor"}. This vector is constrained
+so that \code{crossprod(corvec) < 1}. The number of latent factors
+is taken to be the length of corvec.}
 }
 \value{
 A list with the following elements:
@@ -52,6 +66,8 @@ A list with the following elements:
  \item{\code{X}: }{A design matrix. The first column contains a vector ones (for an
        intercept term) and the second column contains an indicator for group membership.}
  \item{\code{beta}: }{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
+ \item{\code{corassign}:}{The output from the call to \code{\link{corassign}}.
+       Only returned if \code{group_assign = "cor"}.}
 }
 }
 \description{
@@ -65,6 +81,11 @@ The Poisson thinning approach first randomly assigns samples to be in one of two
 given this assignment, will Binomially sample counts with a sample size of the gene expression
 counts and a probability that is a function of the effect size. For details, see
 Gerard and Stephens (2017).
+}
+\references{
+Gerard, D., & Stephens, M. (2017).
+    Unifying and generalizing methods for removing unwanted variation based
+    on negative controls. arXiv preprint arXiv:1705.08393.
 }
 \author{
 David Gerard

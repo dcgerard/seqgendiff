@@ -7,7 +7,6 @@ test_that("poisthin input works", {
   nsamp <- 10
   ngene <- 100
   mat <- matrix(stats::rpois(n = n * p, lambda = 20), nrow = n)
-  skip_gene <- 0
   signal_fun <- stats::rnorm
   signal_params <- list(mean = 0, sd = 1)
   gselect <- "max"
@@ -68,7 +67,6 @@ test_that("poisthin input works with many zeros", {
   nsamp <- 10
   ngene <- 100
   mat <- matrix(stats::rpois(n = n * p, lambda = 1), nrow = n)
-  skip_gene <- 0
   signal_fun <- stats::rnorm
   signal_params <- list(mean = 0, sd = 1)
   gselect <- "max"
