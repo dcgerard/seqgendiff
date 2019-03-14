@@ -19,10 +19,17 @@ I fix an error where default `rmax` can sometimes be greater than dimension
 of `Y`. I also increase the performance by only calculating the
 singular values (not the singular vectors).
 }
+\details{
+The method estimates the number of factors by the Eigenvalue Difference
+Method of Onatski (2010).
+}
 \references{
 Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
     Factor Analysis and Confounder Adjusted Testing and Estimation.
     R package version 1.0.4. https://CRAN.R-project.org/package=cate
+
+    A. Onatski (2010), Determining the number of factors from empirical
+    distribution of eigenvalues. The Review of Economics and Statistics 92(4).
 }
 \author{
 David Gerard

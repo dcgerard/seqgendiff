@@ -393,6 +393,9 @@ uncorassign <- function(n,
 #' of `Y`. I also increase the performance by only calculating the
 #' singular values (not the singular vectors).
 #'
+#' The method estimates the number of factors by the Eigenvalue Difference
+#' Method of Onatski (2010).
+#'
 #' @param Y A matrix to estimate the rank.
 #' @param rmax The maximum rank.
 #' @param niter The maximum number of iterations.
@@ -400,6 +403,9 @@ uncorassign <- function(n,
 #' @references Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
 #'     Factor Analysis and Confounder Adjusted Testing and Estimation.
 #'     R package version 1.0.4. https://CRAN.R-project.org/package=cate
+#'
+#'     A. Onatski (2010), Determining the number of factors from empirical
+#'     distribution of eigenvalues. The Review of Economics and Statistics 92(4).
 #'
 #' @author David Gerard
 EigenDiff <- function (Y,
