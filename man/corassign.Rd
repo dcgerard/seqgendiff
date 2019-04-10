@@ -19,7 +19,9 @@ factors.}
 between latent factor \code{i} and the underlying group-assignment variable.
 You can think of the correlations in \code{corvec} as a kind of "tetrachoric
 correlation." If \code{NULL}, then it assumes independence between
-factors and group assignment.}
+factors and group assignment. Note that the correlations of the
+latent factors with the observed group-assignment vector (instead of the
+latent group-assignment vector) will be \code{corvec * sqrt(2 / pi)}.}
 
 \item{return}{What should we return? Just the group assignment
 (\code{"group"}) or a list of a bunch of things (\code{"full"}).}
@@ -33,7 +35,9 @@ A list with some or all of the following elements:
       \item{\code{nfac}}{The number of assumed latent factors.}
       \item{\code{facmat}}{A matrix, whose columns contain the latent factors.}
       \item{\code{groupfac}}{The underlying group-assignment factor.}
-      \item{\code{corvec}}{The correlation vector.}
+      \item{\code{corvec}}{The correlation vector. Note that this is the
+          correlation between random variables observed in \code{groupfac}
+          and \code{facmat}, }
     }
     If \code{return = "group"}, then the list only contains \code{x}.
 }

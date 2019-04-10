@@ -45,7 +45,9 @@
 #'     of the latent group assignment vector with the ith latent confounder.
 #'     Only used if \code{group_assign = "cor"}. This vector is constrained
 #'     so that \code{crossprod(corvec) < 1}. The number of latent factors
-#'     is taken to be the length of corvec.
+#'     is taken to be the length of corvec. Note that the correlations of the
+#'     latent factors with the observed group-assignment vector (instead of the
+#'     latent group-assignment vector) will be \code{corvec * sqrt(2 / pi)}.
 #'
 #' @return A list with the following elements:
 #' \itemize{
@@ -237,7 +239,9 @@ poisthin <- function(mat,
 #'     between latent factor \code{i} and the underlying group-assignment variable.
 #'     You can think of the correlations in \code{corvec} as a kind of "tetrachoric
 #'     correlation." If \code{NULL}, then it assumes independence between
-#'     factors and group assignment.
+#'     factors and group assignment. Note that the correlations of the
+#'     latent factors with the observed group-assignment vector (instead of the
+#'     latent group-assignment vector) will be \code{corvec * sqrt(2 / pi)}.
 #' @param return What should we return? Just the group assignment
 #'     (\code{"group"}) or a list of a bunch of things (\code{"full"}).
 #'
@@ -249,7 +253,9 @@ poisthin <- function(mat,
 #'       \item{\code{nfac}}{The number of assumed latent factors.}
 #'       \item{\code{facmat}}{A matrix, whose columns contain the latent factors.}
 #'       \item{\code{groupfac}}{The underlying group-assignment factor.}
-#'       \item{\code{corvec}}{The correlation vector.}
+#'       \item{\code{corvec}}{The correlation vector. Note that this is the
+#'           correlation between random variables observed in \code{groupfac}
+#'           and \code{facmat}, }
 #'     }
 #'     If \code{return = "group"}, then the list only contains \code{x}.
 #'

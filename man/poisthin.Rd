@@ -56,7 +56,9 @@ distribution (\code{"random"}), or correlated with latent factors
 of the latent group assignment vector with the ith latent confounder.
 Only used if \code{group_assign = "cor"}. This vector is constrained
 so that \code{crossprod(corvec) < 1}. The number of latent factors
-is taken to be the length of corvec.}
+is taken to be the length of corvec. Note that the correlations of the
+latent factors with the observed group-assignment vector (instead of the
+latent group-assignment vector) will be \code{corvec * sqrt(2 / pi)}.}
 }
 \value{
 A list with the following elements:
