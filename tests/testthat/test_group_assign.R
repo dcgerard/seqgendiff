@@ -65,3 +65,19 @@ test_that("getting correlation close to what you expect", {
                matrix(c(-0.5, 0.1), ncol = 1),
                tolerance = tol)
 })
+
+
+
+test_that("get about the right proportions in 'frac' and 'random'", {
+  set.seed(1)
+  n <- 10000
+  p <- 10
+  Z <- rnorm(n)
+  alpha <- rnorm(p)
+  Y <- round(2^(Z %*% t(alpha) + matrix(rnorm(n * p), nrow = n, ncol = p)))
+  pout <- poisthin(mat = Y, group_assign = "frac", group_prop = 0.2)
+  expect_equal(sum(pout$X[, 2]), 2000)
+
+  pout <- poisthin(mat = Y, group_assign = "random", group_prop = 0.2)
+  expect_equal(mean(pout$X[, 2]), 0.2, tol = 0.01)
+})

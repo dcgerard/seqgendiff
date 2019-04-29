@@ -6,9 +6,10 @@
 \usage{
 poisthin(mat, nsamp = nrow(mat), ngene = ncol(mat),
   gselect = c("max", "random", "rand_max", "custom", "mean_max"),
-  gvec = NULL, skip_gene = 0, signal_fun = stats::rnorm,
+  gvec = NULL, skip_gene = 0L, signal_fun = stats::rnorm,
   signal_params = list(mean = 0, sd = 1), prop_null = 1, alpha = 0,
-  group_assign = c("half", "random", "cor"), corvec = NULL)
+  group_assign = c("frac", "random", "cor"), group_prop = 0.5,
+  corvec = NULL)
 }
 \arguments{
 \item{mat}{A matrix of count data. The rows index the individuals and
@@ -45,12 +46,18 @@ a vector of samples.}
 \item{alpha}{If \eqn{b} is an effect and \eqn{s} is an empirical standard deviation, then
 we model \eqn{b/s^\alpha} as being exchangeable.}
 
-\item{group_assign}{How should we assign groups? Exactly half in one group
-and exactly half in the other (or one less in the other if the number
-of individuals is odd) (\code{"half"}), with a Bernoulli(0.5)
-distribution (\code{"random"}), or correlated with latent factors
+\item{group_assign}{How should we assign groups? Exactly specifying the
+proportion of individuals in each group (\code{"frac"}), with a
+Bernoulli distribution (\code{"random"}), or correlated with latent factors
 (\code{"cor"})? If \code{group_assign = "cor"}, then you have to specify
-\code{corvec}.}
+\code{corvec}. If \code{group_assign = "frac"} or
+\code{group_assign = "random"}, then the proportion of samples in each
+group is specified with the \code{group_prop} argument.}
+
+\item{group_prop}{The proportion of individuals that are in group 1.
+This proportion is deterministic if \code{group_assign = "frac"}, and
+is the expected proportion if \code{group_assign = "random"}. This
+argument is not used if \code{group_assign = "cor"}}
 
 \item{corvec}{A vector of correlations. \code{corvec[i]} is the correlation
 of the latent group assignment vector with the ith latent confounder.

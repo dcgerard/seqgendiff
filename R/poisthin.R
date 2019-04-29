@@ -35,12 +35,17 @@
 #' @param prop_null The proportion of genes that are null.
 #' @param alpha If \eqn{b} is an effect and \eqn{s} is an empirical standard deviation, then
 #'     we model \eqn{b/s^\alpha} as being exchangeable.
-#' @param group_assign How should we assign groups? Exactly half in one group
-#'     and exactly half in the other (or one less in the other if the number
-#'     of individuals is odd) (\code{"half"}), with a Bernoulli(0.5)
-#'     distribution (\code{"random"}), or correlated with latent factors
+#' @param group_assign How should we assign groups? Exactly specifying the
+#'     proportion of individuals in each group (\code{"frac"}), with a
+#'     Bernoulli distribution (\code{"random"}), or correlated with latent factors
 #'     (\code{"cor"})? If \code{group_assign = "cor"}, then you have to specify
-#'     \code{corvec}.
+#'     \code{corvec}. If \code{group_assign = "frac"} or
+#'     \code{group_assign = "random"}, then the proportion of samples in each
+#'     group is specified with the \code{group_prop} argument.
+#' @param group_prop The proportion of individuals that are in group 1.
+#'     This proportion is deterministic if \code{group_assign = "frac"}, and
+#'     is the expected proportion if \code{group_assign = "random"}. This
+#'     argument is not used if \code{group_assign = "cor"}
 #' @param corvec A vector of correlations. \code{corvec[i]} is the correlation
 #'     of the latent group assignment vector with the ith latent confounder.
 #'     Only used if \code{group_assign = "cor"}. This vector is constrained
@@ -70,15 +75,21 @@
 poisthin <- function(mat,
                      nsamp         = nrow(mat),
                      ngene         = ncol(mat),
-                     gselect       = c("max", "random", "rand_max",
-                                       "custom", "mean_max"),
+                     gselect       = c("max",
+                                       "random",
+                                       "rand_max",
+                                       "custom",
+                                       "mean_max"),
                      gvec          = NULL,
-                     skip_gene     = 0,
+                     skip_gene     = 0L,
                      signal_fun    = stats::rnorm,
                      signal_params = list(mean = 0, sd = 1),
                      prop_null     = 1,
                      alpha         = 0,
-                     group_assign  = c("half", "random", "cor"),
+                     group_assign  = c("frac",
+                                       "random",
+                                       "cor"),
+                     group_prop    = 0.5,
                      corvec        = NULL) {
 
   ## Check Input -------------------------------------------------------------
@@ -87,7 +98,13 @@ poisthin <- function(mat,
   assertthat::assert_that(ngene + skip_gene <= ncol(mat))
   assertthat::assert_that(is.function(signal_fun))
   assertthat::assert_that(is.list(signal_params))
+  assertthat::are_equal(1L,
+                        length(skip_gene),
+                        length(prop_null),
+                        length(alpha),
+                        length(group_prop))
   assertthat::assert_that(prop_null >= 0, prop_null <= 1)
+  assertthat::assert_that(group_prop >= 0, group_prop <= 1)
 
   gselect <- match.arg(gselect)
 
@@ -144,13 +161,14 @@ poisthin <- function(mat,
   submat <- mat[samp_indices, gindices, drop = FALSE]
 
   ## Group assignment --------------------------------------------------------
-  if (group_assign == "half") {
+  if (group_assign == "frac") {
     group_indicator <- rep(FALSE, length = nsamp)
-    group_indicator[sample(1:nsamp, size = floor(nsamp / 2))] <- TRUE
+    group_indicator[sample(1:nsamp, size = round(nsamp * group_prop))] <- TRUE
   } else if (group_assign == "random") {
     group_indicator <- sample(x = c(TRUE, FALSE),
                               size = nsamp,
-                              replace = TRUE)
+                              replace = TRUE,
+                              prob = c(group_prop, 1 - group_prop))
   } else if (group_assign == "cor") {
     cout <- corassign(mat    = submat,
                      nfac   = length(corvec),
@@ -159,6 +177,10 @@ poisthin <- function(mat,
     group_indicator <- cout$x == 1L
   } else {
     stop("poisthin: how did you get here?")
+  }
+
+  if (all(group_indicator) | all(!group_indicator)) {
+    warning("All samples were assigned to the same group.")
   }
 
   ## Draw signal -------------------------------------------------------------
