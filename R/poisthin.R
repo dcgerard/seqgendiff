@@ -45,7 +45,7 @@
 #' @param group_prop The proportion of individuals that are in group 1.
 #'     This proportion is deterministic if \code{group_assign = "frac"}, and
 #'     is the expected proportion if \code{group_assign = "random"}. This
-#'     argument is not used if \code{group_assign = "cor"}
+#'     argument is not used if \code{group_assign = "cor"}.
 #' @param corvec A vector of correlations. \code{corvec[i]} is the correlation
 #'     of the latent group assignment vector with the ith latent confounder.
 #'     Only used if \code{group_assign = "cor"}. This vector is constrained
@@ -61,7 +61,7 @@
 #'  \item{\code{X}: }{A design matrix. The first column contains a vector ones (for an
 #'        intercept term) and the second column contains an indicator for group membership.}
 #'  \item{\code{beta}: }{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
-#'  \item{\code{corassign}:}{The output from the call to \code{\link{corassign}}.
+#'  \item{\code{corassign}: }{The output from the call to \code{\link{corassign}}.
 #'        Only returned if \code{group_assign = "cor"}.}
 #' }
 #'
@@ -171,9 +171,9 @@ poisthin <- function(mat,
                               prob = c(group_prop, 1 - group_prop))
   } else if (group_assign == "cor") {
     cout <- corassign(mat    = submat,
-                     nfac   = length(corvec),
-                     corvec = corvec,
-                     return = "full")
+                      nfac   = length(corvec),
+                      corvec = corvec,
+                      return = "full")
     group_indicator <- cout$x == 1L
   } else {
     stop("poisthin: how did you get here?")

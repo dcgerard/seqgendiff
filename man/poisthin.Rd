@@ -57,7 +57,7 @@ group is specified with the \code{group_prop} argument.}
 \item{group_prop}{The proportion of individuals that are in group 1.
 This proportion is deterministic if \code{group_assign = "frac"}, and
 is the expected proportion if \code{group_assign = "random"}. This
-argument is not used if \code{group_assign = "cor"}}
+argument is not used if \code{group_assign = "cor"}.}
 
 \item{corvec}{A vector of correlations. \code{corvec[i]} is the correlation
 of the latent group assignment vector with the ith latent confounder.
@@ -75,7 +75,7 @@ A list with the following elements:
  \item{\code{X}: }{A design matrix. The first column contains a vector ones (for an
        intercept term) and the second column contains an indicator for group membership.}
  \item{\code{beta}: }{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
- \item{\code{corassign}:}{The output from the call to \code{\link{corassign}}.
+ \item{\code{corassign}: }{The output from the call to \code{\link{corassign}}.
        Only returned if \code{group_assign = "cor"}.}
 }
 }
