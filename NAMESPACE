@@ -3,3 +3,5 @@
 export(corassign)
 export(poisthin)
 export(theogen)
+export(thin_diff)
+export(thin_lib)

@@ -14,4 +14,7 @@ Suggests: covr,
     testthat
 Imports: 
     assertthat,
-    irlba
+    irlba,
+    sva,
+    pdist,
+    optmatch
