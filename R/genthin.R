@@ -53,6 +53,106 @@ thin_base <- function(mat, design, coef) {
   return(newmat)
 }
 
+#' Poisson thinning for altering library size.
+#'
+#' @inheritParams thin_diff
+#' @param thinlog2 A vector. Element i is the amount to thin (on the log2 scale). For
+#'     example, a value of 0 means that we do not thin, a value of 1 means
+#'     that we thin by a factor of 2, a value of 2 means we thin by a factor
+#'     of 4, etc.
+#'
+#' @export
+#'
+#' @author David Gerard
+thin_lib <- function(mat, thinlog2) {
+  ## Check input --------------------------------------------------------------
+  assertthat::assert_that(is.matrix(mat))
+  assertthat::assert_that(is.numeric(mat))
+  stopifnot(mat >= 0)
+  assertthat::are_equal(length(thinlog2), ncol(mat))
+  thinlog2 <- c(thinlog2)
+  assertthat::assert_that(is.numeric(thinlog2))
+  stopifnot(thinlog2 >= 0)
+
+  newmat <- thin_base(mat    = mat,
+                      design = matrix(-thinlog2, ncol = 1),
+                      coef   = matrix(1, nrow = nrow(mat), ncol = 1))
+
+  return(newmat)
+}
+
+#' Poisson thinning in the two-group model.
+#'
+#'
+#'
+#' @inheritParams thin_diff
+#' @param prop_null The proportion of genes that are null.
+#' @param signal_fun A function that returns the signal. This should take as
+#'     input \code{n} for the number of samples to return and then return only
+#'     a vector of samples. Additional parameters may be passed through
+#'     \code{signal_params}.
+#' @param signal_params A list of additional arguments to pass to
+#'     \code{signal_fun}.
+#' @param group_prop The proportion of individuals that are in group 1.
+#' @param corvec A vector of target correlations. \code{corvec[i]} is the
+#'     target correlation of the latent group assignment vector with the
+#'     ith latent confounder. The default is to set this to \code{NULL},
+#'     in which case group assignment is made independently of any
+#'     unobserved confounding.
+#'
+#' @author David Gerard
+thin_2group <- function(mat,
+                        prop_null     = 1,
+                        signal_fun    = stats::rnorm,
+                        signal_params = list(mean = 0, sd = 1),
+                        group_prop    = 0.5,
+                        corvec        = NULL) {
+  ## Check input --------------------------------------------------------------
+  assertthat::assert_that(is.matrix(mat))
+  assertthat::are_equal(1, length(prop_null), length(signal_fun), length(group_prop))
+  assertthat::assert_that(prop_null <= 1, prop_null >= 0, group_prop <= 1, group_prop >= 0)
+  assertthat::assert_that(is.function(signal_fun))
+  assertthat::assert_that(is.list(signal_params))
+  assertthat::assert_that(is.null(signal_params$n))
+  ngene <- nrow(mat)
+  nsamp <- ncol(mat)
+
+
+  ## Generate coef ------------------------------------------------------------
+  coef_perm <- matrix(0, nrow = ngene, ncol = 1)
+  signal_params$n <- round(ngene * (1 - prop_null))
+  if (signal_params$n > 0) {
+    signal_vec <- c(do.call(what = signal_fun, args = signal_params))
+    coef_perm[sample(seq_len(ngene), size = signal_params$n), 1] <- signal_vec
+  }
+
+  ## Generate design ----------------------------------------------------------
+  numtreat <- round(group_prop * nsamp)
+  if (numtreat == 0) {
+    design_perm <- matrix(0, ncol = 1, nrow = nsamp)
+  } else if (numtreat == nsamp) {
+    design_perm <- matrix(1, ncol = 1, nrow = nsamp)
+  } else {
+    design_perm <- matrix(0, ncol = 1, nrow = nsamp)
+    design_perm[sample(seq_len(nsamp), size = numtreat), ] <- 1
+  }
+
+  ## Generate target correlation ----------------------------------------------
+  if (!is.null(corvec)) {
+    target_cor <- matrix(corvec, nrow = 1)
+  } else {
+    target_cor <- NULL
+  }
+
+  ## Thin ---------------------------------------------------------------------
+  thout <- thin_diff(mat         = mat,
+                     design_perm = design_perm,
+                     coef_perm   = coef_perm,
+                     target_cor  = target_cor)
+
+  return(thout)
+}
+
 #' Poisson thinning for differential expression analysis.
 #'
 #' @param mat A matrix of counts. The rows index the genes and the columns
@@ -163,7 +263,12 @@ thin_diff <- function(mat,
                       design = design,
                       coef   = coef)
 
-  return(list(mat = newmat, design = design, coef = coef, sv = sv, cor = new_cor, matching_var = latent_var))
+  return(list(mat          = newmat,
+              design       = design,
+              coef         = coef,
+              sv           = sv,
+              cor          = new_cor,
+              matching_var = latent_var))
 }
 
 #' Estimate the surrogate variables.
@@ -244,35 +349,28 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
   return(list(design_perm = design_perm, latent_var = latent_var))
 }
 
-#' Poisson thinning for altering library size.
+#' Estimate the effective correlation
+#'
+#' Will return the actual correlation between the design matrix and the
+#' surrogate variables when you use \code{\link{permute_design}}.
 #'
 #' @inheritParams thin_diff
-#' @param thinlog2 A vector. Element i is the amount to thin (on the log2 scale). For
-#'     example, a value of 0 means that we do not thin, a value of 1 means
-#'     that we thin by a factor of 2, a value of 2 means we thin by a factor
-#'     of 4, etc.
-#'
-#' @export
+#' @inheritParams permute_design
+#' @param iternum The total number of simulated correlations to consider.
 #'
 #' @author David Gerard
-thin_lib <- function(mat, thinlog2) {
-  ## Check input --------------------------------------------------------------
-  assertthat::assert_that(is.matrix(mat))
-  assertthat::assert_that(is.numeric(mat))
-  stopifnot(mat >= 0)
-  assertthat::are_equal(length(thinlog2), ncol(mat))
-  thinlog2 <- c(thinlog2)
-  assertthat::assert_that(is.numeric(thinlog2))
-  stopifnot(thinlog2 >= 0)
-
-  newmat <- thin_base(mat    = mat,
-                      design = matrix(-thinlog2, ncol = 1),
-                      coef   = matrix(1, nrow = nrow(mat), ncol = 1))
-
-  return(newmat)
+effective_cor <- function(design_perm, sv, target_cor, method = c("optmatch", "marriage"), iternum = 1000) {
+  method <- match.arg(method)
+  target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
+  itermax <- 1000
+  corarray <- array(0, dim = c(ncol(design_perm), ncol(sv), itermax))
+  for (index in seq_len(itermax)) {
+    pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = method)
+    corarray[,,index] <- stats::cor(pout$design_perm, sv)
+  }
+  truecor <- apply(corarray, c(1, 2), mean)
+  return(truecor)
 }
-
-
 
 #' Fixes an invalid target correlation.
 #'

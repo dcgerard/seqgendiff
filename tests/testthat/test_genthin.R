@@ -86,23 +86,37 @@ test_that("permute design approximates target correlation", {
   # pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "optmatch")
   # cor(pout$design_perm, sv)
   # target_cor
-
-
-  # n <- 10
-  # design_perm <- rmvnorm(mu = matrix(0, nrow = n, ncol = p), sigma = sigma11)
-  # sv <- scale(matrix(runif(k * n), nrow = n))
-  # target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
-  #
-  # itermax <- 1000
-  # corarray <- array(0, dim = c(p, k, itermax))
-  # for (index in seq_len(itermax)) {
-  #   pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "optmatch")
-  #   corarray[,,index] <- cor(pout$design_perm, sv)
-  # }
-  # apply(corarray, c(1, 2), median)
-  # target_cor
 })
 
+test_that("permute_design orders 0's and 1's for binary designs", {
+  set.seed(1)
+  n <- 100
+  p <- 1
+  k <- 3
+  design_perm <- matrix(rep(c(0, 1), length.out = n))
+  sv <- scale(matrix(runif(k * n), nrow = n))
+  A <- matrix(rnorm((k + p)^2), nrow = p + k)
+  cormat <- cov2cor(crossprod(A))
+  target_cor <- cormat[seq_len(p), (p + 1):(k + p), drop = FALSE]
+  target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
+
+  pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "optmatch")
+  expect_true(min(pout$latent_var[pout$design_perm == 1]) >= max(pout$latent_var[pout$design_perm == 0]))
+})
+
+test_that("thin_2group doesn't alter zero coef genes", {
+  n <- 10
+  p <- 100
+  Z <- rnorm(n)
+  alpha <- rnorm(p)
+  mat <- round(2^(alpha %*% t(Z) + matrix(rnorm(n * p), nrow = p, ncol = n)))
+
+  thout <- thin_2group(mat = mat)
+  expect_equal(thout$mat, mat)
+
+  thout <- thin_2group(mat = mat, prop_null = 0.5)
+  expect_equal(thout$mat[abs(thout$coef) < 10^-6, ], mat[abs(thout$coef) < 10^-6, ])
+})
 
 
 
