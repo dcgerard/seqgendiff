@@ -9,7 +9,8 @@ fix_cor(design_perm, target_cor, num_steps = 51)
 \arguments{
 \item{design_perm}{A design matrix whose rows are to be permuted (thus
 controlling the amount by which they are correlated with the confounders).
-The rows index the samples and the columns index the variables.}
+The rows index the samples and the columns index the variables.
+The intercept should \emph{not} be included.}
 
 \item{target_cor}{A matrix of target correlation betweens the variables in
 \code{design_perm} and the unobserved confounders. The rows index the

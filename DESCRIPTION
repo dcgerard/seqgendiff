@@ -17,4 +17,5 @@ Imports:
     irlba,
     sva,
     pdist,
-    optmatch
+    optmatch,
+    matchingR

@@ -2,19 +2,38 @@
 ## General Thinning functions
 #########################
 
-
-
-#' Basic Poisson thinning function.
+#' Base Poisson thinning function.
 #'
-#' Given a matrix of counts, a design matrix, and a matrix
+#' Given a matrix of counts (\eqn{Y}), a design matrix (\eqn{X}),
+#' and a matrix of coefficients (\eqn{B}), \code{thin_diff} will generate a new
+#' matrix of counts such that \eqn{E[log_2(Y)] \approx BX' + u1'}, where
+#' \eqn{u} is some vector of intercept coefficients. This
+#' function is used by all other thinning functions.
 #'
 #' @inheritParams thin_diff
 #' @param design A design matrix. The rows index the samples and the columns
-#'    index the variables.
+#'    index the variables. The intercept should \emph{not} be included.
 #' @param coef A matrix of coefficients. The rows index the genes and the
 #'    columns index the samples.
 #'
+#' @export
+#'
 #' @author David Gerard
+#'
+#' @examples
+#' ## Simulate data from given matrix of counts
+#' set.seed(1)
+#' nsamp <- 10
+#' ngene <- 1000
+#' Y <- matrix(stats::rpois(nsamp * ngene, lambda = 100), nrow = ngene)
+#' X <- matrix(rep(c(0, 1), length.out = nsamp))
+#' B <- matrix(seq(3, 0, length.out = ngene))
+#' Ynew <- thin_base(mat = Y, design = X, coef = B)
+#'
+#' ## Demonstrate how the log2 effect size is B
+#' Bhat <- coefficients(lm(t(log2(Ynew)) ~ X))["X", ]
+#' plot(Bhat, B)
+#' abline(0, 1, col = 2)
 thin_base <- function(mat, design, coef) {
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.matrix(design))
@@ -40,11 +59,13 @@ thin_base <- function(mat, design, coef) {
 #'     index the samples (as is usual in RNA-seq).
 #' @param design_fixed A design matrix whose rows are fixed and not permuted.
 #'     The rows index the samples and the columns index the variables.
+#'     The intercept should \emph{not} be included.
 #' @param coef_fixed The coefficients corresponding to \code{design_fixed}.
 #'     The rows index the genes and the columns index the variables.
 #' @param design_perm A design matrix whose rows are to be permuted (thus
 #'     controlling the amount by which they are correlated with the confounders).
 #'     The rows index the samples and the columns index the variables.
+#'     The intercept should \emph{not} be included.
 #' @param coef_perm The coefficients corresponding to \code{design_perm}.
 #'     The rows index the genes and the columns index the variables.
 #' @param target_cor A matrix of target correlation betweens the variables in
@@ -59,6 +80,7 @@ thin_base <- function(mat, design, coef) {
 #' @param design_obs A matrix of observed covariates that we are NOT to be a
 #'     part of the signal generating process. Only used in estimating the
 #'     confounders if \code{use_sva = TRUE}.
+#'     The intercept should \emph{not} be included.
 #'
 #' @export
 #'
@@ -111,33 +133,23 @@ thin_diff <- function(mat,
     class(sv) <- "numeric"
   } else {
     ## Fix target correlation ---------------------------
-    new_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
+    new_cor <- fix_cor(design_perm = design_perm,
+                       target_cor  = target_cor)
 
     ## Estimate hidden confounders ----------------------
     n_sv <- ncol(new_cor)
-    matlog2 <- log2(mat + 0.5)
-    if (use_sva & ncol(design_fixed) > 0) {
-      utils::capture.output(sv <- sva::sva(dat = matlog2, mod = cbind(design_fixed, design_obs, 1), n.sv = n_sv)$sv)
-    } else {
-      Xfixed <- cbind(design_fixed, 1)
-      sv <- svd(matlog2 %*% (diag(nrow(Xfixed)) - Xfixed %*% solve(t(Xfixed) %*% Xfixed) %*% t(Xfixed)), nv = 2, nu = 0)$v
-    }
-    sv <- sv * sqrt(nrow(sv))
+    sv <- est_sv(mat          = mat,
+                 n_sv         = n_sv,
+                 design_fixed = design_fixed,
+                 design_obs   = design_obs,
+                 use_sva      = use_sva)
 
-    ## Generate latent factors --------------------------
-    sigma11 <- stats::cor(design_perm)
-    sigma12 <- target_cor
-    sigma_cond <- sigma11 - sigma12 %*% t(sigma12)
-    mu_cond <- sv %*% t(sigma12)
-    latent_var <- rmvnorm(mu = mu_cond, sigma = sigma_cond)
-
-    ## Get permutations ---------------------------------
-    distmat <- as.matrix(pdist::pdist(X = design_perm, Y = latent_var))
-    dimnames(distmat) <- list(treated = paste0("O", seq_len(nsamp)), control = paste0("L", seq_len(nsamp)))
-    suppressWarnings(matchout <- optmatch::pairmatch(distmat))
-    ogroup <- matchout[attributes(matchout)$contrast.group]
-    lgroup <- matchout[!attributes(matchout)$contrast.group]
-    design_perm <- design_perm[match(lgroup, ogroup), , drop = FALSE]
+    ## Permute design matrix ----------------------------
+    pout <- permute_design(design_perm = design_perm,
+                           sv          = sv,
+                           target_cor  = new_cor)
+    design_perm <- pout$design_perm
+    latent_var  <- pout$latent_var
   }
 
   ## Make overall design and coef ---------------------------------------------
@@ -152,6 +164,84 @@ thin_diff <- function(mat,
                       coef   = coef)
 
   return(list(mat = newmat, design = design, coef = coef, sv = sv, cor = new_cor, matching_var = latent_var))
+}
+
+#' Estimate the surrogate variables.
+#'
+#' @inheritParams thin_diff
+#' @param n_sv The number of surrogate variables.
+#'
+#' @author David Gerard
+est_sv <- function(mat, n_sv, design_fixed, design_obs, use_sva = FALSE) {
+  assertthat::is.count(n_sv)
+  assertthat::assert_that(is.matrix(mat))
+  assertthat::assert_that(is.matrix(design_fixed))
+  assertthat::assert_that(is.matrix(design_obs))
+  assertthat::assert_that(is.logical(use_sva))
+  assertthat::are_equal(ncol(mat), nrow(design_fixed), nrow(design_obs))
+  assertthat::are_equal(length(use_sva), 1)
+
+  matlog2 <- log2(mat + 0.5)
+  if (use_sva & ncol(design_fixed) > 0) {
+    utils::capture.output(sv <- sva::sva(dat = matlog2, mod = cbind(design_fixed, design_obs, 1), n.sv = n_sv)$sv)
+  } else {
+    Xfixed <- cbind(design_fixed, design_obs, 1)
+    sv <- svd(matlog2 %*% (diag(nrow(Xfixed)) - Xfixed %*% solve(t(Xfixed) %*% Xfixed) %*% t(Xfixed)), nv = n_sv, nu = 0)$v
+  }
+  sv <- sv * sqrt(nrow(sv - 1))
+  return(sv)
+}
+
+#' Permute the design matrix so that it is approximately correlated with
+#' the surrogate variables.
+#'
+#' @inheritParams thin_diff
+#' @param sv A matrix of surrogate variables
+#' @param method Should we use the optimal matching technique from Hansen and
+#'     Klopfer (2006) (\code{"optmatch"}) or the Gale-Shapley algorithm
+#'     for stable marriages (\code{marriage}) (Gale and Shapley, 1962)
+#'     as implemented in the matchingR package.
+#'     The \code{"optmatch"} method works almost uniformly better in practice,
+#'     but does take a lot more computational time if you have, say, 1000
+#'     samples.
+#'
+#' @references
+#' \itemize{
+#'   \item{Hansen, B.B. and Klopfer, S.O. (2006) Optimal full matching and related designs via network flows, JCGS 15 609-627.}
+#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
+#' }
+#'
+#' @author David Gerard
+permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "marriage")) {
+  ## Check input --------------------------------------------------------------
+  assertthat::are_equal(nrow(design_perm), nrow(sv))
+  assertthat::are_equal(ncol(design_perm), nrow(target_cor))
+  assertthat::are_equal(ncol(sv), ncol(target_cor))
+  method <- match.arg(method)
+  nsamp <- nrow(design_perm)
+  ## in case a non-standard sv is given ---------------------------------------
+  sv <- scale(sv)
+
+  ## Generate latent factors --------------------------------------------------
+  sigma11 <- stats::cor(design_perm)
+  sigma12 <- target_cor
+  sigma_cond <- sigma11 - sigma12 %*% t(sigma12)
+  mu_cond <- sv %*% t(sigma12)
+  latent_var <- rmvnorm(mu = mu_cond, sigma = sigma_cond)
+
+  ## Get permutations ---------------------------------------------------------
+  distmat <- as.matrix(pdist::pdist(X = scale(design_perm), Y = scale(latent_var)))
+  if (method == "optmatch") {
+    dimnames(distmat) <- list(treated = paste0("O", seq_len(nsamp)), control = paste0("L", seq_len(nsamp)))
+    suppressWarnings(matchout <- optmatch::pairmatch(distmat))
+    ogroup <- matchout[attributes(matchout)$contrast.group]
+    lgroup <- matchout[!attributes(matchout)$contrast.group]
+    design_perm <- design_perm[match(lgroup, ogroup), , drop = FALSE]
+  } else if (method == "marriage") {
+    matchout <- matchingR::galeShapley.marriageMarket(proposerUtils = -1 * t(distmat), reviewerUtils = -1 * distmat)
+    design_perm <- design_perm[matchout$proposals, ]
+  }
+  return(list(design_perm = design_perm, latent_var = latent_var))
 }
 
 #' Poisson thinning for altering library size.

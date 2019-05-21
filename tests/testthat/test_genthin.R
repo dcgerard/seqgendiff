@@ -29,6 +29,9 @@ test_that("general thinning works", {
   # cor(thout$sv, thout$matching_var)
   # cor(thout$sv, thout$design[, 2])
   # target_cor
+
+  newmat <- thin_diff(mat = mat)
+  expect_equal(newmat$mat, mat)
 })
 
 
@@ -63,3 +66,45 @@ test_that("rmvnorm works", {
   expect_equal(colMeans(simout), rep(1.2, p), tol = 0.1)
   expect_equal(cov(simout), sigma, tol = 0.1)
 })
+
+
+test_that("permute design approximates target correlation", {
+  set.seed(1)
+  n <- 1000
+  p <- 2
+  k <- 3
+  A <- matrix(rnorm((k + p)^2), nrow = p + k)
+  cormat <- cov2cor(crossprod(A))
+  sigma11 <- cormat[seq_len(p), seq_len(p)]
+  target_cor <- cormat[seq_len(p), (p + 1):(k + p)]
+  design_perm <- rmvnorm(mu = matrix(0, nrow = n, ncol = p), sigma = sigma11)
+  sv <- scale(matrix(runif(k * n), nrow = n))
+  target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
+  pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "marriage")
+  expect_equal(cor(pout$latent_var, sv), target_cor, tol = 0.1)
+
+  # pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "optmatch")
+  # cor(pout$design_perm, sv)
+  # target_cor
+
+
+  # n <- 10
+  # design_perm <- rmvnorm(mu = matrix(0, nrow = n, ncol = p), sigma = sigma11)
+  # sv <- scale(matrix(runif(k * n), nrow = n))
+  # target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
+  #
+  # itermax <- 1000
+  # corarray <- array(0, dim = c(p, k, itermax))
+  # for (index in seq_len(itermax)) {
+  #   pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "optmatch")
+  #   corarray[,,index] <- cor(pout$design_perm, sv)
+  # }
+  # apply(corarray, c(1, 2), median)
+  # target_cor
+})
+
+
+
+
+
+

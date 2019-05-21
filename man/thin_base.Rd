@@ -2,7 +2,7 @@
 % Please edit documentation in R/genthin.R
 \name{thin_base}
 \alias{thin_base}
-\title{Basic Poisson thinning function.}
+\title{Base Poisson thinning function.}
 \usage{
 thin_base(mat, design, coef)
 }
@@ -11,13 +11,32 @@ thin_base(mat, design, coef)
 index the samples (as is usual in RNA-seq).}
 
 \item{design}{A design matrix. The rows index the samples and the columns
-index the variables.}
+index the variables. The intercept should \emph{not} be included.}
 
 \item{coef}{A matrix of coefficients. The rows index the genes and the
 columns index the samples.}
 }
 \description{
-Given a matrix of counts, a design matrix, and a matrix
+Given a matrix of counts (\eqn{Y}), a design matrix (\eqn{X}),
+and a matrix of coefficients (\eqn{B}), \code{thin_diff} will generate a new
+matrix of counts such that \eqn{E[log_2(Y)] \approx BX' + u1'}, where
+\eqn{u} is some vector of intercept coefficients. This
+function is used by all other thinning functions.
+}
+\examples{
+## Simulate data from given matrix of counts
+set.seed(1)
+nsamp <- 10
+ngene <- 1000
+Y <- matrix(stats::rpois(nsamp * ngene, lambda = 100), nrow = ngene)
+X <- matrix(rep(c(0, 1), length.out = nsamp))
+B <- matrix(seq(3, 0, length.out = ngene))
+Ynew <- thin_base(mat = Y, design = X, coef = B)
+
+## Demonstrate how the log2 effect size is B
+Bhat <- coefficients(lm(t(log2(Ynew)) ~ X))["X", ]
+plot(Bhat, B)
+abline(0, 1, col = 2)
 }
 \author{
 David Gerard

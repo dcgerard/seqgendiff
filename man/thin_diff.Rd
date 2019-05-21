@@ -13,14 +13,16 @@ thin_diff(mat, design_fixed = NULL, coef_fixed = NULL,
 index the samples (as is usual in RNA-seq).}
 
 \item{design_fixed}{A design matrix whose rows are fixed and not permuted.
-The rows index the samples and the columns index the variables.}
+The rows index the samples and the columns index the variables.
+The intercept should \emph{not} be included.}
 
 \item{coef_fixed}{The coefficients corresponding to \code{design_fixed}.
 The rows index the genes and the columns index the variables.}
 
 \item{design_perm}{A design matrix whose rows are to be permuted (thus
 controlling the amount by which they are correlated with the confounders).
-The rows index the samples and the columns index the variables.}
+The rows index the samples and the columns index the variables.
+The intercept should \emph{not} be included.}
 
 \item{coef_perm}{The coefficients corresponding to \code{design_perm}.
 The rows index the genes and the columns index the variables.}
@@ -38,7 +40,8 @@ subtracing row means (\code{FALSE})? Defaults to \code{FALSE}.}
 
 \item{design_obs}{A matrix of observed covariates that we are NOT to be a
 part of the signal generating process. Only used in estimating the
-confounders if \code{use_sva = TRUE}.}
+confounders if \code{use_sva = TRUE}.
+The intercept should \emph{not} be included.}
 }
 \description{
 Poisson thinning for differential expression analysis.
