@@ -6,7 +6,7 @@
 \usage{
 thin_diff(mat, design_fixed = NULL, coef_fixed = NULL,
   design_perm = NULL, coef_perm = NULL, target_cor = NULL,
-  use_sva = FALSE, design_obs = NULL)
+  use_sva = FALSE, design_obs = NULL, relative = TRUE)
 }
 \arguments{
 \item{mat}{A matrix of counts. The rows index the genes and the columns
@@ -42,6 +42,10 @@ subtracing row means (\code{FALSE})? Defaults to \code{FALSE}.}
 part of the signal generating process. Only used in estimating the
 confounders if \code{use_sva = TRUE}.
 The intercept should \emph{not} be included.}
+
+\item{relative}{A logical. Should we apply relative thinning (\code{TRUE})
+or absolute thinning (\code{FALSE}). Only experts should change
+the default.}
 }
 \description{
 Poisson thinning for differential expression analysis.

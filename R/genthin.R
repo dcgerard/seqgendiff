@@ -11,9 +11,9 @@
 #' function is used by all other thinning functions.
 #'
 #' @inheritParams thin_diff
-#' @param design A design matrix. The rows index the samples and the columns
+#' @param designmat A design matrix. The rows index the samples and the columns
 #'    index the variables. The intercept should \emph{not} be included.
-#' @param coef A matrix of coefficients. The rows index the genes and the
+#' @param coefmat A matrix of coefficients. The rows index the genes and the
 #'    columns index the samples.
 #'
 #' @export
@@ -28,27 +28,39 @@
 #' Y <- matrix(stats::rpois(nsamp * ngene, lambda = 100), nrow = ngene)
 #' X <- matrix(rep(c(0, 1), length.out = nsamp))
 #' B <- matrix(seq(3, 0, length.out = ngene))
-#' Ynew <- thin_base(mat = Y, design = X, coef = B)
+#' Ynew <- thin_base(mat = Y, designmat = X, coefmat = B)
 #'
 #' ## Demonstrate how the log2 effect size is B
 #' Bhat <- coefficients(lm(t(log2(Ynew)) ~ X))["X", ]
 #' plot(Bhat, B)
-#' abline(0, 1, col = 2)
-thin_base <- function(mat, design, coef) {
+#' abline(0, 1, col = 2, lwd = 2)
+thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
+  ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
-  assertthat::assert_that(is.matrix(design))
-  assertthat::assert_that(is.matrix(coef))
+  assertthat::assert_that(is.matrix(designmat))
+  assertthat::assert_that(is.matrix(coefmat))
   assertthat::assert_that(is.numeric(mat))
-  assertthat::assert_that(is.numeric(design))
-  assertthat::assert_that(is.numeric(coef))
-  assertthat::are_equal(nrow(mat), nrow(coef))
-  assertthat::are_equal(ncol(mat), nrow(design))
-  assertthat::are_equal(ncol(design), ncol(coef))
+  assertthat::assert_that(is.numeric(designmat))
+  assertthat::assert_that(is.numeric(coefmat))
+  assertthat::are_equal(nrow(mat), nrow(coefmat))
+  assertthat::are_equal(ncol(mat), nrow(designmat))
+  assertthat::are_equal(ncol(designmat), ncol(coefmat))
+  assertthat::assert_that(is.logical(relative))
+  assertthat::are_equal(1L, length(relative))
   stopifnot(mat >= 0)
 
-  meanmat <- tcrossprod(coef, design)
-  qmat <- 2 ^ (meanmat - apply(meanmat, 1, max))
-  newmat <- stats::rbinom(n = prod(dim(mat)), size = mat, prob = qmat)
+  ## Thin ---------------------------------------------------------------------
+  meanmat <- tcrossprod(coefmat, designmat)
+  maxvec  <- apply(meanmat, 1, max)
+  if (!relative) {
+    if (any(maxvec > 0)) {
+      stop("thin_base: tcrossprod(coefmat, designmat) produced positive entries.")
+    }
+    qmat <- 2 ^ meanmat
+  } else {
+    qmat <- 2 ^ (meanmat - maxvec)
+  }
+  newmat      <- stats::rbinom(n = prod(dim(mat)), size = mat, prob = qmat)
   dim(newmat) <- dim(mat)
   return(newmat)
 }
@@ -64,21 +76,21 @@ thin_base <- function(mat, design, coef) {
 #' @export
 #'
 #' @author David Gerard
-thin_lib <- function(mat, thinlog2) {
+thin_lib <- function(mat, thinlog2, relative = FALSE) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.numeric(mat))
-  stopifnot(mat >= 0)
   assertthat::are_equal(length(thinlog2), ncol(mat))
   thinlog2 <- c(thinlog2)
   assertthat::assert_that(is.numeric(thinlog2))
   stopifnot(thinlog2 >= 0)
 
-  newmat <- thin_base(mat    = mat,
-                      design = matrix(-thinlog2, ncol = 1),
-                      coef   = matrix(1, nrow = nrow(mat), ncol = 1))
+  thout <- thin_diff(mat          = mat,
+                     design_fixed = matrix(-thinlog2, ncol = 1),
+                     coef_fixed   = matrix(1, nrow = nrow(mat), ncol = 1),
+                     relative     = relative)
 
-  return(newmat)
+  return(thout)
 }
 
 #' Poisson thinning in the two-group model.
@@ -109,7 +121,7 @@ thin_2group <- function(mat,
                         corvec        = NULL) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
-  assertthat::are_equal(1, length(prop_null), length(signal_fun), length(group_prop))
+  assertthat::are_equal(1L, length(prop_null), length(signal_fun), length(group_prop))
   assertthat::assert_that(prop_null <= 1, prop_null >= 0, group_prop <= 1, group_prop >= 0)
   assertthat::assert_that(is.function(signal_fun))
   assertthat::assert_that(is.list(signal_params))
@@ -181,6 +193,9 @@ thin_2group <- function(mat,
 #'     part of the signal generating process. Only used in estimating the
 #'     confounders if \code{use_sva = TRUE}.
 #'     The intercept should \emph{not} be included.
+#' @param relative A logical. Should we apply relative thinning (\code{TRUE})
+#'     or absolute thinning (\code{FALSE}). Only experts should change
+#'     the default.
 #'
 #' @export
 #'
@@ -192,12 +207,14 @@ thin_diff <- function(mat,
                       coef_perm    = NULL,
                       target_cor   = NULL,
                       use_sva      = FALSE,
-                      design_obs   = NULL) {
+                      design_obs   = NULL,
+                      relative     = TRUE) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.numeric(mat))
-  stopifnot(mat >= 0)
   assertthat::assert_that(is.logical(use_sva))
+  assertthat::assert_that(is.logical(relative))
+  assertthat::are_equal(1L, length(use_sva), length(relative))
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
 
@@ -253,22 +270,27 @@ thin_diff <- function(mat,
   }
 
   ## Make overall design and coef ---------------------------------------------
-  design <- cbind(design_fixed, design_perm)
-  class(design) <- "numeric"
-  coef   <- cbind(coef_fixed, coef_perm)
-  class(coef) <- "numeric"
+  designmat        <- cbind(design_fixed, design_perm)
+  class(designmat) <- "numeric"
+  coefmat          <- cbind(coef_fixed, coef_perm)
+  class(coefmat)   <- "numeric"
 
   ## Thin ---------------------------------------------------------------------
-  newmat <- thin_base(mat    = mat,
-                      design = design,
-                      coef   = coef)
+  newmat <- thin_base(mat       = mat,
+                      designmat = designmat,
+                      coefmat   = coefmat,
+                      relative  = relative)
 
-  return(list(mat          = newmat,
-              design       = design,
-              coef         = coef,
-              sv           = sv,
-              cor          = new_cor,
-              matching_var = latent_var))
+  retval <- list(mat          = newmat,
+                 designmat    = designmat,
+                 coefmat      = coefmat,
+                 sv           = sv,
+                 cor          = new_cor,
+                 matching_var = latent_var)
+
+  class(retval) <- "ThinData"
+
+  return(retval)
 }
 
 #' Estimate the surrogate variables.

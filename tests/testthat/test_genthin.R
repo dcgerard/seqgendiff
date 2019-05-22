@@ -35,6 +35,22 @@ test_that("general thinning works", {
 })
 
 
+test_that("library thinning works", {
+  set.seed(1)
+  n <- 10
+  p <- 1000
+  mat <- matrix(1000, ncol = n, nrow = p)
+  thinlog2 <- rexp(n = n, rate = 1)
+
+  thout <- thin_lib(mat = mat, thinlog2 = thinlog2)
+
+  empvec <- colMeans(thout$mat) / 1000
+  propvec <- 2^(-thinlog2)
+
+  expect_equal(empvec, propvec, tol = 0.01)
+})
+
+
 
 test_that("fix_cor fixes the correlation", {
   set.seed(1)
@@ -115,7 +131,7 @@ test_that("thin_2group doesn't alter zero coef genes", {
   expect_equal(thout$mat, mat)
 
   thout <- thin_2group(mat = mat, prop_null = 0.5)
-  expect_equal(thout$mat[abs(thout$coef) < 10^-6, ], mat[abs(thout$coef) < 10^-6, ])
+  expect_equal(thout$mat[abs(thout$coefmat) < 10^-6, ], mat[abs(thout$coefmat) < 10^-6, ])
 })
 
 

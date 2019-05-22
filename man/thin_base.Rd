@@ -4,17 +4,21 @@
 \alias{thin_base}
 \title{Base Poisson thinning function.}
 \usage{
-thin_base(mat, design, coef)
+thin_base(mat, designmat, coefmat, relative = TRUE)
 }
 \arguments{
 \item{mat}{A matrix of counts. The rows index the genes and the columns
 index the samples (as is usual in RNA-seq).}
 
-\item{design}{A design matrix. The rows index the samples and the columns
+\item{designmat}{A design matrix. The rows index the samples and the columns
 index the variables. The intercept should \emph{not} be included.}
 
-\item{coef}{A matrix of coefficients. The rows index the genes and the
+\item{coefmat}{A matrix of coefficients. The rows index the genes and the
 columns index the samples.}
+
+\item{relative}{A logical. Should we apply relative thinning (\code{TRUE})
+or absolute thinning (\code{FALSE}). Only experts should change
+the default.}
 }
 \description{
 Given a matrix of counts (\eqn{Y}), a design matrix (\eqn{X}),
@@ -31,12 +35,12 @@ ngene <- 1000
 Y <- matrix(stats::rpois(nsamp * ngene, lambda = 100), nrow = ngene)
 X <- matrix(rep(c(0, 1), length.out = nsamp))
 B <- matrix(seq(3, 0, length.out = ngene))
-Ynew <- thin_base(mat = Y, design = X, coef = B)
+Ynew <- thin_base(mat = Y, designmat = X, coefmat = B)
 
 ## Demonstrate how the log2 effect size is B
 Bhat <- coefficients(lm(t(log2(Ynew)) ~ X))["X", ]
 plot(Bhat, B)
-abline(0, 1, col = 2)
+abline(0, 1, col = 2, lwd = 2)
 }
 \author{
 David Gerard

@@ -4,7 +4,7 @@
 \alias{thin_lib}
 \title{Poisson thinning for altering library size.}
 \usage{
-thin_lib(mat, thinlog2)
+thin_lib(mat, thinlog2, relative = FALSE)
 }
 \arguments{
 \item{mat}{A matrix of counts. The rows index the genes and the columns
@@ -14,6 +14,10 @@ index the samples (as is usual in RNA-seq).}
 example, a value of 0 means that we do not thin, a value of 1 means
 that we thin by a factor of 2, a value of 2 means we thin by a factor
 of 4, etc.}
+
+\item{relative}{A logical. Should we apply relative thinning (\code{TRUE})
+or absolute thinning (\code{FALSE}). Only experts should change
+the default.}
 }
 \description{
 Poisson thinning for altering library size.
