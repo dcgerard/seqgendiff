@@ -13,9 +13,6 @@
 *~
 *.#*
 
-## ignore mostly when using Rmarkdown
-*.html
-!docs/*.html
 
 ## LaTeX
 *.aux
