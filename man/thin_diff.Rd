@@ -47,6 +47,20 @@ The intercept should \emph{not} be included.}
 or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
 }
+\value{
+An S3 object of class \code{ThinData}. Components include some or
+all of the following:
+\describe{
+  \item{\code{mat}}{The modified matrix of counts.}
+  \item{\code{designmat}}{The design matrix, excluding an intercept term.}
+  \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
+  \item{\code{sv}}{A matrix of estimated surrogate variables.}
+  \item{\code{cormat}}{A matrix of target correlations between the
+      surrogate variables and the permuted variables in the design matrix.}
+  \item{\code{matching_var}}{A matrix of simulated variables used to
+      permute the permuted components of the design matrix.}
+}
+}
 \description{
 Poisson thinning for differential expression analysis.
 }

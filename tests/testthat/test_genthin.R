@@ -45,7 +45,7 @@ test_that("library thinning works", {
   thout <- thin_lib(mat = mat, thinlog2 = thinlog2)
 
   empvec <- colMeans(thout$mat) / 1000
-  propvec <- 2^(-thinlog2)
+  propvec <- 2 ^ (-thinlog2)
 
   expect_equal(empvec, propvec, tol = 0.01)
 })

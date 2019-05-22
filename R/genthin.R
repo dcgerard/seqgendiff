@@ -160,7 +160,8 @@ thin_2group <- function(mat,
   thout <- thin_diff(mat         = mat,
                      design_perm = design_perm,
                      coef_perm   = coef_perm,
-                     target_cor  = target_cor)
+                     target_cor  = target_cor,
+                     relative    = TRUE)
 
   return(thout)
 }
@@ -196,6 +197,19 @@ thin_2group <- function(mat,
 #' @param relative A logical. Should we apply relative thinning (\code{TRUE})
 #'     or absolute thinning (\code{FALSE}). Only experts should change
 #'     the default.
+#'
+#' @return An S3 object of class \code{ThinData}. Components include some or
+#' all of the following:
+#' \describe{
+#'   \item{\code{mat}}{The modified matrix of counts.}
+#'   \item{\code{designmat}}{The design matrix, excluding an intercept term.}
+#'   \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
+#'   \item{\code{sv}}{A matrix of estimated surrogate variables.}
+#'   \item{\code{cormat}}{A matrix of target correlations between the
+#'       surrogate variables and the permuted variables in the design matrix.}
+#'   \item{\code{matching_var}}{A matrix of simulated variables used to
+#'       permute the permuted components of the design matrix.}
+#' }
 #'
 #' @export
 #'
@@ -282,10 +296,10 @@ thin_diff <- function(mat,
                       relative  = relative)
 
   retval <- list(mat          = newmat,
-                 designmat    = designmat,
+                 designmat    = cbind(designmat, design_obs),
                  coefmat      = coefmat,
                  sv           = sv,
-                 cor          = new_cor,
+                 cormat       = new_cor,
                  matching_var = latent_var)
 
   class(retval) <- "ThinData"
