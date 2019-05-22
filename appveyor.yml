@@ -14,9 +14,9 @@ install:
 
 build_script:
   - travis-tool.sh install_deps
-  - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_bioc sva
   - travis-tool.sh install_bioc SummarizedExperiment
+  - travis-tool.sh install_bioc_deps
 
 
 
