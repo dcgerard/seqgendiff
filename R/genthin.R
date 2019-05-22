@@ -300,13 +300,18 @@ thin_2group <- function(mat,
 #'     observed covariates and the columns index the surrogate variables.
 #'     The number of columns indicates the number of surrogate variables.
 #'     Set this to \code{NULL} to indicate uncorrelated.
-#' @param use_sva A logical. Should we use SVA using \code{design_fixed}
-#'     and \code{design_obs} to estimate the hidden covariates (\code{TRUE})
+#' @param use_sva A logical. Should we use SVA using
+#'     \code{design_obs} to estimate the hidden covariates (\code{TRUE})
 #'     or should we just do an SVD on \code{log2(mat + 0.5)} after
-#'     subtracing row means (\code{FALSE})? Defaults to \code{FALSE}.
-#' @param design_obs A numeric matrix of observed covariates that we are NOT to be a
+#'     regressing out \code{design_obs} (\code{FALSE})? Setting this to
+#'     \code{TRUE} allows the surrogate variables to be correlated with the
+#'     observed covariates, while setting this to \code{FALSE} assumes that
+#'     the surrogate variabes are orthogonal to the observed covariates. This
+#'     option only matters if \code{design_obs} is not \code{NULL}.
+#'     Defaults to \code{FALSE}.
+#' @param design_obs A numeric matrix of observed covariates that are NOT to be a
 #'     part of the signal generating process. Only used in estimating the
-#'     surrogate variables if \code{use_sva = TRUE}.
+#'     surrogate variables (if \code{target_cor} is not \code{NULL}).
 #'     The intercept should \emph{not} be included.
 #' @param relative A logical. Should we apply relative thinning (\code{TRUE})
 #'     or absolute thinning (\code{FALSE}). Only experts should change
@@ -464,7 +469,6 @@ thin_diff <- function(mat,
     n_sv <- ncol(new_cor)
     sv <- est_sv(mat          = mat,
                  n_sv         = n_sv,
-                 design_fixed = design_fixed,
                  design_obs   = design_obs,
                  use_sva      = use_sva)
 

@@ -13,10 +13,13 @@ test_that("general thinning works", {
   thinlog2 <- stats::rexp(n = n)
   design_fixed <- matrix(rep(c(0, 1), length.out = n))
   coef_fixed <- matrix(rnorm(p))
+  design_obs = matrix(runif(n))
 
   thout <- thin_diff(mat = mat,
                      design_perm = design_perm,
                      coef_perm = coef_perm)
+
+  summary(thout)
 
   thout <- thin_diff(mat = mat,
                      design_fixed = design_fixed,
@@ -24,6 +27,7 @@ test_that("general thinning works", {
                      design_perm = design_perm,
                      coef_perm = coef_perm,
                      target_cor = target_cor,
+                     design_obs = design_obs,
                      use_sva = TRUE)
 
   # cor(thout$sv, thout$matching_var)
@@ -133,8 +137,5 @@ test_that("thin_2group doesn't alter zero coef genes", {
   thout <- thin_2group(mat = mat, prop_null = 0.5)
   expect_equal(thout$mat[abs(thout$coefmat) < 10^-6, ], mat[abs(thout$coefmat) < 10^-6, ])
 })
-
-
-
 
 

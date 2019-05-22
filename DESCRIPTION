@@ -10,8 +10,10 @@ LazyData: true
 URL: https://github.com/dcgerard/seqgendiff
 BugReports: http://github.com/dcgerard/seqgendiff/issues
 RoxygenNote: 6.1.1
-Suggests: covr,
-    testthat
+Suggests: 
+    covr,
+    testthat,
+    SummarizedExperiment
 Imports: 
     assertthat,
     irlba,

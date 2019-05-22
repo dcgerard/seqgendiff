@@ -1,28 +1,31 @@
 ############################
-## Functions relating to surrogate variables and permuting the desing
+## Functions relating to surrogate variables and permuting the design
 ## matrix in thin_diff().
 ############################
 
 #' Estimate the surrogate variables.
 #'
+#' This will use either \code{\link[sva]{sva}} or an SVD on the residuals
+#' of a regression of \code{mat} on \code{design_obs} to estimate the
+#' surrogate variables.
+#'
 #' @inheritParams thin_diff
 #' @param n_sv The number of surrogate variables.
 #'
 #' @author David Gerard
-est_sv <- function(mat, n_sv, design_fixed, design_obs, use_sva = FALSE) {
+est_sv <- function(mat, n_sv, design_obs, use_sva = FALSE) {
   assertthat::is.count(n_sv)
   assertthat::assert_that(is.matrix(mat))
-  assertthat::assert_that(is.matrix(design_fixed))
   assertthat::assert_that(is.matrix(design_obs))
   assertthat::assert_that(is.logical(use_sva))
-  assertthat::are_equal(ncol(mat), nrow(design_fixed), nrow(design_obs))
+  assertthat::are_equal(ncol(mat), nrow(design_obs))
   assertthat::are_equal(length(use_sva), 1)
 
   matlog2 <- log2(mat + 0.5)
-  if (use_sva & ncol(design_fixed) > 0) {
-    utils::capture.output(sv <- sva::sva(dat = matlog2, mod = cbind(design_fixed, design_obs, 1), n.sv = n_sv)$sv)
+  Xfixed  <- cbind(design_obs, 1)
+  if (use_sva & ncol(design_obs) > 0) {
+    utils::capture.output(sv <- sva::sva(dat = matlog2, mod = Xfixed, n.sv = n_sv)$sv)
   } else {
-    Xfixed <- cbind(design_fixed, design_obs, 1)
     sv <- svd(matlog2 %*% (diag(nrow(Xfixed)) - Xfixed %*% solve(t(Xfixed) %*% Xfixed) %*% t(Xfixed)), nv = n_sv, nu = 0)$v
   }
   sv <- sv * sqrt(nrow(sv - 1))
@@ -185,7 +188,11 @@ fix_cor <- function(design_perm, target_cor, num_steps = 51) {
   return(sqrt(current_shrink) * target_cor)
 }
 
-# Generate multivariate normal random variable.
+# Generate multivariate normal random samples.
+#
+# @param mu A matrix of means. The rows index the independent samples, the columns
+#    index the variables.
+# @param sigma A covariance matrix of the columns.
 rmvnorm <- function(mu, sigma) {
   stopifnot(nrow(sigma) == ncol(mu))
   cholout <- chol(sigma)

@@ -4,7 +4,7 @@
 \alias{est_sv}
 \title{Estimate the surrogate variables.}
 \usage{
-est_sv(mat, n_sv, design_fixed, design_obs, use_sva = FALSE)
+est_sv(mat, n_sv, design_obs, use_sva = FALSE)
 }
 \arguments{
 \item{mat}{A numeric matrix of counts. The rows index the genes and the
@@ -12,22 +12,25 @@ columns index the samples (as is usual in RNA-seq).}
 
 \item{n_sv}{The number of surrogate variables.}
 
-\item{design_fixed}{A numeric design matrix whose rows are fixed and not permuted.
-The rows index the samples and the columns index the variables.
-The intercept should \emph{not} be included.}
-
-\item{design_obs}{A numeric matrix of observed covariates that we are NOT to be a
+\item{design_obs}{A numeric matrix of observed covariates that are NOT to be a
 part of the signal generating process. Only used in estimating the
-surrogate variables if \code{use_sva = TRUE}.
+surrogate variables (if \code{target_cor} is not \code{NULL}).
 The intercept should \emph{not} be included.}
 
-\item{use_sva}{A logical. Should we use SVA using \code{design_fixed}
-and \code{design_obs} to estimate the hidden covariates (\code{TRUE})
+\item{use_sva}{A logical. Should we use SVA using
+\code{design_obs} to estimate the hidden covariates (\code{TRUE})
 or should we just do an SVD on \code{log2(mat + 0.5)} after
-subtracing row means (\code{FALSE})? Defaults to \code{FALSE}.}
+regressing out \code{design_obs} (\code{FALSE})? Setting this to
+\code{TRUE} allows the surrogate variables to be correlated with the
+observed covariates, while setting this to \code{FALSE} assumes that
+the surrogate variabes are orthogonal to the observed covariates. This
+option only matters if \code{design_obs} is not \code{NULL}.
+Defaults to \code{FALSE}.}
 }
 \description{
-Estimate the surrogate variables.
+This will use either \code{\link[sva]{sva}} or an SVD on the residuals
+of a regression of \code{mat} on \code{design_obs} to estimate the
+surrogate variables.
 }
 \author{
 David Gerard
