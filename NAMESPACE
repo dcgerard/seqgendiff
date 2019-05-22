@@ -3,6 +3,7 @@
 export(corassign)
 export(poisthin)
 export(theogen)
+export(thin_2group)
 export(thin_base)
 export(thin_diff)
 export(thin_lib)

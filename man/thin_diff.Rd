@@ -9,28 +9,28 @@ thin_diff(mat, design_fixed = NULL, coef_fixed = NULL,
   use_sva = FALSE, design_obs = NULL, relative = TRUE)
 }
 \arguments{
-\item{mat}{A matrix of counts. The rows index the genes and the columns
-index the samples (as is usual in RNA-seq).}
+\item{mat}{A numeric matrix of counts. The rows index the genes and the
+columns index the samples (as is usual in RNA-seq).}
 
-\item{design_fixed}{A design matrix whose rows are fixed and not permuted.
+\item{design_fixed}{A numeric design matrix whose rows are fixed and not permuted.
 The rows index the samples and the columns index the variables.
 The intercept should \emph{not} be included.}
 
-\item{coef_fixed}{The coefficients corresponding to \code{design_fixed}.
+\item{coef_fixed}{A numeric matrix. The coefficients corresponding to \code{design_fixed}.
 The rows index the genes and the columns index the variables.}
 
-\item{design_perm}{A design matrix whose rows are to be permuted (thus
-controlling the amount by which they are correlated with the confounders).
+\item{design_perm}{A numeric design matrix whose rows are to be permuted (thus
+controlling the amount by which they are correlated with the surrogate variables).
 The rows index the samples and the columns index the variables.
 The intercept should \emph{not} be included.}
 
-\item{coef_perm}{The coefficients corresponding to \code{design_perm}.
+\item{coef_perm}{A numeric matrix. The coefficients corresponding to \code{design_perm}.
 The rows index the genes and the columns index the variables.}
 
-\item{target_cor}{A matrix of target correlation betweens the variables in
-\code{design_perm} and the unobserved confounders. The rows index the
-observed covariates and the columns index the unobserved confounders.
-The number of columns indicates the number of hidden confounders.
+\item{target_cor}{A numeric matrix of target correlations betweens the variables in
+\code{design_perm} and the surrogate variables. The rows index the
+observed covariates and the columns index the surrogate variables.
+The number of columns indicates the number of surrogate variables.
 Set this to \code{NULL} to indicate uncorrelated.}
 
 \item{use_sva}{A logical. Should we use SVA using \code{design_fixed}
@@ -38,9 +38,9 @@ and \code{design_obs} to estimate the hidden covariates (\code{TRUE})
 or should we just do an SVD on \code{log2(mat + 0.5)} after
 subtracing row means (\code{FALSE})? Defaults to \code{FALSE}.}
 
-\item{design_obs}{A matrix of observed covariates that we are NOT to be a
+\item{design_obs}{A numeric matrix of observed covariates that we are NOT to be a
 part of the signal generating process. Only used in estimating the
-confounders if \code{use_sva = TRUE}.
+surrogate variables if \code{use_sva = TRUE}.
 The intercept should \emph{not} be included.}
 
 \item{relative}{A logical. Should we apply relative thinning (\code{TRUE})
@@ -62,7 +62,121 @@ all of the following:
 }
 }
 \description{
-Poisson thinning for differential expression analysis.
+Given a matrix of real RNA-seq counts, this function will add a known
+amount of signal to the count matrix. This signal is given in the form
+of a Poisson generalized linear model with a log (base 2) link. The user may
+specify any arbitrary design matrix and coefficient matrix. The user
+may also control for the amount of correlation between the observed
+covariates and any unobserved surrogate variables.
+}
+\section{Mathematical Formulation}{
+
+Let
+\describe{
+  \item{\eqn{N}}{Be the number of samples.}
+  \item{\eqn{G}}{Be the number of genes.}
+  \item{\eqn{Y}}{Be an \eqn{G} by \eqn{N} matrix of real RNA-seq counts.
+      This is \code{mat}.}
+  \item{\eqn{X_1}}{Be an \eqn{N} by \eqn{P_1} user-provided design matrix.
+      This is \code{design_fixed}.}
+  \item{\eqn{X_2}}{Be an \eqn{N} by \eqn{P_2} user-provided design matrix.
+      This is \code{design_perm}.}
+  \item{\eqn{X_3}}{Be an \eqn{N} by \eqn{P_3} matrix of known covariates.
+      This is \code{design_obs}.}
+  \item{\eqn{Z}}{Be an \eqn{N} by \eqn{K} matrix of unobserved surrogate
+       variables. This is estimated when \code{target_cor} is not
+       \code{NULL}.}
+}
+We assume that \eqn{Y} is Poisson distributed given \eqn{X_3} and
+\eqn{Z} such that
+\deqn{\log_2(EY) = 1_N\mu' + B_3X_3' + AZ'.}
+\code{thin_diff()} will take as inpute \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
+\eqn{B_2}, and will output a \eqn{\tilde{Y}} and \eqn{W} such that
+\eqn{\tilde{Y}} is Poisson distributed given \eqn{X_1}, \eqn{X_2}, \eqn{X_3},
+\eqn{W}, and \eqn{Z} such that
+\deqn{\log_2(E\tilde{Y}) \approx 1_N\tilde{\mu}' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',}
+where \eqn{W} is an \eqn{N} by \eqn{N} permutation matrix. \eqn{W} is randomly
+drawn so that \eqn{X_2} and \eqn{Z} are correlated approximately according
+to a target correlation matrix.
+}
+
+\examples{
+## Generate simulated data with surrogate variables
+## In practice, you would obtain mat from a real dataset, not simulate it.
+set.seed(1)
+n <- 10
+p <- 1000
+Z <- matrix(abs(rnorm(n, sd = 4)))
+alpha <- matrix(abs(rnorm(p, sd = 1)))
+mat <- round(2^(alpha \%*\% t(Z) + abs(matrix(rnorm(n * p, sd = 5),
+                                            nrow = p,
+                                            ncol = n))))
+
+## Choose simulation parameters
+design_perm <- cbind(rep(c(0, 1), length.out = n), runif(n))
+coef_perm <- matrix(rnorm(p * ncol(design_perm), sd = 6), nrow = p)
+
+## Specify one surrogate variable (number of columns in taget_cor),
+## highly correlated with first observed covariate and uncorrelated
+## with second observed covariate
+target_cor <- matrix(c(0.9, 0))
+
+## Thin
+thout <- thin_diff(mat = mat,
+                   design_perm = design_perm,
+                   coef_perm = coef_perm,
+                   target_cor = target_cor)
+
+## target_cor approximates correlation between estimated surrogate variable
+## and matching variable.
+cor(thout$matching_var, thout$sv)
+
+## Estimated surrogate variable is associated with true surrogate variable
+## (because the signal is strong in this case)
+plot(Z, thout$sv, xlab = "True SV", ylab = "Estimated SV")
+
+## So target_cor approximates correlation between surrogate variable and
+## matching variables
+cor(thout$matching_var, Z)
+
+## Correlation between permuted covariates and surrogate variables are less
+## close to target_cor
+cor(thout$designmat, Z)
+
+## Estimated signal is correlated to true single. First variable is slightly
+## biased because the surrogate variable is not included.
+Ynew <- log2(t(thout$mat) + 0.5)
+X <- thout$designmat
+coef_est <- t(coef(lm(Ynew ~ X))[2:3, ])
+
+plot(thout$coefmat[, 1], coef_est[, 1])
+abline(0, 1, col = 2, lwd = 2)
+
+plot(thout$coefmat[, 2], coef_est[, 2])
+abline(0, 1, col = 2, lwd = 2)
+
+## But estimated coefficient of the first variable is slightly closer when
+## the surrogate variable is included.
+Ynew <- log2(t(thout$mat) + 0.5)
+X <- cbind(thout$designmat, thout$sv)
+coef_est <- t(coef(lm(Ynew ~ X))[2:3, ])
+
+plot(thout$coefmat[, 1], coef_est[, 1])
+abline(0, 1, col = 2, lwd = 2)
+
+plot(thout$coefmat[, 2], coef_est[, 2])
+abline(0, 1, col = 2, lwd = 2)
+
+}
+\seealso{
+\describe{
+  \item{\code{\link{thin_2group}}}{For the specific application of
+      \code{thin_diff} to the two-group model.}
+  \item{\code{\link{thin_lib}}}{For the specific application of
+      \code{thin_diff} to library size thinning.}
+  \item{\code{\link{thin_base}}}{For the underlying thinning function
+      used in \code{thin_diff}.}
+}
 }
 \author{
 David Gerard

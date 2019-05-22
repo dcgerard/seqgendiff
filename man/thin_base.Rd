@@ -7,8 +7,8 @@
 thin_base(mat, designmat, coefmat, relative = TRUE)
 }
 \arguments{
-\item{mat}{A matrix of counts. The rows index the genes and the columns
-index the samples (as is usual in RNA-seq).}
+\item{mat}{A numeric matrix of counts. The rows index the genes and the
+columns index the samples (as is usual in RNA-seq).}
 
 \item{designmat}{A design matrix. The rows index the samples and the columns
 index the variables. The intercept should \emph{not} be included.}
@@ -29,6 +29,7 @@ function is used by all other thinning functions.
 }
 \examples{
 ## Simulate data from given matrix of counts
+## In practice, you would obtain Y from a real dataset, not simulate it.
 set.seed(1)
 nsamp <- 10
 ngene <- 1000
@@ -39,8 +40,9 @@ Ynew <- thin_base(mat = Y, designmat = X, coefmat = B)
 
 ## Demonstrate how the log2 effect size is B
 Bhat <- coefficients(lm(t(log2(Ynew)) ~ X))["X", ]
-plot(Bhat, B)
+plot(B, Bhat, xlab = "Coefficients", ylab = "Coefficient Estimates")
 abline(0, 1, col = 2, lwd = 2)
+
 }
 \author{
 David Gerard

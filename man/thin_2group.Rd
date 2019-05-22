@@ -9,8 +9,8 @@ thin_2group(mat, prop_null = 1, signal_fun = stats::rnorm,
   corvec = NULL)
 }
 \arguments{
-\item{mat}{A matrix of counts. The rows index the genes and the columns
-index the samples (as is usual in RNA-seq).}
+\item{mat}{A numeric matrix of counts. The rows index the genes and the
+columns index the samples (as is usual in RNA-seq).}
 
 \item{prop_null}{The proportion of genes that are null.}
 
@@ -30,8 +30,60 @@ ith latent confounder. The default is to set this to \code{NULL},
 in which case group assignment is made independently of any
 unobserved confounding.}
 }
+\value{
+An S3 object of class \code{ThinData}. Components include some or
+all of the following:
+\describe{
+  \item{\code{mat}}{The modified matrix of counts.}
+  \item{\code{designmat}}{The design matrix, excluding an intercept term.}
+  \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
+  \item{\code{sv}}{A matrix of estimated surrogate variables.}
+  \item{\code{cormat}}{A matrix of target correlations between the
+      surrogate variables and the permuted variables in the design matrix.}
+  \item{\code{matching_var}}{A matrix of simulated variables used to
+      permute the permuted components of the design matrix.}
+}
+}
 \description{
-Poisson thinning in the two-group model.
+Given a matrix of real RNA-seq counts, this function will
+randomly assign samples to one of two groups, draw
+the log2-fold change in expression between two groups for each gene,
+and add this signal to the RNA-seq counts matrix. The user may specify
+the proportion of samples in each group, the proportion of null genes
+(where the log2-fold change is 0),
+and the signal function. This is a specific application of the
+general Poisson thinning approach implemented in \code{\link{thin_diff}}.
+}
+\examples{
+## Simulate data from given matrix of counts
+## In practice, you would obtain Y from a real dataset, not simulate it.
+set.seed(1)
+nsamp <- 10
+ngene <- 1000
+Y <- matrix(stats::rpois(nsamp * ngene, lambda = 50), nrow = ngene)
+thinout <- thin_2group(mat           = Y,
+                       prop_null     = 0.9,
+                       signal_fun    = stats::rexp,
+                       signal_params = list(rate = 0.5))
+
+## 90 percent of genes are null
+mean(abs(thinout$coef) < 10^-6)
+
+## Check the estimates of the log2-fold change
+Ynew <- log2(t(thinout$mat + 0.5))
+X    <- thinout$designmat
+Bhat <- coef(lm(Ynew ~ X))["X", ]
+plot(thinout$coefmat,
+     Bhat,
+     xlab = "log2-fold change",
+     ylab = "Estimated log2-fold change")
+abline(0, 1, col = 2, lwd = 2)
+
+}
+\seealso{
+\describe{
+  \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
+}
 }
 \author{
 David Gerard

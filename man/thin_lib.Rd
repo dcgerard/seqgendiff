@@ -7,10 +7,10 @@
 thin_lib(mat, thinlog2, relative = FALSE)
 }
 \arguments{
-\item{mat}{A matrix of counts. The rows index the genes and the columns
-index the samples (as is usual in RNA-seq).}
+\item{mat}{A numeric matrix of counts. The rows index the genes and the
+columns index the samples (as is usual in RNA-seq).}
 
-\item{thinlog2}{A vector. Element i is the amount to thin (on the log2 scale). For
+\item{thinlog2}{A vector of numerics. Element i is the amount to thin (on the log2 scale). For
 example, a value of 0 means that we do not thin, a value of 1 means
 that we thin by a factor of 2, a value of 2 means we thin by a factor
 of 4, etc.}
@@ -19,8 +19,50 @@ of 4, etc.}
 or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
 }
+\value{
+An S3 object of class \code{ThinData}. Components include some or
+all of the following:
+\describe{
+  \item{\code{mat}}{The modified matrix of counts.}
+  \item{\code{designmat}}{The design matrix, excluding an intercept term.}
+  \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
+  \item{\code{sv}}{A matrix of estimated surrogate variables.}
+  \item{\code{cormat}}{A matrix of target correlations between the
+      surrogate variables and the permuted variables in the design matrix.}
+  \item{\code{matching_var}}{A matrix of simulated variables used to
+      permute the permuted components of the design matrix.}
+}
+}
 \description{
-Poisson thinning for altering library size.
+Given a matrix of real RNA-seq counts, this function will apply a
+separate, user-provided thinning factor to each sample. This uniformly
+lowers the counts for all genes in a sample. The thinning factor
+should be provided on the log2-scale. This is a specific application
+of the Poisson thinning approach in \code{\link{thin_diff}}.
+}
+\examples{
+## Generate count data and thinning factors
+## In practice, you would obtain mat from a real dataset, not simulate it.
+set.seed(1)
+n <- 10
+p <- 1000
+mat <- matrix(1000, ncol = n, nrow = p)
+thinlog2 <- rexp(n = n, rate = 1)
+
+## Thin library sizes
+thout <- thin_lib(mat = mat, thinlog2 = thinlog2)
+
+## Compare empirical thinning proportions to specified thinning proportions
+empirical_propvec <- colMeans(thout$mat) / 1000
+specified_propvec <- 2 ^ (-thinlog2)
+empirical_propvec
+specified_propvec
+
+}
+\seealso{
+\describe{
+  \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
+}
 }
 \author{
 David Gerard

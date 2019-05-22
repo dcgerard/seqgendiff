@@ -22,6 +22,7 @@
 #'
 #' @examples
 #' ## Simulate data from given matrix of counts
+#' ## In practice, you would obtain Y from a real dataset, not simulate it.
 #' set.seed(1)
 #' nsamp <- 10
 #' ngene <- 1000
@@ -32,8 +33,9 @@
 #'
 #' ## Demonstrate how the log2 effect size is B
 #' Bhat <- coefficients(lm(t(log2(Ynew)) ~ X))["X", ]
-#' plot(Bhat, B)
+#' plot(B, Bhat, xlab = "Coefficients", ylab = "Coefficient Estimates")
 #' abline(0, 1, col = 2, lwd = 2)
+#'
 thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
@@ -67,15 +69,47 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 
 #' Poisson thinning for altering library size.
 #'
+#' Given a matrix of real RNA-seq counts, this function will apply a
+#' separate, user-provided thinning factor to each sample. This uniformly
+#' lowers the counts for all genes in a sample. The thinning factor
+#' should be provided on the log2-scale. This is a specific application
+#' of the Poisson thinning approach in \code{\link{thin_diff}}.
+#'
 #' @inheritParams thin_diff
-#' @param thinlog2 A vector. Element i is the amount to thin (on the log2 scale). For
+#' @param thinlog2 A vector of numerics. Element i is the amount to thin (on the log2 scale). For
 #'     example, a value of 0 means that we do not thin, a value of 1 means
 #'     that we thin by a factor of 2, a value of 2 means we thin by a factor
 #'     of 4, etc.
 #'
+#' @inherit thin_diff return
+#'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
+#' }
+#'
 #' @export
 #'
 #' @author David Gerard
+#'
+#' @examples
+#' ## Generate count data and thinning factors
+#' ## In practice, you would obtain mat from a real dataset, not simulate it.
+#' set.seed(1)
+#' n <- 10
+#' p <- 1000
+#' mat <- matrix(1000, ncol = n, nrow = p)
+#' thinlog2 <- rexp(n = n, rate = 1)
+#'
+#' ## Thin library sizes
+#' thout <- thin_lib(mat = mat, thinlog2 = thinlog2)
+#'
+#' ## Compare empirical thinning proportions to specified thinning proportions
+#' empirical_propvec <- colMeans(thout$mat) / 1000
+#' specified_propvec <- 2 ^ (-thinlog2)
+#' empirical_propvec
+#' specified_propvec
+#'
 thin_lib <- function(mat, thinlog2, relative = FALSE) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
@@ -95,7 +129,14 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 
 #' Poisson thinning in the two-group model.
 #'
-#'
+#' Given a matrix of real RNA-seq counts, this function will
+#' randomly assign samples to one of two groups, draw
+#' the log2-fold change in expression between two groups for each gene,
+#' and add this signal to the RNA-seq counts matrix. The user may specify
+#' the proportion of samples in each group, the proportion of null genes
+#' (where the log2-fold change is 0),
+#' and the signal function. This is a specific application of the
+#' general Poisson thinning approach implemented in \code{\link{thin_diff}}.
 #'
 #' @inheritParams thin_diff
 #' @param prop_null The proportion of genes that are null.
@@ -112,7 +153,42 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 #'     in which case group assignment is made independently of any
 #'     unobserved confounding.
 #'
+#' @inherit thin_diff return
+#'
+#' @export
+#'
 #' @author David Gerard
+#'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
+#' }
+#'
+#' @examples
+#' ## Simulate data from given matrix of counts
+#' ## In practice, you would obtain Y from a real dataset, not simulate it.
+#' set.seed(1)
+#' nsamp <- 10
+#' ngene <- 1000
+#' Y <- matrix(stats::rpois(nsamp * ngene, lambda = 50), nrow = ngene)
+#' thinout <- thin_2group(mat           = Y,
+#'                        prop_null     = 0.9,
+#'                        signal_fun    = stats::rexp,
+#'                        signal_params = list(rate = 0.5))
+#'
+#' ## 90 percent of genes are null
+#' mean(abs(thinout$coef) < 10^-6)
+#'
+#' ## Check the estimates of the log2-fold change
+#' Ynew <- log2(t(thinout$mat + 0.5))
+#' X    <- thinout$designmat
+#' Bhat <- coef(lm(Ynew ~ X))["X", ]
+#' plot(thinout$coefmat,
+#'      Bhat,
+#'      xlab = "log2-fold change",
+#'      ylab = "Estimated log2-fold change")
+#' abline(0, 1, col = 2, lwd = 2)
+#'
 thin_2group <- function(mat,
                         prop_null     = 1,
                         signal_fun    = stats::rnorm,
@@ -168,31 +244,69 @@ thin_2group <- function(mat,
 
 #' Poisson thinning for differential expression analysis.
 #'
-#' @param mat A matrix of counts. The rows index the genes and the columns
-#'     index the samples (as is usual in RNA-seq).
-#' @param design_fixed A design matrix whose rows are fixed and not permuted.
+#' Given a matrix of real RNA-seq counts, this function will add a known
+#' amount of signal to the count matrix. This signal is given in the form
+#' of a Poisson generalized linear model with a log (base 2) link. The user may
+#' specify any arbitrary design matrix and coefficient matrix. The user
+#' may also control for the amount of correlation between the observed
+#' covariates and any unobserved surrogate variables.
+#'
+#'
+#' @section Mathematical Formulation:
+#' Let
+#' \describe{
+#'   \item{\eqn{N}}{Be the number of samples.}
+#'   \item{\eqn{G}}{Be the number of genes.}
+#'   \item{\eqn{Y}}{Be an \eqn{G} by \eqn{N} matrix of real RNA-seq counts.
+#'       This is \code{mat}.}
+#'   \item{\eqn{X_1}}{Be an \eqn{N} by \eqn{P_1} user-provided design matrix.
+#'       This is \code{design_fixed}.}
+#'   \item{\eqn{X_2}}{Be an \eqn{N} by \eqn{P_2} user-provided design matrix.
+#'       This is \code{design_perm}.}
+#'   \item{\eqn{X_3}}{Be an \eqn{N} by \eqn{P_3} matrix of known covariates.
+#'       This is \code{design_obs}.}
+#'   \item{\eqn{Z}}{Be an \eqn{N} by \eqn{K} matrix of unobserved surrogate
+#'        variables. This is estimated when \code{target_cor} is not
+#'        \code{NULL}.}
+#' }
+#' We assume that \eqn{Y} is Poisson distributed given \eqn{X_3} and
+#' \eqn{Z} such that
+#' \deqn{\log_2(EY) = 1_N\mu' + B_3X_3' + AZ'.}
+#' \code{thin_diff()} will take as inpute \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
+#' \eqn{B_2}, and will output a \eqn{\tilde{Y}} and \eqn{W} such that
+#' \eqn{\tilde{Y}} is Poisson distributed given \eqn{X_1}, \eqn{X_2}, \eqn{X_3},
+#' \eqn{W}, and \eqn{Z} such that
+#' \deqn{\log_2(E\tilde{Y}) \approx 1_N\tilde{\mu}' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',}
+#' where \eqn{W} is an \eqn{N} by \eqn{N} permutation matrix. \eqn{W} is randomly
+#' drawn so that \eqn{X_2} and \eqn{Z} are correlated approximately according
+#' to a target correlation matrix.
+#'
+#'
+#' @param mat A numeric matrix of counts. The rows index the genes and the
+#'     columns index the samples (as is usual in RNA-seq).
+#' @param design_fixed A numeric design matrix whose rows are fixed and not permuted.
 #'     The rows index the samples and the columns index the variables.
 #'     The intercept should \emph{not} be included.
-#' @param coef_fixed The coefficients corresponding to \code{design_fixed}.
+#' @param coef_fixed A numeric matrix. The coefficients corresponding to \code{design_fixed}.
 #'     The rows index the genes and the columns index the variables.
-#' @param design_perm A design matrix whose rows are to be permuted (thus
-#'     controlling the amount by which they are correlated with the confounders).
+#' @param design_perm A numeric design matrix whose rows are to be permuted (thus
+#'     controlling the amount by which they are correlated with the surrogate variables).
 #'     The rows index the samples and the columns index the variables.
 #'     The intercept should \emph{not} be included.
-#' @param coef_perm The coefficients corresponding to \code{design_perm}.
+#' @param coef_perm A numeric matrix. The coefficients corresponding to \code{design_perm}.
 #'     The rows index the genes and the columns index the variables.
-#' @param target_cor A matrix of target correlation betweens the variables in
-#'     \code{design_perm} and the unobserved confounders. The rows index the
-#'     observed covariates and the columns index the unobserved confounders.
-#'     The number of columns indicates the number of hidden confounders.
+#' @param target_cor A numeric matrix of target correlations betweens the variables in
+#'     \code{design_perm} and the surrogate variables. The rows index the
+#'     observed covariates and the columns index the surrogate variables.
+#'     The number of columns indicates the number of surrogate variables.
 #'     Set this to \code{NULL} to indicate uncorrelated.
 #' @param use_sva A logical. Should we use SVA using \code{design_fixed}
 #'     and \code{design_obs} to estimate the hidden covariates (\code{TRUE})
 #'     or should we just do an SVD on \code{log2(mat + 0.5)} after
 #'     subtracing row means (\code{FALSE})? Defaults to \code{FALSE}.
-#' @param design_obs A matrix of observed covariates that we are NOT to be a
+#' @param design_obs A numeric matrix of observed covariates that we are NOT to be a
 #'     part of the signal generating process. Only used in estimating the
-#'     confounders if \code{use_sva = TRUE}.
+#'     surrogate variables if \code{use_sva = TRUE}.
 #'     The intercept should \emph{not} be included.
 #' @param relative A logical. Should we apply relative thinning (\code{TRUE})
 #'     or absolute thinning (\code{FALSE}). Only experts should change
@@ -214,6 +328,85 @@ thin_2group <- function(mat,
 #' @export
 #'
 #' @author David Gerard
+#'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link{thin_2group}}}{For the specific application of
+#'       \code{thin_diff} to the two-group model.}
+#'   \item{\code{\link{thin_lib}}}{For the specific application of
+#'       \code{thin_diff} to library size thinning.}
+#'   \item{\code{\link{thin_base}}}{For the underlying thinning function
+#'       used in \code{thin_diff}.}
+#' }
+#'
+#'
+#' @examples
+#' ## Generate simulated data with surrogate variables
+#' ## In practice, you would obtain mat from a real dataset, not simulate it.
+#' set.seed(1)
+#' n <- 10
+#' p <- 1000
+#' Z <- matrix(abs(rnorm(n, sd = 4)))
+#' alpha <- matrix(abs(rnorm(p, sd = 1)))
+#' mat <- round(2^(alpha %*% t(Z) + abs(matrix(rnorm(n * p, sd = 5),
+#'                                             nrow = p,
+#'                                             ncol = n))))
+#'
+#' ## Choose simulation parameters
+#' design_perm <- cbind(rep(c(0, 1), length.out = n), runif(n))
+#' coef_perm <- matrix(rnorm(p * ncol(design_perm), sd = 6), nrow = p)
+#'
+#' ## Specify one surrogate variable (number of columns in taget_cor),
+#' ## highly correlated with first observed covariate and uncorrelated
+#' ## with second observed covariate
+#' target_cor <- matrix(c(0.9, 0))
+#'
+#' ## Thin
+#' thout <- thin_diff(mat = mat,
+#'                    design_perm = design_perm,
+#'                    coef_perm = coef_perm,
+#'                    target_cor = target_cor)
+#'
+#' ## target_cor approximates correlation between estimated surrogate variable
+#' ## and matching variable.
+#' cor(thout$matching_var, thout$sv)
+#'
+#' ## Estimated surrogate variable is associated with true surrogate variable
+#' ## (because the signal is strong in this case)
+#' plot(Z, thout$sv, xlab = "True SV", ylab = "Estimated SV")
+#'
+#' ## So target_cor approximates correlation between surrogate variable and
+#' ## matching variables
+#' cor(thout$matching_var, Z)
+#'
+#' ## Correlation between permuted covariates and surrogate variables are less
+#' ## close to target_cor
+#' cor(thout$designmat, Z)
+#'
+#' ## Estimated signal is correlated to true single. First variable is slightly
+#' ## biased because the surrogate variable is not included.
+#' Ynew <- log2(t(thout$mat) + 0.5)
+#' X <- thout$designmat
+#' coef_est <- t(coef(lm(Ynew ~ X))[2:3, ])
+#'
+#' plot(thout$coefmat[, 1], coef_est[, 1])
+#' abline(0, 1, col = 2, lwd = 2)
+#'
+#' plot(thout$coefmat[, 2], coef_est[, 2])
+#' abline(0, 1, col = 2, lwd = 2)
+#'
+#' ## But estimated coefficient of the first variable is slightly closer when
+#' ## the surrogate variable is included.
+#' Ynew <- log2(t(thout$mat) + 0.5)
+#' X <- cbind(thout$designmat, thout$sv)
+#' coef_est <- t(coef(lm(Ynew ~ X))[2:3, ])
+#'
+#' plot(thout$coefmat[, 1], coef_est[, 1])
+#' abline(0, 1, col = 2, lwd = 2)
+#'
+#' plot(thout$coefmat[, 2], coef_est[, 2])
+#' abline(0, 1, col = 2, lwd = 2)
+#'
 thin_diff <- function(mat,
                       design_fixed = NULL,
                       coef_fixed   = NULL,
@@ -267,7 +460,7 @@ thin_diff <- function(mat,
     new_cor <- fix_cor(design_perm = design_perm,
                        target_cor  = target_cor)
 
-    ## Estimate hidden confounders ----------------------
+    ## Estimate surrogate variables ---------------------
     n_sv <- ncol(new_cor)
     sv <- est_sv(mat          = mat,
                  n_sv         = n_sv,
@@ -307,160 +500,4 @@ thin_diff <- function(mat,
   return(retval)
 }
 
-#' Estimate the surrogate variables.
-#'
-#' @inheritParams thin_diff
-#' @param n_sv The number of surrogate variables.
-#'
-#' @author David Gerard
-est_sv <- function(mat, n_sv, design_fixed, design_obs, use_sva = FALSE) {
-  assertthat::is.count(n_sv)
-  assertthat::assert_that(is.matrix(mat))
-  assertthat::assert_that(is.matrix(design_fixed))
-  assertthat::assert_that(is.matrix(design_obs))
-  assertthat::assert_that(is.logical(use_sva))
-  assertthat::are_equal(ncol(mat), nrow(design_fixed), nrow(design_obs))
-  assertthat::are_equal(length(use_sva), 1)
-
-  matlog2 <- log2(mat + 0.5)
-  if (use_sva & ncol(design_fixed) > 0) {
-    utils::capture.output(sv <- sva::sva(dat = matlog2, mod = cbind(design_fixed, design_obs, 1), n.sv = n_sv)$sv)
-  } else {
-    Xfixed <- cbind(design_fixed, design_obs, 1)
-    sv <- svd(matlog2 %*% (diag(nrow(Xfixed)) - Xfixed %*% solve(t(Xfixed) %*% Xfixed) %*% t(Xfixed)), nv = n_sv, nu = 0)$v
-  }
-  sv <- sv * sqrt(nrow(sv - 1))
-  return(sv)
-}
-
-#' Permute the design matrix so that it is approximately correlated with
-#' the surrogate variables.
-#'
-#' @inheritParams thin_diff
-#' @param sv A matrix of surrogate variables
-#' @param method Should we use the optimal matching technique from Hansen and
-#'     Klopfer (2006) (\code{"optmatch"}) or the Gale-Shapley algorithm
-#'     for stable marriages (\code{marriage}) (Gale and Shapley, 1962)
-#'     as implemented in the matchingR package.
-#'     The \code{"optmatch"} method works almost uniformly better in practice,
-#'     but does take a lot more computational time if you have, say, 1000
-#'     samples.
-#'
-#' @references
-#' \itemize{
-#'   \item{Hansen, B.B. and Klopfer, S.O. (2006) Optimal full matching and related designs via network flows, JCGS 15 609-627.}
-#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
-#' }
-#'
-#' @author David Gerard
-permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "marriage")) {
-  ## Check input --------------------------------------------------------------
-  assertthat::are_equal(nrow(design_perm), nrow(sv))
-  assertthat::are_equal(ncol(design_perm), nrow(target_cor))
-  assertthat::are_equal(ncol(sv), ncol(target_cor))
-  method <- match.arg(method)
-  nsamp <- nrow(design_perm)
-  ## in case a non-standard sv is given ---------------------------------------
-  sv <- scale(sv)
-
-  ## Generate latent factors --------------------------------------------------
-  sigma11 <- stats::cor(design_perm)
-  sigma12 <- target_cor
-  sigma_cond <- sigma11 - sigma12 %*% t(sigma12)
-  mu_cond <- sv %*% t(sigma12)
-  latent_var <- rmvnorm(mu = mu_cond, sigma = sigma_cond)
-
-  ## Get permutations ---------------------------------------------------------
-  distmat <- as.matrix(pdist::pdist(X = scale(design_perm), Y = scale(latent_var)))
-  if (method == "optmatch") {
-    dimnames(distmat) <- list(treated = paste0("O", seq_len(nsamp)), control = paste0("L", seq_len(nsamp)))
-    suppressWarnings(matchout <- optmatch::pairmatch(distmat))
-    ogroup <- matchout[attributes(matchout)$contrast.group]
-    lgroup <- matchout[!attributes(matchout)$contrast.group]
-    design_perm <- design_perm[match(lgroup, ogroup), , drop = FALSE]
-  } else if (method == "marriage") {
-    matchout <- matchingR::galeShapley.marriageMarket(proposerUtils = -1 * t(distmat), reviewerUtils = -1 * distmat)
-    design_perm <- design_perm[matchout$proposals, ]
-  }
-  return(list(design_perm = design_perm, latent_var = latent_var))
-}
-
-#' Estimate the effective correlation
-#'
-#' Will return the actual correlation between the design matrix and the
-#' surrogate variables when you use \code{\link{permute_design}}.
-#'
-#' @inheritParams thin_diff
-#' @inheritParams permute_design
-#' @param iternum The total number of simulated correlations to consider.
-#'
-#' @author David Gerard
-effective_cor <- function(design_perm, sv, target_cor, method = c("optmatch", "marriage"), iternum = 1000) {
-  method <- match.arg(method)
-  target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
-  itermax <- 1000
-  corarray <- array(0, dim = c(ncol(design_perm), ncol(sv), itermax))
-  for (index in seq_len(itermax)) {
-    pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = method)
-    corarray[,,index] <- stats::cor(pout$design_perm, sv)
-  }
-  truecor <- apply(corarray, c(1, 2), mean)
-  return(truecor)
-}
-
-#' Fixes an invalid target correlation.
-#'
-#' Shrinks the target correlation using a uniform scaling facter so that
-#' the overall correlation matrix is positive semi-definite.
-#'
-#' @inheritParams thin_diff
-#' @param num_steps The number of steps between 0 and 1 to take in the
-#'     grid search for the shrinkage factor. The step-size would be
-#'     \code{1 / (num_steps - 1)}.
-#'
-#' @author David Gerard
-fix_cor <- function(design_perm, target_cor, num_steps = 51) {
-  ## Check input --------------------------------------------------------------
-  stopifnot(is.matrix(design_perm))
-  stopifnot(is.matrix(target_cor))
-  stopifnot(ncol(design_perm) == nrow(target_cor))
-  stopifnot(target_cor >= -1, target_cor <= 1)
-  assertthat::is.count(num_steps)
-  stopifnot(num_steps > 1)
-
-  p <- ncol(design_perm)
-  ## Calculate top left correlation -------------------------------------------
-  top_left_cor <- stats::cor(design_perm)
-
-  ## Calculate RR^T -----------------------------------------------------------
-  RRt <- tcrossprod(target_cor)
-
-  ## Test if already psd ------------------------------------------------------
-  eout <- eigen(top_left_cor - RRt, only.values = TRUE)
-  if (eout$values[p] >= 0) {
-    return(target_cor)
-  }
-
-  shrink_vec <- seq(1, 0, length.out = num_steps)
-  valid <- FALSE
-  step_index <- 1
-  while(!valid) {
-    step_index <- step_index + 1
-    current_shrink <- shrink_vec[step_index]
-    eout <- eigen(top_left_cor - current_shrink * RRt, only.values = TRUE)
-    if (eout$values[p] >= 0) {
-      valid <- TRUE
-    }
-  }
-
-  return(sqrt(current_shrink) * target_cor)
-}
-
-# Generate multivariate normal random variable.
-rmvnorm <- function(mu, sigma) {
-  stopifnot(nrow(sigma) == ncol(mu))
-  cholout <- chol(sigma)
-  simout <- matrix(stats::rnorm(n = prod(dim(mu))), nrow = nrow(mu)) %*% cholout + mu
-  return(simout)
-}
 
