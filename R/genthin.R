@@ -56,7 +56,9 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
   maxvec  <- apply(meanmat, 1, max)
   if (!relative) {
     if (any(maxvec > 0)) {
-      stop("thin_base: tcrossprod(coefmat, designmat) produced positive entries.")
+      stop(paste0("thin_base: tcrossprod(coefmat, designmat) produced positive entries\n",
+                  "       and relative = FALSE. Either set relative = TRUE or change your\n",
+                  "       coefficient and design matrices."))
     }
     qmat <- 2 ^ meanmat
   } else {
