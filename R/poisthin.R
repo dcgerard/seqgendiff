@@ -1,6 +1,8 @@
 
 #' Apply Poisson thinning to a matrix of count data.
 #'
+#' This is now defunct. Please try out \code{\link{thin_2group}}.
+#'
 #' Given a matrix of RNA-seq counts, this function will randomly select two groups of
 #' samples and add signal to a known proportion of the genes. This signal
 #' is the log (base 2) effect size of the group indicator in a linear model.
@@ -91,6 +93,14 @@ poisthin <- function(mat,
                                        "cor"),
                      group_prop    = 0.5,
                      corvec        = NULL) {
+
+  if(getOption("poisthinwarning", TRUE)) {
+    # transition message for 0.4-0 to 0.5-0
+    message(paste0(
+      "poisthin() is now defunct. Please use thin_2group() instead.",
+      "\nThis message is displayed once per R session"))
+    options("poisthinwarning" = FALSE)
+  }
 
   ## Check Input -------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))

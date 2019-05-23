@@ -1,17 +1,30 @@
 Package: seqgendiff
 Type: Package
-Title: Sequence Generation for Differential Expression Analysis
-Version: 0.2.1
+Title: Sequence Generation/Modification for Differential Expression Analysis Simulations
+Version: 0.3.0
 Authors@R: person("David", "Gerard", email = "dgerard@american.edu", role = c("aut", "cre"))
-Description: Modifies/generates RNA-seq data for use in simulations.
+Description: Generates/modifies RNA-seq data for use in simulations. We provide
+    a suite of functions that will add a known amount of signal to a real 
+    RNA-seq dataset. The advantage to using this approach over simulating under
+    a theoretical distribution is that common/annoying aspects of the data
+    are more preserved, giving a more realistic evaluation of your method. 
+    The main functions are thin_diff(), thin_lib(), thin_gene(), and 
+    thin_2group().
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/dcgerard/seqgendiff
 BugReports: http://github.com/dcgerard/seqgendiff/issues
 RoxygenNote: 6.1.1
-Suggests: covr,
-    testthat
+Suggests: 
+    covr,
+    testthat,
+    SummarizedExperiment,
+    DESeq2
 Imports: 
     assertthat,
-    irlba
+    irlba,
+    sva,
+    pdist,
+    optmatch,
+    matchingR
