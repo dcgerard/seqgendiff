@@ -8,14 +8,15 @@ est_sv(mat, n_sv, design_obs, use_sva = FALSE)
 }
 \arguments{
 \item{mat}{A numeric matrix of counts. The rows index the genes and the
-columns index the samples (as is usual in RNA-seq).}
+columns index the samples.}
 
 \item{n_sv}{The number of surrogate variables.}
 
 \item{design_obs}{A numeric matrix of observed covariates that are NOT to be a
 part of the signal generating process. Only used in estimating the
 surrogate variables (if \code{target_cor} is not \code{NULL}).
-The intercept should \emph{not} be included.}
+The intercept should \emph{not} be included (it will produce an error
+if it is included).}
 
 \item{use_sva}{A logical. Should we use SVA using
 \code{design_obs} to estimate the hidden covariates (\code{TRUE})

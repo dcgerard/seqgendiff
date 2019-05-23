@@ -8,7 +8,7 @@ thin_base(mat, designmat, coefmat, relative = TRUE)
 }
 \arguments{
 \item{mat}{A numeric matrix of counts. The rows index the genes and the
-columns index the samples (as is usual in RNA-seq).}
+columns index the samples.}
 
 \item{designmat}{A design matrix. The rows index the samples and the columns
 index the variables. The intercept should \emph{not} be included.}

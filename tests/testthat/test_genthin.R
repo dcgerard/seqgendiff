@@ -19,8 +19,6 @@ test_that("general thinning works", {
                      design_perm = design_perm,
                      coef_perm = coef_perm)
 
-  summary(thout)
-
   thout <- thin_diff(mat = mat,
                      design_fixed = design_fixed,
                      coef_fixed = coef_fixed,
@@ -30,12 +28,56 @@ test_that("general thinning works", {
                      design_obs = design_obs,
                      use_sva = TRUE)
 
+  trash <- capture.output(summary(thout))
+
   # cor(thout$sv, thout$matching_var)
   # cor(thout$sv, thout$design[, 2])
   # target_cor
 
   newmat <- thin_diff(mat = mat)
   expect_equal(newmat$mat, mat)
+
+
+  design_obs <- matrix(1, nrow = n, ncol = 1)
+  expect_error(thout <- thin_diff(mat = mat,
+                                  design_perm = design_perm,
+                                  coef_perm = coef_perm,
+                                  target_cor = target_cor,
+                                  design_obs = design_obs))
+})
+
+
+test_that("conversion to DESeq2DataSet and SummarizedExperiment works", {
+  if (requireNamespace("DESeq2", quietly = TRUE)) {
+    set.seed(2)
+    n <- 10
+    p <- 100
+    Z <- rnorm(n)
+    alpha <- rnorm(p)
+    mat <- round(2^(alpha %*% t(Z) + matrix(rnorm(n * p), nrow = p, ncol = n)))
+    design_perm <- matrix(runif(n))
+    coef_perm <- matrix(1, nrow = p, ncol = 1)
+    target_cor <- matrix(runif(ncol(design_perm) * 2), nrow = ncol(design_perm))
+    thinlog2 <- stats::rexp(n = n)
+    design_fixed <- matrix(rep(c(0, 1), length.out = n))
+    coef_fixed <- matrix(rnorm(p))
+    design_obs = matrix(runif(n))
+
+    thout <- thin_diff(mat = mat,
+                       design_fixed = design_fixed,
+                       coef_fixed = coef_fixed,
+                       design_perm = design_perm,
+                       coef_perm = coef_perm,
+                       target_cor = target_cor,
+                       design_obs = design_obs,
+                       use_sva = TRUE)
+
+    se <- ThinDataToSummarizedExperiment(obj = thout)
+    expect_true(class(se) == "SummarizedExperiment")
+
+    dds <- ThinDataToDESeqDataSet(obj = thout)
+    expect_true(class(dds) == "DESeqDataSet")
+  }
 })
 
 

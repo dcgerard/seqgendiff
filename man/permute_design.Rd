@@ -12,15 +12,17 @@ permute_design(design_perm, sv, target_cor, method = c("optmatch",
 \item{design_perm}{A numeric design matrix whose rows are to be permuted (thus
 controlling the amount by which they are correlated with the surrogate variables).
 The rows index the samples and the columns index the variables.
-The intercept should \emph{not} be included.}
+The intercept should \emph{not} be included
+(though see Section "Unestimable Components").}
 
 \item{sv}{A matrix of surrogate variables}
 
 \item{target_cor}{A numeric matrix of target correlations betweens the variables in
 \code{design_perm} and the surrogate variables. The rows index the
 observed covariates and the columns index the surrogate variables.
-The number of columns indicates the number of surrogate variables.
-Set this to \code{NULL} to indicate uncorrelated.}
+The number of columns specifies the number of surrogate variables.
+Set this to \code{NULL} to indicate that \code{design_perm} and the
+surrogate variables are uncorrelated.}
 
 \item{method}{Should we use the optimal matching technique from Hansen and
 Klopfer (2006) (\code{"optmatch"}) or the Gale-Shapley algorithm

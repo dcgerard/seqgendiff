@@ -78,7 +78,8 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #' of the Poisson thinning approach in \code{\link{thin_diff}}.
 #'
 #' @inheritParams thin_diff
-#' @param thinlog2 A vector of numerics. Element i is the amount to thin (on the log2 scale). For
+#' @param thinlog2 A vector of numerics. Element i is the amount to thin
+#'     (on the log2 scale) for sample i. For
 #'     example, a value of 0 means that we do not thin, a value of 1 means
 #'     that we thin by a factor of 2, a value of 2 means we thin by a factor
 #'     of 4, etc.
@@ -88,6 +89,7 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #' @seealso
 #' \describe{
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
+#'   \item{\code{\link{thin_gene}}}{For thinning gene-wise instead of sample-wise.}
 #' }
 #'
 #' @export
@@ -100,14 +102,15 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #' set.seed(1)
 #' n <- 10
 #' p <- 1000
-#' mat <- matrix(1000, ncol = n, nrow = p)
+#' lambda <- 1000
+#' mat <- matrix(lambda, ncol = n, nrow = p)
 #' thinlog2 <- rexp(n = n, rate = 1)
 #'
 #' ## Thin library sizes
 #' thout <- thin_lib(mat = mat, thinlog2 = thinlog2)
 #'
 #' ## Compare empirical thinning proportions to specified thinning proportions
-#' empirical_propvec <- colMeans(thout$mat) / 1000
+#' empirical_propvec <- colMeans(thout$mat) / lambda
 #' specified_propvec <- 2 ^ (-thinlog2)
 #' empirical_propvec
 #' specified_propvec
@@ -127,6 +130,74 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
                      relative     = relative)
 
   return(thout)
+}
+
+
+#' Poisson thinning for altering total gene expression levels
+#'
+#' Given a matrix of real RNA-seq counts, this function will apply a
+#' separate, user-provided thinning factor to each gene. This uniformly
+#' lowers the counts for all samples in a gene. The thinning factor
+#' should be provided on the log2-scale. This is a specific application
+#' of the Poisson thinning approach in \code{\link{thin_diff}}.
+#'
+#'
+#' @inheritParams thin_diff
+#' @param thinlog2 A vector of numerics. Element i is the amount to thin
+#'     (on the log2 scale) for gene i. For
+#'     example, a value of 0 means that we do not thin, a value of 1 means
+#'     that we thin by a factor of 2, a value of 2 means we thin by a factor
+#'     of 4, etc.
+#'
+#' @inherit thin_diff return
+#'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
+#'   \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of gene-wise.}
+#' }
+#'
+#' @export
+#'
+#' @author David Gerard
+#'
+#' @examples
+#' ## Generate count data and thinning factors
+#' ## In practice, you would obtain mat from a real dataset, not simulate it.
+#' set.seed(1)
+#' n <- 10
+#' p <- 1000
+#' lambda <- 1000
+#' mat <- matrix(lambda, ncol = n, nrow = p)
+#' thinlog2 <- rexp(n = p, rate = 1)
+#'
+#' ## Thin total gene expressions
+#' thout <- thin_gene(mat = mat, thinlog2 = thinlog2)
+#'
+#' ## Compare empirical thinning proportions to specified thinning proportions
+#' empirical_propvec <- rowMeans(thout$mat) / lambda
+#' specified_propvec <- 2 ^ (-thinlog2)
+#' plot(empirical_propvec, specified_propvec,
+#'      xlab = "Empirical Thinning Proportion",
+#'      ylab = "Specified Thinning Proportion")
+#' abline(0, 1, col = 2, lwd = 2)
+#'
+thin_gene <- function(mat, thinlog2, relative = FALSE) {
+  ## Check input --------------------------------------------------------------
+  assertthat::assert_that(is.matrix(mat))
+  assertthat::assert_that(is.numeric(mat))
+  assertthat::are_equal(length(thinlog2), nrow(mat))
+  thinlog2 <- c(thinlog2)
+  assertthat::assert_that(is.numeric(thinlog2))
+  stopifnot(thinlog2 >= 0)
+
+  thout <- thin_diff(mat          = mat,
+                     design_fixed = matrix(1, ncol = 1, nrow = ncol(mat)),
+                     coef_fixed   = matrix(-thinlog2, ncol = 1),
+                     relative     = relative)
+
+  return(thout)
+
 }
 
 #' Poisson thinning in the two-group model.
@@ -253,7 +324,6 @@ thin_2group <- function(mat,
 #' may also control for the amount of correlation between the observed
 #' covariates and any unobserved surrogate variables.
 #'
-#'
 #' @section Mathematical Formulation:
 #' Let
 #' \describe{
@@ -273,35 +343,55 @@ thin_2group <- function(mat,
 #' }
 #' We assume that \eqn{Y} is Poisson distributed given \eqn{X_3} and
 #' \eqn{Z} such that
-#' \deqn{\log_2(EY) = 1_N\mu' + B_3X_3' + AZ'.}
+#' \deqn{\log_2(EY) = \mu 1_N' + B_3X_3' + AZ'.}
 #' \code{thin_diff()} will take as inpute \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
 #' \eqn{B_2}, and will output a \eqn{\tilde{Y}} and \eqn{W} such that
 #' \eqn{\tilde{Y}} is Poisson distributed given \eqn{X_1}, \eqn{X_2}, \eqn{X_3},
 #' \eqn{W}, and \eqn{Z} such that
-#' \deqn{\log_2(E\tilde{Y}) \approx 1_N\tilde{\mu}' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',}
+#' \deqn{\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',}
 #' where \eqn{W} is an \eqn{N} by \eqn{N} permutation matrix. \eqn{W} is randomly
 #' drawn so that \eqn{X_2} and \eqn{Z} are correlated approximately according
 #' to a target correlation matrix.
 #'
+#' @section Unestimable Components:
+#'
+#' It is possible to include an intercept term or a column from \code{design_obs}
+#' into either \code{design_fixed} or \code{design_perm}. This will not
+#' produce an error and the specified thinning will be applied. However,
+#' If any column of \code{design_fixed} or
+#' \code{design_perm} is a vector of ones or contains a column from
+#' \code{design_obs}, then the corresponding columns in \code{coef_fixed}
+#' or \code{coef_designed} cannot be estimated by \emph{any} method. This is
+#' represented in the output by having duplicate columns in
+#' \code{designmat} and \code{design_obs}.
+#'
+#' Including duplicate columns in \code{design_fixed} and \code{design_perm}
+#' is also allowed but, again, will produce unestimable coefficients.
+#'
+#' Including an intercpet term in \code{design_obs} will produce an error if
+#' you are specifying correlated surrogate variables.
 #'
 #' @param mat A numeric matrix of counts. The rows index the genes and the
-#'     columns index the samples (as is usual in RNA-seq).
+#'     columns index the samples.
 #' @param design_fixed A numeric design matrix whose rows are fixed and not permuted.
 #'     The rows index the samples and the columns index the variables.
-#'     The intercept should \emph{not} be included.
+#'     The intercept should \emph{not} be included
+#'     (though see Section "Unestimable Components").
 #' @param coef_fixed A numeric matrix. The coefficients corresponding to \code{design_fixed}.
 #'     The rows index the genes and the columns index the variables.
 #' @param design_perm A numeric design matrix whose rows are to be permuted (thus
 #'     controlling the amount by which they are correlated with the surrogate variables).
 #'     The rows index the samples and the columns index the variables.
-#'     The intercept should \emph{not} be included.
+#'     The intercept should \emph{not} be included
+#'     (though see Section "Unestimable Components").
 #' @param coef_perm A numeric matrix. The coefficients corresponding to \code{design_perm}.
 #'     The rows index the genes and the columns index the variables.
 #' @param target_cor A numeric matrix of target correlations betweens the variables in
 #'     \code{design_perm} and the surrogate variables. The rows index the
 #'     observed covariates and the columns index the surrogate variables.
-#'     The number of columns indicates the number of surrogate variables.
-#'     Set this to \code{NULL} to indicate uncorrelated.
+#'     The number of columns specifies the number of surrogate variables.
+#'     Set this to \code{NULL} to indicate that \code{design_perm} and the
+#'     surrogate variables are uncorrelated.
 #' @param use_sva A logical. Should we use SVA using
 #'     \code{design_obs} to estimate the hidden covariates (\code{TRUE})
 #'     or should we just do an SVD on \code{log2(mat + 0.5)} after
@@ -314,22 +404,37 @@ thin_2group <- function(mat,
 #' @param design_obs A numeric matrix of observed covariates that are NOT to be a
 #'     part of the signal generating process. Only used in estimating the
 #'     surrogate variables (if \code{target_cor} is not \code{NULL}).
-#'     The intercept should \emph{not} be included.
+#'     The intercept should \emph{not} be included (it will produce an error
+#'     if it is included).
 #' @param relative A logical. Should we apply relative thinning (\code{TRUE})
 #'     or absolute thinning (\code{FALSE}). Only experts should change
 #'     the default.
+#' @param change_colnames A logical. Should we change the column-names
+#'     of the design matrices (\code{TRUE}) or not (\code{FALSE})?
+#'     Each column name begins with either "O" (observed), "P" (permuted),
+#'     or "F" (fixed), followed by a number. The letters correspond to
+#'     whether the variables come from \code{design_obs}, \code{design_perm},
+#'     or \code{design_fixed}. Setting this to \code{TRUE}
+#'     also changes the column-names of the corresponding coefficient matrices.
+#'     Defaults to \code{TRUE}.
 #'
-#' @return An S3 object of class \code{ThinData}. Components include some or
-#' all of the following:
+#' @return A list-like S3 object of class \code{ThinData}.
+#' Components include some or all of the following:
 #' \describe{
 #'   \item{\code{mat}}{The modified matrix of counts.}
-#'   \item{\code{designmat}}{The design matrix, excluding an intercept term.}
+#'   \item{\code{designmat}}{The design matrix of variables used to simulate
+#'       signal.}
 #'   \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
-#'   \item{\code{sv}}{A matrix of estimated surrogate variables.}
+#'   \item{\code{design_obs}}{Additional variables that should be included in
+#'       your design matrix in downstream fittings. This contains at the very
+#'       least a vector of 1's for the intercept term.}
+#'   \item{\code{sv}}{A matrix of estimated surrogate variables. In simulation
+#'       studies you would probably leave this out and estimate your own
+#'       surrogate variables.}
 #'   \item{\code{cormat}}{A matrix of target correlations between the
 #'       surrogate variables and the permuted variables in the design matrix.}
 #'   \item{\code{matching_var}}{A matrix of simulated variables used to
-#'       permute the permuted components of the design matrix.}
+#'       permute \code{design_perm}.}
 #' }
 #'
 #' @export
@@ -342,6 +447,8 @@ thin_2group <- function(mat,
 #'       \code{thin_diff} to the two-group model.}
 #'   \item{\code{\link{thin_lib}}}{For the specific application of
 #'       \code{thin_diff} to library size thinning.}
+#'   \item{\code{\link{thin_gene}}}{For the specific application of
+#'       \code{thin_diff} to total gene expression thinning.}
 #'   \item{\code{\link{thin_base}}}{For the underlying thinning function
 #'       used in \code{thin_diff}.}
 #' }
@@ -422,12 +529,14 @@ thin_diff <- function(mat,
                       target_cor   = NULL,
                       use_sva      = FALSE,
                       design_obs   = NULL,
-                      relative     = TRUE) {
+                      relative     = TRUE,
+                      change_colnames = TRUE) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.numeric(mat))
   assertthat::assert_that(is.logical(use_sva))
   assertthat::assert_that(is.logical(relative))
+  assertthat::assert_that(is.logical(change_colnames))
   assertthat::are_equal(1L, length(use_sva), length(relative))
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
@@ -455,8 +564,8 @@ thin_diff <- function(mat,
   assertthat::are_equal(ncol(design_perm), ncol(coef_perm))
 
   ## Permute ------------------------------------------------------------------
-  if (is.null(target_cor) | nrow(design_perm) == 0) {
-    design_perm <- design_perm[sample(seq_len(nrow(design_perm))), ]
+  if (is.null(target_cor) | ncol(design_perm) == 0) {
+    design_perm <- design_perm[sample(seq_len(nrow(design_perm))), , drop = FALSE]
     new_cor <- NULL
     latent_var <- matrix(ncol = 0L, nrow = nsamp)
     class(latent_var) <- "numeric"
@@ -482,6 +591,21 @@ thin_diff <- function(mat,
     latent_var  <- pout$latent_var
   }
 
+  ## Fix column names ---------------------------------------------------------
+  if (change_colnames) {
+    if (ncol(design_fixed) > 0) {
+      colnames(design_fixed) <- paste0("F", seq_len(ncol(design_fixed)))
+      colnames(coef_fixed)   <- paste0("F", seq_len(ncol(design_fixed)))
+    }
+    if (ncol(design_perm) > 0) {
+      colnames(design_perm)   <- paste0("P", seq_len(ncol(design_perm)))
+      colnames(coef_perm)     <- paste0("P", seq_len(ncol(design_perm)))
+    }
+    if (ncol(design_obs) > 0) {
+      colnames(design_obs)   <- paste0("O", seq_len(ncol(design_obs)))
+    }
+  }
+
   ## Make overall design and coef ---------------------------------------------
   designmat        <- cbind(design_fixed, design_perm)
   class(designmat) <- "numeric"
@@ -495,8 +619,9 @@ thin_diff <- function(mat,
                       relative  = relative)
 
   retval <- list(mat          = newmat,
-                 designmat    = cbind(designmat, design_obs),
+                 designmat    = cbind(designmat),
                  coefmat      = coefmat,
+                 design_obs   = cbind("(Intercept)" = 1, design_obs),
                  sv           = sv,
                  cormat       = new_cor,
                  matching_var = latent_var)

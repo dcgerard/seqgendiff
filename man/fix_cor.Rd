@@ -10,13 +10,15 @@ fix_cor(design_perm, target_cor, num_steps = 51)
 \item{design_perm}{A numeric design matrix whose rows are to be permuted (thus
 controlling the amount by which they are correlated with the surrogate variables).
 The rows index the samples and the columns index the variables.
-The intercept should \emph{not} be included.}
+The intercept should \emph{not} be included
+(though see Section "Unestimable Components").}
 
 \item{target_cor}{A numeric matrix of target correlations betweens the variables in
 \code{design_perm} and the surrogate variables. The rows index the
 observed covariates and the columns index the surrogate variables.
-The number of columns indicates the number of surrogate variables.
-Set this to \code{NULL} to indicate uncorrelated.}
+The number of columns specifies the number of surrogate variables.
+Set this to \code{NULL} to indicate that \code{design_perm} and the
+surrogate variables are uncorrelated.}
 
 \item{num_steps}{The number of steps between 0 and 1 to take in the
 grid search for the shrinkage factor. The step-size would be

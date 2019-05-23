@@ -10,7 +10,7 @@ thin_2group(mat, prop_null = 1, signal_fun = stats::rnorm,
 }
 \arguments{
 \item{mat}{A numeric matrix of counts. The rows index the genes and the
-columns index the samples (as is usual in RNA-seq).}
+columns index the samples.}
 
 \item{prop_null}{The proportion of genes that are null.}
 
@@ -31,17 +31,23 @@ in which case group assignment is made independently of any
 unobserved confounding.}
 }
 \value{
-An S3 object of class \code{ThinData}. Components include some or
-all of the following:
+A list-like S3 object of class \code{ThinData}.
+Components include some or all of the following:
 \describe{
   \item{\code{mat}}{The modified matrix of counts.}
-  \item{\code{designmat}}{The design matrix, excluding an intercept term.}
+  \item{\code{designmat}}{The design matrix of variables used to simulate
+      signal.}
   \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
-  \item{\code{sv}}{A matrix of estimated surrogate variables.}
+  \item{\code{design_obs}}{Additional variables that should be included in
+      your design matrix in downstream fittings. This contains at the very
+      least a vector of 1's for the intercept term.}
+  \item{\code{sv}}{A matrix of estimated surrogate variables. In simulation
+      studies you would probably leave this out and estimate your own
+      surrogate variables.}
   \item{\code{cormat}}{A matrix of target correlations between the
       surrogate variables and the permuted variables in the design matrix.}
   \item{\code{matching_var}}{A matrix of simulated variables used to
-      permute the permuted components of the design matrix.}
+      permute \code{design_perm}.}
 }
 }
 \description{

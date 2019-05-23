@@ -8,8 +8,8 @@ ThinDataToSummarizedExperiment(obj)
 }
 \arguments{
 \item{obj}{A ThinData S3 object. This is generally output by either
-\code{\link{thin_diff}}, \code{\link{thin_2group}}, or
-\code{\link{thin_lib}}.}
+\code{\link{thin_diff}}, \code{\link{thin_2group}},
+\code{\link{thin_lib}}, or \code{\link{thin_gene}}.}
 }
 \value{
 A \code{\link[SummarizedExperiment]{SummarizedExperiment}} S4
@@ -17,9 +17,8 @@ A \code{\link[SummarizedExperiment]{SummarizedExperiment}} S4
     differential expression analysis.
 }
 \description{
-This only keeps the \code{mat} and \code{designmat} elements of
-the ThinData object. Notably, the new SummarizedExperiment object
-does not contain the true coefficients.
+This only keeps the \code{mat}, \code{designmat}, and \code{coefmat}
+elements of the ThinData object.
 }
 \author{
 David Gerard

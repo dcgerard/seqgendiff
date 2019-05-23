@@ -6,15 +6,17 @@
 \usage{
 thin_diff(mat, design_fixed = NULL, coef_fixed = NULL,
   design_perm = NULL, coef_perm = NULL, target_cor = NULL,
-  use_sva = FALSE, design_obs = NULL, relative = TRUE)
+  use_sva = FALSE, design_obs = NULL, relative = TRUE,
+  change_colnames = TRUE)
 }
 \arguments{
 \item{mat}{A numeric matrix of counts. The rows index the genes and the
-columns index the samples (as is usual in RNA-seq).}
+columns index the samples.}
 
 \item{design_fixed}{A numeric design matrix whose rows are fixed and not permuted.
 The rows index the samples and the columns index the variables.
-The intercept should \emph{not} be included.}
+The intercept should \emph{not} be included
+(though see Section "Unestimable Components").}
 
 \item{coef_fixed}{A numeric matrix. The coefficients corresponding to \code{design_fixed}.
 The rows index the genes and the columns index the variables.}
@@ -22,7 +24,8 @@ The rows index the genes and the columns index the variables.}
 \item{design_perm}{A numeric design matrix whose rows are to be permuted (thus
 controlling the amount by which they are correlated with the surrogate variables).
 The rows index the samples and the columns index the variables.
-The intercept should \emph{not} be included.}
+The intercept should \emph{not} be included
+(though see Section "Unestimable Components").}
 
 \item{coef_perm}{A numeric matrix. The coefficients corresponding to \code{design_perm}.
 The rows index the genes and the columns index the variables.}
@@ -30,8 +33,9 @@ The rows index the genes and the columns index the variables.}
 \item{target_cor}{A numeric matrix of target correlations betweens the variables in
 \code{design_perm} and the surrogate variables. The rows index the
 observed covariates and the columns index the surrogate variables.
-The number of columns indicates the number of surrogate variables.
-Set this to \code{NULL} to indicate uncorrelated.}
+The number of columns specifies the number of surrogate variables.
+Set this to \code{NULL} to indicate that \code{design_perm} and the
+surrogate variables are uncorrelated.}
 
 \item{use_sva}{A logical. Should we use SVA using
 \code{design_obs} to estimate the hidden covariates (\code{TRUE})
@@ -46,24 +50,40 @@ Defaults to \code{FALSE}.}
 \item{design_obs}{A numeric matrix of observed covariates that are NOT to be a
 part of the signal generating process. Only used in estimating the
 surrogate variables (if \code{target_cor} is not \code{NULL}).
-The intercept should \emph{not} be included.}
+The intercept should \emph{not} be included (it will produce an error
+if it is included).}
 
 \item{relative}{A logical. Should we apply relative thinning (\code{TRUE})
 or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
+
+\item{change_colnames}{A logical. Should we change the column-names
+of the design matrices (\code{TRUE}) or not (\code{FALSE})?
+Each column name begins with either "O" (observed), "P" (permuted),
+or "F" (fixed), followed by a number. The letters correspond to
+whether the variables come from \code{design_obs}, \code{design_perm},
+or \code{design_fixed}. Setting this to \code{TRUE}
+also changes the column-names of the corresponding coefficient matrices.
+Defaults to \code{TRUE}.}
 }
 \value{
-An S3 object of class \code{ThinData}. Components include some or
-all of the following:
+A list-like S3 object of class \code{ThinData}.
+Components include some or all of the following:
 \describe{
   \item{\code{mat}}{The modified matrix of counts.}
-  \item{\code{designmat}}{The design matrix, excluding an intercept term.}
+  \item{\code{designmat}}{The design matrix of variables used to simulate
+      signal.}
   \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
-  \item{\code{sv}}{A matrix of estimated surrogate variables.}
+  \item{\code{design_obs}}{Additional variables that should be included in
+      your design matrix in downstream fittings. This contains at the very
+      least a vector of 1's for the intercept term.}
+  \item{\code{sv}}{A matrix of estimated surrogate variables. In simulation
+      studies you would probably leave this out and estimate your own
+      surrogate variables.}
   \item{\code{cormat}}{A matrix of target correlations between the
       surrogate variables and the permuted variables in the design matrix.}
   \item{\code{matching_var}}{A matrix of simulated variables used to
-      permute the permuted components of the design matrix.}
+      permute \code{design_perm}.}
 }
 }
 \description{
@@ -94,15 +114,35 @@ Let
 }
 We assume that \eqn{Y} is Poisson distributed given \eqn{X_3} and
 \eqn{Z} such that
-\deqn{\log_2(EY) = 1_N\mu' + B_3X_3' + AZ'.}
+\deqn{\log_2(EY) = \mu 1_N' + B_3X_3' + AZ'.}
 \code{thin_diff()} will take as inpute \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
 \eqn{B_2}, and will output a \eqn{\tilde{Y}} and \eqn{W} such that
 \eqn{\tilde{Y}} is Poisson distributed given \eqn{X_1}, \eqn{X_2}, \eqn{X_3},
 \eqn{W}, and \eqn{Z} such that
-\deqn{\log_2(E\tilde{Y}) \approx 1_N\tilde{\mu}' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',}
+\deqn{\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',}
 where \eqn{W} is an \eqn{N} by \eqn{N} permutation matrix. \eqn{W} is randomly
 drawn so that \eqn{X_2} and \eqn{Z} are correlated approximately according
 to a target correlation matrix.
+}
+
+\section{Unestimable Components}{
+
+
+It is possible to include an intercept term or a column from \code{design_obs}
+into either \code{design_fixed} or \code{design_perm}. This will not
+produce an error and the specified thinning will be applied. However,
+If any column of \code{design_fixed} or
+\code{design_perm} is a vector of ones or contains a column from
+\code{design_obs}, then the corresponding columns in \code{coef_fixed}
+or \code{coef_designed} cannot be estimated by \emph{any} method. This is
+represented in the output by having duplicate columns in
+\code{designmat} and \code{design_obs}.
+
+Including duplicate columns in \code{design_fixed} and \code{design_perm}
+is also allowed but, again, will produce unestimable coefficients.
+
+Including an intercpet term in \code{design_obs} will produce an error if
+you are specifying correlated surrogate variables.
 }
 
 \examples{
@@ -179,6 +219,8 @@ abline(0, 1, col = 2, lwd = 2)
       \code{thin_diff} to the two-group model.}
   \item{\code{\link{thin_lib}}}{For the specific application of
       \code{thin_diff} to library size thinning.}
+  \item{\code{\link{thin_gene}}}{For the specific application of
+      \code{thin_diff} to total gene expression thinning.}
   \item{\code{\link{thin_base}}}{For the underlying thinning function
       used in \code{thin_diff}.}
 }
