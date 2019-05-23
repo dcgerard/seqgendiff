@@ -88,9 +88,9 @@ ThinDataToSummarizedExperiment <- function(obj) {
   return(se)
 }
 
-#' Converts a ThinData S3 object into a DESeq2 S4 object.
+#' Converts a ThinData S3 object into a DESeqDataSet S4 object.
 #'
-#' The design formula in the resulting DESeq2DataSet is just the sum of all
+#' The design formula in the resulting DESeqDataSet is just the sum of all
 #' variables in \code{designmat} from the ThinData object (except the
 #' intercept term). You should change this design formula if you want to
 #' study other models.

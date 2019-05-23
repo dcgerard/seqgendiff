@@ -125,7 +125,8 @@ covariates and any unobserved surrogate variables.</p>
 
     <pre class="usage"><span class='fu'>thin_diff</span>(<span class='no'>mat</span>, <span class='kw'>design_fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>coef_fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>design_perm</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>coef_perm</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>target_cor</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>use_sva</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>design_obs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>relative</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>use_sva</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>design_obs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>relative</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>change_colnames</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,13 +134,14 @@ covariates and any unobserved surrogate variables.</p>
     <tr>
       <th>mat</th>
       <td><p>A numeric matrix of counts. The rows index the genes and the
-columns index the samples (as is usual in RNA-seq).</p></td>
+columns index the samples.</p></td>
     </tr>
     <tr>
       <th>design_fixed</th>
       <td><p>A numeric design matrix whose rows are fixed and not permuted.
 The rows index the samples and the columns index the variables.
-The intercept should <em>not</em> be included.</p></td>
+The intercept should <em>not</em> be included
+(though see Section "Unestimable Components").</p></td>
     </tr>
     <tr>
       <th>coef_fixed</th>
@@ -151,7 +153,8 @@ The rows index the genes and the columns index the variables.</p></td>
       <td><p>A numeric design matrix whose rows are to be permuted (thus
 controlling the amount by which they are correlated with the surrogate variables).
 The rows index the samples and the columns index the variables.
-The intercept should <em>not</em> be included.</p></td>
+The intercept should <em>not</em> be included
+(though see Section "Unestimable Components").</p></td>
     </tr>
     <tr>
       <th>coef_perm</th>
@@ -160,21 +163,23 @@ The rows index the genes and the columns index the variables.</p></td>
     </tr>
     <tr>
       <th>target_cor</th>
-      <td><p>A numeric matrix of target correlations betweens the variables in
+      <td><p>A numeric matrix of target correlations between the variables in
 <code>design_perm</code> and the surrogate variables. The rows index the
 observed covariates and the columns index the surrogate variables.
-The number of columns indicates the number of surrogate variables.
-Set this to <code>NULL</code> to indicate uncorrelated.</p></td>
+The number of columns specifies the number of surrogate variables.
+Set this to <code>NULL</code> to indicate that <code>design_perm</code> and the
+surrogate variables are uncorrelated.</p></td>
     </tr>
     <tr>
       <th>use_sva</th>
-      <td><p>A logical. Should we use SVA using
-<code>design_obs</code> to estimate the hidden covariates (<code>TRUE</code>)
+      <td><p>A logical. Should we use surrogate variable analysis
+(Leek and Storey, 2008) using <code>design_obs</code>
+to estimate the hidden covariates (<code>TRUE</code>)
 or should we just do an SVD on <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log2(mat + 0.5)</a></code> after
 regressing out <code>design_obs</code> (<code>FALSE</code>)? Setting this to
 <code>TRUE</code> allows the surrogate variables to be correlated with the
 observed covariates, while setting this to <code>FALSE</code> assumes that
-the surrogate variabes are orthogonal to the observed covariates. This
+the surrogate variables are orthogonal to the observed covariates. This
 option only matters if <code>design_obs</code> is not <code>NULL</code>.
 Defaults to <code>FALSE</code>.</p></td>
     </tr>
@@ -183,7 +188,8 @@ Defaults to <code>FALSE</code>.</p></td>
       <td><p>A numeric matrix of observed covariates that are NOT to be a
 part of the signal generating process. Only used in estimating the
 surrogate variables (if <code>target_cor</code> is not <code>NULL</code>).
-The intercept should <em>not</em> be included.</p></td>
+The intercept should <em>not</em> be included (it will sometimes
+produce an error if it is included).</p></td>
     </tr>
     <tr>
       <th>relative</th>
@@ -191,20 +197,37 @@ The intercept should <em>not</em> be included.</p></td>
 or absolute thinning (<code>FALSE</code>). Only experts should change
 the default.</p></td>
     </tr>
+    <tr>
+      <th>change_colnames</th>
+      <td><p>A logical. Should we change the column-names
+of the design matrices (<code>TRUE</code>) or not (<code>FALSE</code>)?
+Each new column name begins with either "O" (observed), "P" (permuted),
+or "F" (fixed), followed by a number. The letters correspond to
+whether the variables come from <code>design_obs</code>, <code>design_perm</code>,
+or <code>design_fixed</code>. Setting this to <code>TRUE</code>
+also changes the column-names of the corresponding coefficient matrices.
+Defaults to <code>TRUE</code>.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An S3 object of class <code>ThinData</code>. Components include some or
-all of the following:</p><dl class='dl-horizontal'>
+    <p>A list-like S3 object of class <code>ThinData</code>.
+Components include some or all of the following:</p><dl class='dl-horizontal'>
   <dt><code>mat</code></dt><dd><p>The modified matrix of counts.</p></dd>
-  <dt><code>designmat</code></dt><dd><p>The design matrix, excluding an intercept term.</p></dd>
+  <dt><code>designmat</code></dt><dd><p>The design matrix of variables used to simulate
+      signal.</p></dd>
   <dt><code>coefmat</code></dt><dd><p>A matrix of coefficients corresponding to <code>designmat</code></p></dd>
-  <dt><code>sv</code></dt><dd><p>A matrix of estimated surrogate variables.</p></dd>
+  <dt><code>design_obs</code></dt><dd><p>Additional variables that should be included in
+      your design matrix in downstream fittings. This contains at the very
+      least a vector of 1's for the intercept term.</p></dd>
+  <dt><code>sv</code></dt><dd><p>A matrix of estimated surrogate variables. In simulation
+      studies you would probably leave this out and estimate your own
+      surrogate variables.</p></dd>
   <dt><code>cormat</code></dt><dd><p>A matrix of target correlations between the
       surrogate variables and the permuted variables in the design matrix.</p></dd>
   <dt><code>matching_var</code></dt><dd><p>A matrix of simulated variables used to
-      permute the permuted components of the design matrix.</p></dd>
+      permute <code>design_perm</code>.</p></dd>
 </dl>
 
     
@@ -227,15 +250,38 @@ all of the following:</p><dl class='dl-horizontal'>
        <code>NULL</code>.</p></dd>
 </dl><p>We assume that \(Y\) is Poisson distributed given \(X_3\) and
 \(Z\) such that
-$$\log_2(EY) = 1_N\mu' + B_3X_3' + AZ'.$$
-<code>thin_diff()</code> will take as inpute \(X_1\), \(X_2\), \(B_1\),
+$$\log_2(EY) = \mu 1_N' + B_3X_3' + AZ'.$$
+<code>thin_diff()</code> will take as input \(X_1\), \(X_2\), \(B_1\),
 \(B_2\), and will output a \(\tilde{Y}\) and \(W\) such that
 \(\tilde{Y}\) is Poisson distributed given \(X_1\), \(X_2\), \(X_3\),
 \(W\), and \(Z\) such that
-$$\log_2(E\tilde{Y}) \approx 1_N\tilde{\mu}' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',$$
+$$\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',$$
 where \(W\) is an \(N\) by \(N\) permutation matrix. \(W\) is randomly
 drawn so that \(X_2\) and \(Z\) are correlated approximately according
 to a target correlation matrix.</p>
+    
+    <h2 class="hasAnchor" id="unestimable-components"><a class="anchor" href="#unestimable-components"></a>Unestimable Components</h2>
+
+    
+    <p>It is possible to include an intercept term or a column from <code>design_obs</code>
+into either <code>design_fixed</code> or <code>design_perm</code>. This will not
+produce an error and the specified thinning will be applied. However,
+If any column of <code>design_fixed</code> or
+<code>design_perm</code> is a vector of ones or contains a column from
+<code>design_obs</code>, then the corresponding columns in <code>coef_fixed</code>
+or <code>coef_designed</code> cannot be estimated by <em>any</em> method. This is
+represented in the output by having duplicate columns in
+<code>designmat</code> and <code>design_obs</code>.</p>
+<p>Including duplicate columns in <code>design_fixed</code> and <code>design_perm</code>
+is also allowed but, again, will produce unestimable coefficients.</p>
+<p>Including an intercept term in <code>design_obs</code> will produce an error if
+you are specifying correlated surrogate variables.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <ul>
+<li><p>Leek, Jeffrey T., and John D. Storey. "A general framework for multiple testing dependence." Proceedings of the National Academy of Sciences 105, no. 48 (2008): 18718-18723.</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -244,8 +290,16 @@ to a target correlation matrix.</p>
       <code>thin_diff</code> to the two-group model.</p></dd>
   <dt><code><a href='thin_lib.html'>thin_lib</a></code></dt><dd><p>For the specific application of
       <code>thin_diff</code> to library size thinning.</p></dd>
+  <dt><code><a href='thin_gene.html'>thin_gene</a></code></dt><dd><p>For the specific application of
+      <code>thin_diff</code> to total gene expression thinning.</p></dd>
   <dt><code><a href='thin_base.html'>thin_base</a></code></dt><dd><p>For the underlying thinning function
       used in <code>thin_diff</code>.</p></dd>
+  <dt><code><a href='https://www.rdocumentation.org/packages/sva/topics/sva'>sva</a></code></dt><dd><p>For the implementation of surrogate
+      variable analysis.</p></dd>
+  <dt><code><a href='ThinDataToSummarizedExperiment.html'>ThinDataToSummarizedExperiment</a></code></dt><dd><p>For converting a
+      ThinData object to a SummarizedExperiment object.</p></dd>
+  <dt><code><a href='ThinDataToDESeqDataSet.html'>ThinDataToDESeqDataSet</a></code></dt><dd><p>For converting a
+      ThinData object to a DESeqDataSet object.</p></dd>
 </dl></div>
     
 
@@ -291,9 +345,9 @@ to a target correlation matrix.</p>
 #&gt; [2,] 0.08834679</div><div class='input'>
 <span class='co'>## Correlation between permuted covariates and surrogate variables are less</span>
 <span class='co'>## close to target_cor</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/cor'>cor</a></span>(<span class='no'>thout</span>$<span class='no'>designmat</span>, <span class='no'>Z</span>)</div><div class='output co'>#&gt;            [,1]
-#&gt; [1,]  0.5890975
-#&gt; [2,] -0.2183653</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/cor'>cor</a></span>(<span class='no'>thout</span>$<span class='no'>designmat</span>, <span class='no'>Z</span>)</div><div class='output co'>#&gt;          [,1]
+#&gt; P1  0.5890975
+#&gt; P2 -0.2183653</div><div class='input'>
 <span class='co'>## Estimated signal is correlated to true single. First variable is slightly</span>
 <span class='co'>## biased because the surrogate variable is not included.</span>
 <span class='no'>Ynew</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log2</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='no'>thout</span>$<span class='no'>mat</span>) + <span class='fl'>0.5</span>)
@@ -320,6 +374,10 @@ to a target correlation matrix.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#mathematical-formulation">Mathematical Formulation</a></li>
+
+      <li><a href="#unestimable-components">Unestimable Components</a></li>
+
+      <li><a href="#references">References</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

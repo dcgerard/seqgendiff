@@ -129,7 +129,7 @@ function is used by all other thinning functions.</p>
     <tr>
       <th>mat</th>
       <td><p>A numeric matrix of counts. The rows index the genes and the
-columns index the samples (as is usual in RNA-seq).</p></td>
+columns index the samples.</p></td>
     </tr>
     <tr>
       <th>designmat</th>
@@ -148,6 +148,19 @@ or absolute thinning (<code>FALSE</code>). Only experts should change
 the default.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><dl class='dl-horizontal'>
+  <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>For the function most users should
+      be using for general-purpose Poisson thinning.</p></dd>
+  <dt><code><a href='thin_2group.html'>thin_2group</a></code></dt><dd><p>For the specific application of
+      thinning in the two-group model.</p></dd>
+  <dt><code><a href='thin_lib.html'>thin_lib</a></code></dt><dd><p>For the specific application of
+      library size thinning.</p></dd>
+  <dt><code><a href='thin_gene.html'>thin_gene</a></code></dt><dd><p>For the specific application of
+      total gene expression thinning.</p></dd>
+</dl></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -170,7 +183,9 @@ the default.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#see-also">See also</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

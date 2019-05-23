@@ -37,8 +37,9 @@ The number of columns specifies the number of surrogate variables.
 Set this to \code{NULL} to indicate that \code{design_perm} and the
 surrogate variables are uncorrelated.}
 
-\item{use_sva}{A logical. Should we use SVA using
-\code{design_obs} to estimate the hidden covariates (\code{TRUE})
+\item{use_sva}{A logical. Should we use surrogate variable analysis
+(Leek and Storey, 2008) using \code{design_obs}
+to estimate the hidden covariates (\code{TRUE})
 or should we just do an SVD on \code{log2(mat + 0.5)} after
 regressing out \code{design_obs} (\code{FALSE})? Setting this to
 \code{TRUE} allows the surrogate variables to be correlated with the
@@ -50,8 +51,8 @@ Defaults to \code{FALSE}.}
 \item{design_obs}{A numeric matrix of observed covariates that are NOT to be a
 part of the signal generating process. Only used in estimating the
 surrogate variables (if \code{target_cor} is not \code{NULL}).
-The intercept should \emph{not} be included (it will produce an error
-if it is included).}
+The intercept should \emph{not} be included (it will sometimes
+produce an error if it is included).}
 
 \item{relative}{A logical. Should we apply relative thinning (\code{TRUE})
 or absolute thinning (\code{FALSE}). Only experts should change
@@ -59,7 +60,7 @@ the default.}
 
 \item{change_colnames}{A logical. Should we change the column-names
 of the design matrices (\code{TRUE}) or not (\code{FALSE})?
-Each column name begins with either "O" (observed), "P" (permuted),
+Each new column name begins with either "O" (observed), "P" (permuted),
 or "F" (fixed), followed by a number. The letters correspond to
 whether the variables come from \code{design_obs}, \code{design_perm},
 or \code{design_fixed}. Setting this to \code{TRUE}
@@ -213,6 +214,11 @@ plot(thout$coefmat[, 2], coef_est[, 2])
 abline(0, 1, col = 2, lwd = 2)
 
 }
+\references{
+\itemize{
+  \item{Leek, Jeffrey T., and John D. Storey. "A general framework for multiple testing dependence." Proceedings of the National Academy of Sciences 105, no. 48 (2008): 18718-18723.}
+}
+}
 \seealso{
 \describe{
   \item{\code{\link{thin_2group}}}{For the specific application of
@@ -223,6 +229,12 @@ abline(0, 1, col = 2, lwd = 2)
       \code{thin_diff} to total gene expression thinning.}
   \item{\code{\link{thin_base}}}{For the underlying thinning function
       used in \code{thin_diff}.}
+  \item{\code{\link[sva]{sva}}}{For the implementation of surrogate
+      variable analysis.}
+  \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
+      ThinData object to a SummarizedExperiment object.}
+  \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
+      ThinData object to a DESeqDataSet object.}
 }
 }
 \author{

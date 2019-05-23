@@ -71,6 +71,10 @@ specified_propvec
 \describe{
   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
   \item{\code{\link{thin_gene}}}{For thinning gene-wise instead of sample-wise.}
+  \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
+      ThinData object to a SummarizedExperiment object.}
+  \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
+      ThinData object to a DESeqDataSet object.}
 }
 }
 \author{

@@ -44,6 +44,18 @@ plot(B, Bhat, xlab = "Coefficients", ylab = "Coefficient Estimates")
 abline(0, 1, col = 2, lwd = 2)
 
 }
+\seealso{
+\describe{
+  \item{\code{\link{thin_diff}}}{For the function most users should
+      be using for general-purpose Poisson thinning.}
+  \item{\code{\link{thin_2group}}}{For the specific application of
+      thinning in the two-group model.}
+  \item{\code{\link{thin_lib}}}{For the specific application of
+      library size thinning.}
+  \item{\code{\link{thin_gene}}}{For the specific application of
+      total gene expression thinning.}
+}
+}
 \author{
 David Gerard
 }

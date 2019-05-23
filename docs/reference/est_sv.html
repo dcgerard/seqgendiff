@@ -125,7 +125,7 @@ surrogate variables.</p>
     <tr>
       <th>mat</th>
       <td><p>A numeric matrix of counts. The rows index the genes and the
-columns index the samples (as is usual in RNA-seq).</p></td>
+columns index the samples.</p></td>
     </tr>
     <tr>
       <th>n_sv</th>
@@ -136,17 +136,19 @@ columns index the samples (as is usual in RNA-seq).</p></td>
       <td><p>A numeric matrix of observed covariates that are NOT to be a
 part of the signal generating process. Only used in estimating the
 surrogate variables (if <code>target_cor</code> is not <code>NULL</code>).
-The intercept should <em>not</em> be included.</p></td>
+The intercept should <em>not</em> be included (it will sometimes
+produce an error if it is included).</p></td>
     </tr>
     <tr>
       <th>use_sva</th>
-      <td><p>A logical. Should we use SVA using
-<code>design_obs</code> to estimate the hidden covariates (<code>TRUE</code>)
+      <td><p>A logical. Should we use surrogate variable analysis
+(Leek and Storey, 2008) using <code>design_obs</code>
+to estimate the hidden covariates (<code>TRUE</code>)
 or should we just do an SVD on <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log2(mat + 0.5)</a></code> after
 regressing out <code>design_obs</code> (<code>FALSE</code>)? Setting this to
 <code>TRUE</code> allows the surrogate variables to be correlated with the
 observed covariates, while setting this to <code>FALSE</code> assumes that
-the surrogate variabes are orthogonal to the observed covariates. This
+the surrogate variables are orthogonal to the observed covariates. This
 option only matters if <code>design_obs</code> is not <code>NULL</code>.
 Defaults to <code>FALSE</code>.</p></td>
     </tr>

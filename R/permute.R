@@ -121,7 +121,7 @@ effective_cor <- function(design_perm, sv, target_cor, method = c("optmatch", "m
 #' \end{array}
 #' \right).
 #' }
-#' This function appliess a multiplicative scaling factor to \eqn{R} until
+#' This function applies a multiplicative scaling factor to \eqn{R} until
 #' the above matrix is positive semi-definite. That is, it finds \eqn{a}
 #' between 0 and 1 such that
 #' \deqn{ \left(

@@ -89,6 +89,10 @@ abline(0, 1, col = 2, lwd = 2)
 \seealso{
 \describe{
   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
+  \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
+      ThinData object to a SummarizedExperiment object.}
+  \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
+      ThinData object to a DESeqDataSet object.}
 }
 }
 \author{

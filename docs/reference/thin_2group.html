@@ -137,7 +137,7 @@ general Poisson thinning approach implemented in <code><a href='thin_diff.html'>
     <tr>
       <th>mat</th>
       <td><p>A numeric matrix of counts. The rows index the genes and the
-columns index the samples (as is usual in RNA-seq).</p></td>
+columns index the samples.</p></td>
     </tr>
     <tr>
       <th>prop_null</th>
@@ -171,16 +171,22 @@ unobserved confounding.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An S3 object of class <code>ThinData</code>. Components include some or
-all of the following:</p><dl class='dl-horizontal'>
+    <p>A list-like S3 object of class <code>ThinData</code>.
+Components include some or all of the following:</p><dl class='dl-horizontal'>
   <dt><code>mat</code></dt><dd><p>The modified matrix of counts.</p></dd>
-  <dt><code>designmat</code></dt><dd><p>The design matrix, excluding an intercept term.</p></dd>
+  <dt><code>designmat</code></dt><dd><p>The design matrix of variables used to simulate
+      signal.</p></dd>
   <dt><code>coefmat</code></dt><dd><p>A matrix of coefficients corresponding to <code>designmat</code></p></dd>
-  <dt><code>sv</code></dt><dd><p>A matrix of estimated surrogate variables.</p></dd>
+  <dt><code>design_obs</code></dt><dd><p>Additional variables that should be included in
+      your design matrix in downstream fittings. This contains at the very
+      least a vector of 1's for the intercept term.</p></dd>
+  <dt><code>sv</code></dt><dd><p>A matrix of estimated surrogate variables. In simulation
+      studies you would probably leave this out and estimate your own
+      surrogate variables.</p></dd>
   <dt><code>cormat</code></dt><dd><p>A matrix of target correlations between the
       surrogate variables and the permuted variables in the design matrix.</p></dd>
   <dt><code>matching_var</code></dt><dd><p>A matrix of simulated variables used to
-      permute the permuted components of the design matrix.</p></dd>
+      permute <code>design_perm</code>.</p></dd>
 </dl>
 
     
@@ -188,6 +194,10 @@ all of the following:</p><dl class='dl-horizontal'>
 
     <div class='dont-index'><dl class='dl-horizontal'>
   <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>For the more general thinning approach.</p></dd>
+  <dt><code><a href='ThinDataToSummarizedExperiment.html'>ThinDataToSummarizedExperiment</a></code></dt><dd><p>For converting a
+      ThinData object to a SummarizedExperiment object.</p></dd>
+  <dt><code><a href='ThinDataToDESeqDataSet.html'>ThinDataToDESeqDataSet</a></code></dt><dd><p>For converting a
+      ThinData object to a DESeqDataSet object.</p></dd>
 </dl></div>
     
 

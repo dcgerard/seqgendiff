@@ -15,11 +15,12 @@ columns index the samples.}
 \item{design_obs}{A numeric matrix of observed covariates that are NOT to be a
 part of the signal generating process. Only used in estimating the
 surrogate variables (if \code{target_cor} is not \code{NULL}).
-The intercept should \emph{not} be included (it will produce an error
-if it is included).}
+The intercept should \emph{not} be included (it will sometimes
+produce an error if it is included).}
 
-\item{use_sva}{A logical. Should we use SVA using
-\code{design_obs} to estimate the hidden covariates (\code{TRUE})
+\item{use_sva}{A logical. Should we use surrogate variable analysis
+(Leek and Storey, 2008) using \code{design_obs}
+to estimate the hidden covariates (\code{TRUE})
 or should we just do an SVD on \code{log2(mat + 0.5)} after
 regressing out \code{design_obs} (\code{FALSE})? Setting this to
 \code{TRUE} allows the surrogate variables to be correlated with the

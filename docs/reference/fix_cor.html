@@ -125,15 +125,17 @@ the overall correlation matrix is positive semi-definite.</p>
       <td><p>A numeric design matrix whose rows are to be permuted (thus
 controlling the amount by which they are correlated with the surrogate variables).
 The rows index the samples and the columns index the variables.
-The intercept should <em>not</em> be included.</p></td>
+The intercept should <em>not</em> be included
+(though see Section "Unestimable Components").</p></td>
     </tr>
     <tr>
       <th>target_cor</th>
-      <td><p>A numeric matrix of target correlations betweens the variables in
+      <td><p>A numeric matrix of target correlations between the variables in
 <code>design_perm</code> and the surrogate variables. The rows index the
 observed covariates and the columns index the surrogate variables.
-The number of columns indicates the number of surrogate variables.
-Set this to <code>NULL</code> to indicate uncorrelated.</p></td>
+The number of columns specifies the number of surrogate variables.
+Set this to <code>NULL</code> to indicate that <code>design_perm</code> and the
+surrogate variables are uncorrelated.</p></td>
     </tr>
     <tr>
       <th>num_steps</th>
@@ -154,7 +156,7 @@ R' &amp; I_K
 \end{array}
 \right).
 $$
-This function applys a multiplicative scaling factor to \(R\) until
+This function applies a multiplicative scaling factor to \(R\) until
 the above matrix is positive semi-definite. That is, it finds \(a\)
 between 0 and 1 such that
 $$ \left(
