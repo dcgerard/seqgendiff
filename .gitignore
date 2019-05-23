@@ -41,3 +41,4 @@ _region_.tex
 *.tar
 *.zip
 *.egg-info
+inst/doc

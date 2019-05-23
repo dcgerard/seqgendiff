@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -74,6 +74,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/simulate_rnaseq.html">Simulate RNA-seq Data from Real Data</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -103,6 +115,19 @@
       <small>Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="seqgendiff-0-3-0" class="section level1">
+<h1 class="page-header">
+<a href="#seqgendiff-0-3-0" class="anchor"></a>seqgendiff 0.3.0</h1>
+<p>This has been a massive rewrite of the seqgendiff package.</p>
+<ul>
+<li>
+<code><a href="../reference/poisthin.html">poisthin()</a></code> is now defunct. The two-group model is now implemented in the <code><a href="../reference/thin_2group.html">thin_2group()</a></code> function. I’ll keep it around since some of my old simulation code depends on it.</li>
+<li>The main functions for thinning are now <code><a href="../reference/thin_diff.html">thin_diff()</a></code>, <code><a href="../reference/thin_2group.html">thin_2group()</a></code>, <code><a href="../reference/thin_lib.html">thin_lib()</a></code>, and <code><a href="../reference/thin_gene.html">thin_gene()</a></code>.</li>
+<li>Note that these functions, unlike <code><a href="../reference/poisthin.html">poisthin()</a></code>, do not have functionality to subset count matrices. This is on purpose. I wanted the functionality of these thinning functions to be simpler.</li>
+<li>Unlike <code><a href="../reference/poisthin.html">poisthin()</a></code>, which can only handle the two-group model, <code><a href="../reference/thin_diff.html">thin_diff()</a></code> can handle generically any design, while still controlling the level of correlation between the design variables and the surrogate variables.</li>
+<li>Functions now exist to convert the simulation output to common Bioconductor S4 classes. See <code><a href="../reference/ThinDataToSummarizedExperiment.html">ThinDataToSummarizedExperiment()</a></code> and <code><a href="../reference/ThinDataToDESeqDataSet.html">ThinDataToDESeqDataSet()</a></code>.</li>
+</ul>
+</div>
     <div id="seqgendiff-0-2-0" class="section level1">
 <h1 class="page-header">
 <a href="#seqgendiff-0-2-0" class="anchor"></a>seqgendiff 0.2.0</h1>
@@ -118,6 +143,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#seqgendiff-0-3-0">0.3.0</a></li>
         <li><a href="#seqgendiff-0-2-0">0.2.0</a></li>
       </ul>
     </div>

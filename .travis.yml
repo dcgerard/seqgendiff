@@ -7,6 +7,9 @@ cache: packages
 bioc_packages: sva
 bioc_packages: SummarizedExperiment
 bioc_packages: DESeq2
+bioc_packages: airway
+bioc_packages: limma
+bioc_packages: qvalue
 
 after_success:
   - Rscript -e 'covr::codecov()'

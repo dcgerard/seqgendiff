@@ -20,7 +20,12 @@ Suggests:
     covr,
     testthat,
     SummarizedExperiment,
-    DESeq2
+    DESeq2,
+    knitr,
+    rmarkdown,
+    airway,
+    limma,
+    qvalue
 Imports: 
     assertthat,
     irlba,
@@ -28,3 +33,4 @@ Imports:
     pdist,
     optmatch,
     matchingR
+VignetteBuilder: knitr

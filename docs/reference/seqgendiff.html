@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate the effective correlation — effective_cor • seqgendiff</title>
+<title>seqgendiff: Sequence Generation/Modification for Differential Expression Analysis Simulations. — seqgendiff • seqgendiff</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,17 @@
 
 
 
-<meta property="og:title" content="Estimate the effective correlation — effective_cor" />
+<meta property="og:title" content="seqgendiff: Sequence Generation/Modification for Differential Expression Analysis Simulations. — seqgendiff" />
 
-<meta property="og:description" content="Will return the actual correlation between the design matrix and the
-surrogate variables when you use permute_design." />
+<meta property="og:description" content="This package is designed to take real RNA-seq data and alter it by
+adding a known amount of signal. You can then use this modified dataset
+in simulation studies for differential expression analysis. The
+advantage of this way of simulating data is that you can see how
+your method behaves when the simulated data exhibit common
+(and annoying) features of real data. For example, in the real world
+data are not normally (or negative binomially) distributed and
+unobserved confounding is a major issue. This package will simulate
+data that exhibit these characteristics." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,68 +122,54 @@ surrogate variables when you use permute_design." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate the effective correlation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/R/permute.R'><code>R/permute.R</code></a></small>
-    <div class="hidden name"><code>effective_cor.Rd</code></div>
+    <h1>seqgendiff: Sequence Generation/Modification for Differential Expression Analysis Simulations.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/R/seqgendiff.R'><code>R/seqgendiff.R</code></a></small>
+    <div class="hidden name"><code>seqgendiff.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Will return the actual correlation between the design matrix and the
-surrogate variables when you use <code><a href='permute_design.html'>permute_design</a></code>.</p>
+    <p>This package is designed to take real RNA-seq data and alter it by
+adding a known amount of signal. You can then use this modified dataset
+in simulation studies for differential expression analysis. The
+advantage of this way of simulating data is that you can see how
+your method behaves when the simulated data exhibit common
+(and annoying) features of real data. For example, in the real world
+data are not normally (or negative binomially) distributed and
+unobserved confounding is a major issue. This package will simulate
+data that exhibit these characteristics.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>effective_cor</span>(<span class='no'>design_perm</span>, <span class='no'>sv</span>, <span class='no'>target_cor</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"optmatch"</span>,
-  <span class='st'>"marriage"</span>), <span class='kw'>iternum</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
+        
+    <h2 class="hasAnchor" id="seqgendiff-functions"><a class="anchor" href="#seqgendiff-functions"></a>seqgendiff Functions</h2>
+
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>design_perm</th>
-      <td><p>A numeric design matrix whose rows are to be permuted (thus
-controlling the amount by which they are correlated with the surrogate variables).
-The rows index the samples and the columns index the variables.
-The intercept should <em>not</em> be included
-(though see Section "Unestimable Components").</p></td>
-    </tr>
-    <tr>
-      <th>sv</th>
-      <td><p>A matrix of surrogate variables</p></td>
-    </tr>
-    <tr>
-      <th>target_cor</th>
-      <td><p>A numeric matrix of target correlations between the variables in
-<code>design_perm</code> and the surrogate variables. The rows index the
-observed covariates and the columns index the surrogate variables.
-The number of columns specifies the number of surrogate variables.
-Set this to <code>NULL</code> to indicate that <code>design_perm</code> and the
-surrogate variables are uncorrelated.</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>Should we use the optimal matching technique from Hansen and
-Klopfer (2006) (<code>"optmatch"</code>) or the Gale-Shapley algorithm
-for stable marriages (<code>marriage</code>) (Gale and Shapley, 1962)
-as implemented in the matchingR package.
-The <code>"optmatch"</code> method works almost uniformly better in practice,
-but does take a lot more computational time if you have, say, 1000
-samples.</p></td>
-    </tr>
-    <tr>
-      <th>iternum</th>
-      <td><p>The total number of simulated correlations to consider.</p></td>
-    </tr>
-    </table>
+    <dl class='dl-horizontal'>
+  <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>For the function most users should
+      be using for general-purpose Poisson thinning. For the special
+      applications of the two-group model or library/gene thinning, see
+      the functions listed below.</p></dd>
+  <dt><code><a href='thin_2group.html'>thin_2group</a></code></dt><dd><p>For the specific application of
+      thinning in the two-group model.</p></dd>
+  <dt><code><a href='thin_lib.html'>thin_lib</a></code></dt><dd><p>For the specific application of
+      library size thinning.</p></dd>
+  <dt><code><a href='thin_gene.html'>thin_gene</a></code></dt><dd><p>For the specific application of
+      total gene expression thinning.</p></dd>
+  <dt><code><a href='ThinDataToSummarizedExperiment.html'>ThinDataToSummarizedExperiment</a></code></dt><dd><p>For converting a
+      ThinData object to a SummarizedExperiment object.</p></dd>
+  <dt><code><a href='ThinDataToDESeqDataSet.html'>ThinDataToDESeqDataSet</a></code></dt><dd><p>For converting a
+      ThinData object to a DESeqDataSet object.</p></dd>
+</dl>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#seqgendiff-functions">seqgendiff Functions</a></li>
+          </ul>
 
     <h2>Author</h2>
     <p>David Gerard</p>
