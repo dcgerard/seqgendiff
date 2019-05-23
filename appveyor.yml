@@ -13,13 +13,8 @@ install:
 # Adapt as necessary starting from here
 
 build_script:
+  - travis-tool.sh install_bioc sva SummarizedExperiment DESeq2
   - travis-tool.sh install_deps
-  - travis-tool.sh install_bioc sva
-  - travis-tool.sh install_bioc SummarizedExperiment
-  - travis-tool.sh install_bioc DESeq2
-  - travis-tool.sh install_bioc_deps
-
-
 
 test_script:
   - travis-tool.sh run_tests
