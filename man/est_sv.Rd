@@ -24,7 +24,7 @@ or should we just do an SVD on \code{log2(mat + 0.5)} after
 regressing out \code{design_obs} (\code{FALSE})? Setting this to
 \code{TRUE} allows the surrogate variables to be correlated with the
 observed covariates, while setting this to \code{FALSE} assumes that
-the surrogate variabes are orthogonal to the observed covariates. This
+the surrogate variables are orthogonal to the observed covariates. This
 option only matters if \code{design_obs} is not \code{NULL}.
 Defaults to \code{FALSE}.}
 }

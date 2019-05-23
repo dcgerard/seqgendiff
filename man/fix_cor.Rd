@@ -13,7 +13,7 @@ The rows index the samples and the columns index the variables.
 The intercept should \emph{not} be included
 (though see Section "Unestimable Components").}
 
-\item{target_cor}{A numeric matrix of target correlations betweens the variables in
+\item{target_cor}{A numeric matrix of target correlations between the variables in
 \code{design_perm} and the surrogate variables. The rows index the
 observed covariates and the columns index the surrogate variables.
 The number of columns specifies the number of surrogate variables.
@@ -38,7 +38,7 @@ R' & I_K
 \end{array}
 \right).
 }
-This function applys a multiplicative scaling factor to \eqn{R} until
+This function appliess a multiplicative scaling factor to \eqn{R} until
 the above matrix is positive semi-definite. That is, it finds \eqn{a}
 between 0 and 1 such that
 \deqn{ \left(

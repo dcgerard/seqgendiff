@@ -30,7 +30,7 @@ The intercept should \emph{not} be included
 \item{coef_perm}{A numeric matrix. The coefficients corresponding to \code{design_perm}.
 The rows index the genes and the columns index the variables.}
 
-\item{target_cor}{A numeric matrix of target correlations betweens the variables in
+\item{target_cor}{A numeric matrix of target correlations between the variables in
 \code{design_perm} and the surrogate variables. The rows index the
 observed covariates and the columns index the surrogate variables.
 The number of columns specifies the number of surrogate variables.
@@ -43,7 +43,7 @@ or should we just do an SVD on \code{log2(mat + 0.5)} after
 regressing out \code{design_obs} (\code{FALSE})? Setting this to
 \code{TRUE} allows the surrogate variables to be correlated with the
 observed covariates, while setting this to \code{FALSE} assumes that
-the surrogate variabes are orthogonal to the observed covariates. This
+the surrogate variables are orthogonal to the observed covariates. This
 option only matters if \code{design_obs} is not \code{NULL}.
 Defaults to \code{FALSE}.}
 
@@ -115,7 +115,7 @@ Let
 We assume that \eqn{Y} is Poisson distributed given \eqn{X_3} and
 \eqn{Z} such that
 \deqn{\log_2(EY) = \mu 1_N' + B_3X_3' + AZ'.}
-\code{thin_diff()} will take as inpute \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
+\code{thin_diff()} will take as input \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
 \eqn{B_2}, and will output a \eqn{\tilde{Y}} and \eqn{W} such that
 \eqn{\tilde{Y}} is Poisson distributed given \eqn{X_1}, \eqn{X_2}, \eqn{X_3},
 \eqn{W}, and \eqn{Z} such that
@@ -141,7 +141,7 @@ represented in the output by having duplicate columns in
 Including duplicate columns in \code{design_fixed} and \code{design_perm}
 is also allowed but, again, will produce unestimable coefficients.
 
-Including an intercpet term in \code{design_obs} will produce an error if
+Including an intercept term in \code{design_obs} will produce an error if
 you are specifying correlated surrogate variables.
 }
 

@@ -344,7 +344,7 @@ thin_2group <- function(mat,
 #' We assume that \eqn{Y} is Poisson distributed given \eqn{X_3} and
 #' \eqn{Z} such that
 #' \deqn{\log_2(EY) = \mu 1_N' + B_3X_3' + AZ'.}
-#' \code{thin_diff()} will take as inpute \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
+#' \code{thin_diff()} will take as input \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
 #' \eqn{B_2}, and will output a \eqn{\tilde{Y}} and \eqn{W} such that
 #' \eqn{\tilde{Y}} is Poisson distributed given \eqn{X_1}, \eqn{X_2}, \eqn{X_3},
 #' \eqn{W}, and \eqn{Z} such that
@@ -368,7 +368,7 @@ thin_2group <- function(mat,
 #' Including duplicate columns in \code{design_fixed} and \code{design_perm}
 #' is also allowed but, again, will produce unestimable coefficients.
 #'
-#' Including an intercpet term in \code{design_obs} will produce an error if
+#' Including an intercept term in \code{design_obs} will produce an error if
 #' you are specifying correlated surrogate variables.
 #'
 #' @param mat A numeric matrix of counts. The rows index the genes and the
@@ -386,7 +386,7 @@ thin_2group <- function(mat,
 #'     (though see Section "Unestimable Components").
 #' @param coef_perm A numeric matrix. The coefficients corresponding to \code{design_perm}.
 #'     The rows index the genes and the columns index the variables.
-#' @param target_cor A numeric matrix of target correlations betweens the variables in
+#' @param target_cor A numeric matrix of target correlations between the variables in
 #'     \code{design_perm} and the surrogate variables. The rows index the
 #'     observed covariates and the columns index the surrogate variables.
 #'     The number of columns specifies the number of surrogate variables.
@@ -398,7 +398,7 @@ thin_2group <- function(mat,
 #'     regressing out \code{design_obs} (\code{FALSE})? Setting this to
 #'     \code{TRUE} allows the surrogate variables to be correlated with the
 #'     observed covariates, while setting this to \code{FALSE} assumes that
-#'     the surrogate variabes are orthogonal to the observed covariates. This
+#'     the surrogate variables are orthogonal to the observed covariates. This
 #'     option only matters if \code{design_obs} is not \code{NULL}.
 #'     Defaults to \code{FALSE}.
 #' @param design_obs A numeric matrix of observed covariates that are NOT to be a
@@ -522,14 +522,14 @@ thin_2group <- function(mat,
 #' abline(0, 1, col = 2, lwd = 2)
 #'
 thin_diff <- function(mat,
-                      design_fixed = NULL,
-                      coef_fixed   = NULL,
-                      design_perm  = NULL,
-                      coef_perm    = NULL,
-                      target_cor   = NULL,
-                      use_sva      = FALSE,
-                      design_obs   = NULL,
-                      relative     = TRUE,
+                      design_fixed    = NULL,
+                      coef_fixed      = NULL,
+                      design_perm     = NULL,
+                      coef_perm       = NULL,
+                      target_cor      = NULL,
+                      use_sva         = FALSE,
+                      design_obs      = NULL,
+                      relative        = TRUE,
                       change_colnames = TRUE) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))

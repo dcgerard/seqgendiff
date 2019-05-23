@@ -16,7 +16,7 @@ The intercept should \emph{not} be included
 
 \item{sv}{A matrix of surrogate variables}
 
-\item{target_cor}{A numeric matrix of target correlations betweens the variables in
+\item{target_cor}{A numeric matrix of target correlations between the variables in
 \code{design_perm} and the surrogate variables. The rows index the
 observed covariates and the columns index the surrogate variables.
 The number of columns specifies the number of surrogate variables.
