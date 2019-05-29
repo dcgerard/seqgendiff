@@ -1,39 +1,236 @@
 ## Generate counts from the theoretical model.
 
-#' Simulate RNA seq data via a factor-augmented regression model on the log-counts.
+#' Simulate RNA-seq data from the (unrealistic) theoretical model.
 #'
-#' This function simulates RNA-seq data generated under the assumed
-#' model on the log-counts (\eqn{Y}):
-#' \deqn{Y = XB + WC + ZA + E,}
-#' where \eqn{Y} is a matrix of gene-expression levels
-#' (rows index samples and columns index genes),
-#' \eqn{X} is a matrix of observed covariates of interest,
-#' \eqn{B} is a matrix of unobserved coefficients of interest,
-#' \eqn{W} is a matrix of observed nuisance covariates,
-#' \eqn{C} is a matrix of unobserved coefficients of \eqn{W},
-#' \eqn{Z} is a matrix of unobserved confounders, \eqn{A} is a matrix of unobserved
-#' coefficients of \eqn{Z}, and \eqn{E} is Gaussian noise with column-specific variances.
-#' Various options are available for correlation between X and Z and the proportion of variance
-#' explained by X and Z. X and Z can consist of either normal variates or columns of indicator
-#' variables. Abilities to vary library size and the effects of transcript length (special cases
-#' of unobserved confounding) are included.
+#' The main difference between \code{seqgen_base} and \code{seqgen_diff}
+#' is the output format.
 #'
-#' @author David Gerard
+#' @inheritParams seqgen_diff
+#'
+#' @return A matrix of RNA-seq counts. The rows index the genes and the columns
+#'     index the samples.
 #'
 #' @export
 #'
-#' @param nsamp The sample size.
-#' @param ngene The number of genes.
-#' @param signal_fun A function that returns a vector of the signal of interest. It must
-#'     take as a parameter \code{n}, for the number of samples to return.
-#' @param signal_params A list of parameters to pass to \code{signal_fun}.
-#'     It cannot include a parameter named \code{n}.
-#' @param prop_null The proportion of genes that are null.
-#'
-theogen <- function(nsamp, ngene, signal_fun = stats::rnorm,
-                    signal_params = list(mean = 0, sd = 1),
-                    prop_null = 1 ) {
+#' @author David Gerard
+seqgen_base <- function(designmat,
+                        coefmat,
+                        dispvec) {
 
+  ## Check input --------------------------------------------------------------
+  assertthat::assert_that(is.matrix(designmat))
+  assertthat::assert_that(is.matrix(coefmat))
+  assertthat::assert_that(is.numeric(designmat))
+  assertthat::assert_that(is.numeric(coefmat))
+  assertthat::assert_that(is.numeric(dispvec))
+  assertthat::assert_that(all(dispvec > 0))
+  assertthat::are_equal(nrow(coefmat), length(dispvec))
+  assertthat::are_equal(ncol(coefmat), ncol(designmat))
 
+  ngene <- nrow(coefmat)
+  nsamp <- nrow(designmat)
 
+  ## Get mean -----------------------------------------------------------------
+  mumat <- 2 ^ tcrossprod(coefmat, designmat)
+
+  ## Get draws ----------------------------------------------------------------
+  mat <- stats::rnbinom(n    = ngene * nsamp,
+                        size = 1 / dispvec,
+                        mu   = mumat)
+  dim(mat) <- dim(mumat)
+
+  return(mat)
 }
+
+
+#' Theoretical sequence simulation for differential expression analysis.
+#'
+#' Generate a matrix of RNA-seq counts from a theoretical negative-binomial
+#' model.
+#'
+#' @param designmat A numeric design matrix. The rows index the samples
+#'     and the columns index the variables.
+#' @param coefmat A numeric matrix of coefficients. The rows index the
+#'     genes and the columns index the variables.
+#' @param dispvec A vector of negative binomial dispersion parameters.
+#'     Element i is the dispersion for gene i.
+#' @param design_sv A numeric design matrix for the surrogate variables.
+#'     The rows index the samples and the columns index the surrogate
+#'     variables.
+#' @param coef_sv A numeric matrix of coefficients for the surrogate
+#'     variables. The rows index the genes and the columns index the
+#'     variables.
+#'
+#' @export
+#'
+#' @author David Gerard
+seqgen_diff <- function(designmat,
+                        coefmat,
+                        dispvec,
+                        design_sv = NULL,
+                        coef_sv = NULL) {
+  ## Check input --------------------------------------------------------------
+  ngene <- nrow(coefmat)
+  nsamp <- nrow(designmat)
+  if (is.null(design_sv) | is.null(coef_sv)) {
+    design_sv <- matrix(ncol = 0L, nrow = nsamp)
+    class(design_sv) <- "numeric"
+    coef_sv <- matrix(ncol = 0L, nrow = ngene)
+    class(coef_sv) <- "numeric"
+  }
+  assertthat::assert_that(is.matrix(designmat))
+  assertthat::assert_that(is.matrix(coefmat))
+  assertthat::assert_that(is.matrix(design_sv))
+  assertthat::assert_that(is.matrix(coef_sv))
+  assertthat::assert_that(is.numeric(designmat))
+  assertthat::assert_that(is.numeric(coefmat))
+  assertthat::assert_that(is.numeric(dispvec))
+  assertthat::assert_that(is.numeric(design_sv))
+  assertthat::assert_that(is.numeric(coef_sv))
+  assertthat::are_equal(nrow(coefmat), nrow(coef_sv), length(dispvec))
+  assertthat::are_equal(nrow(designmat), nrow(design_sv))
+  assertthat::are_equal(ncol(designmat), ncol(coefmat))
+  assertthat::are_equal(ncol(design_sv), ncol(coef_sv))
+  assertthat::assert_that(all(dispvec > 0))
+
+  ## Generate RNA-seq ---------------------------------------------------------
+  mat <- seqgen_base(designmat = cbind(designmat, design_sv),
+                     coefmat   = cbind(coefmat, coef_sv),
+                     dispvec   = dispvec)
+
+  ## Return -------------------------------------------------------------------
+  retlist <- list(mat       = mat,
+                  designmat = designmat,
+                  coefmat   = coefmat,
+                  sv        = design_sv,
+                  coef_sv   = coef_sv)
+
+  return(retlist)
+}
+
+
+#' Theoretical sequence simulation in the two-group model.
+#'
+#' Generate a matrix of RNA-seq counts from a theoretical negative-binomial
+#' model. This is in the special case of the two-group model.
+#'
+#' @param ngene The number of genes.
+#' @param nsamp The number of samples.
+#' @param dispvec A numeric vector of dispersions.
+#' @param prop_null The proportion of sgenes that are null.
+#' @param signal_fun The signal function for the non-null genes.
+#'     A function that takes at least the argument \code{n}
+#'     and returns \code{n} draws. Additioanl parameters may be passed
+#'     through \code{signal_params}.
+#' @param signal_params Additional arguments to be passed to \code{signal_fun}.
+#' @param intercept_fun The function for the intercept coefficients. A function
+#'     that takes at least the argument \code{n} and returns \code{n} draws.
+#'     Additional parameters may be passed through \code{intercept_params}.
+#' @param intercept_params Additional arguments to be passed to
+#'     \code{intercept_fun}.
+#' @param libvec A vector of library size multiplicative factors (not
+#'     on the log2 scale).
+#' @param group_prop The proportion of samples to be placed in group 1.
+#' @param design_sv Optional numeric design matrix of surrogate variables. The
+#'     rows index the samples and the columns index the surrogate variables.
+#' @param coef_sv Optional numeric matrix of coefficients of the surrogate
+#'     variables. The rows index the genes and the columns index the surrogate
+#'     variables.
+#'
+#' @export
+#'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link[DESeq2]{makeExampleDESeqDataSet}}{For a very similar
+#'       function from the DESeq2 package.}
+#'   \item{\code{\link{seqgen_diff}}}{For the underlying sequence simulation
+#'       function.}
+#' }
+#'
+#' @author David Gerard
+seqgen_2group  <- function(ngene,
+                           nsamp,
+                           dispvec          = rep(0.1, times = ngene),
+                           prop_null        = 1,
+                           signal_fun       = stats::rnorm,
+                           signal_params    = list(mean = 0, sd = 1),
+                           intercept_fun    = stats::rnorm,
+                           intercept_params = list(mean = 4, sd = 2),
+                           libvec           = rep(1, times = nsamp),
+                           group_prop       = 0.5,
+                           design_sv        = NULL,
+                           coef_sv          = NULL) {
+  ## Check input --------------------------------------------------------------
+  assertthat::is.count(ngene)
+  assertthat::is.count(nsamp)
+  if (is.null(design_sv) | is.null(coef_sv)) {
+    design_sv <- matrix(ncol = 0L, nrow = nsamp)
+    class(design_sv) <- "numeric"
+    coef_sv <- matrix(ncol = 0L, nrow = ngene)
+    class(coef_sv) <- "numeric"
+  }
+  assertthat::assert_that(is.numeric(dispvec))
+  assertthat::assert_that(is.numeric(prop_null))
+  assertthat::assert_that(is.numeric(group_prop))
+  assertthat::assert_that(is.numeric(design_sv))
+  assertthat::assert_that(is.numeric(coef_sv))
+  assertthat::assert_that(is.matrix(design_sv))
+  assertthat::assert_that(is.matrix(coef_sv))
+  assertthat::assert_that(is.function(signal_fun))
+  assertthat::assert_that(is.function(intercept_fun))
+  assertthat::assert_that(is.list(signal_params))
+  assertthat::assert_that(is.list(intercept_params))
+  assertthat::are_equal(1, length(prop_null), length(group_prop))
+  assertthat::assert_that(prop_null >= 0, prop_null <= 1)
+  assertthat::assert_that(group_prop >= 0, group_prop <= 1)
+  assertthat::are_equal(ngene, length(dispvec), nrow(coef_sv))
+  assertthat::are_equal(nsamp, length(libvec), nrow(design_sv))
+  assertthat::assert_that(all(dispvec > 0))
+  assertthat::assert_that(all(libvec >= 0))
+  assertthat::assert_that(is.null(signal_params$n))
+  assertthat::assert_that(is.null(intercept_params$n))
+
+  ## Generate designmat and coefmat -------------------------------------------
+  n1 <- round(group_prop * nsamp)
+  groupvec <- rep(0, times = nsamp)
+  groupvec[sample(seq_along(groupvec), size = n1)] <- 1
+  designmat <- cbind("(Intercept)" = 1, "Treatmemt" = groupvec)
+
+  intercept_params$n <- ngene
+  beta0vec <- do.call(what = intercept_fun, args = intercept_params)
+
+  signal_params$n <- ngene
+  beta1vec <- do.call(what = signal_fun, args = signal_params)
+
+  coefmat <- cbind("(Intercept)" = beta0vec, "Treatment" = beta1vec)
+
+  ## Simulate -----------------------------------------------------------------
+  retlist <- seqgen_diff(designmat = designmat,
+                         coefmat   = coefmat,
+                         dispvec   = dispvec,
+                         design_sv = cbind(design_sv, "Library" = log2(libvec)),
+                         coef_sv   = cbind(coef_sv, "Library" = 1))
+
+  return(retlist)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
