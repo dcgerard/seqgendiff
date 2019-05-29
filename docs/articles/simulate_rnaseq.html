@@ -178,7 +178,7 @@
 <a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; sample8  -0.355891249958748  0.217149139494375         0</span></a>
 <a class="sourceLine" id="cb11-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/design">design</a></span>(dds)</a>
 <a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; ~V1 + V2 + P1</span></a>
-<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; &lt;environment: 0x564f52c675d0&gt;</span></a>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; &lt;environment: 0x5643a9e777f8&gt;</span></a>
 <a class="sourceLine" id="cb11-18" data-line-number="18">dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeq">DESeq</a></span>(<span class="dt">object =</span> dds)</a>
 <a class="sourceLine" id="cb11-19" data-line-number="19">pval_dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class">rowData</a></span>(dds)[, <span class="st">"WaldPvalue_P1"</span>]</a>
 <a class="sourceLine" id="cb11-20" data-line-number="20">qval_dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/qvalue/topics/qvalue">qvalue</a></span>(<span class="dt">p =</span> pval_dds)</a></code></pre></div>
