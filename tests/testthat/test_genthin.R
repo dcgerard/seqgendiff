@@ -176,7 +176,7 @@ test_that("thin_2group doesn't alter zero coef genes", {
   thout <- thin_2group(mat = mat)
   expect_equal(thout$mat, mat)
 
-  thout <- thin_2group(mat = mat, prop_null = 0.5)
+  thout <- thin_2group(mat = mat, prop_null = 0.5, alpha = 1)
   expect_equal(thout$mat[abs(thout$coefmat) < 10^-6, ], mat[abs(thout$coefmat) < 10^-6, ])
 })
 

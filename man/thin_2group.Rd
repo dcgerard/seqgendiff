@@ -6,7 +6,7 @@
 \usage{
 thin_2group(mat, prop_null = 1, signal_fun = stats::rnorm,
   signal_params = list(mean = 0, sd = 1), group_prop = 0.5,
-  corvec = NULL)
+  corvec = NULL, alpha = 0)
 }
 \arguments{
 \item{mat}{A numeric matrix of counts. The rows index the genes and the
@@ -29,6 +29,16 @@ target correlation of the latent group assignment vector with the
 ith latent confounder. The default is to set this to \code{NULL},
 in which case group assignment is made independently of any
 unobserved confounding.}
+
+\item{alpha}{The scaling factor for the signal distribution from
+Stephens (2016). If \eqn{x_1, x_2, ..., x_n} are drawn from
+\code{signal_fun}, then signal is set to
+\eqn{x_1 s_1^{\alpha}, x_2 s_2^{\alpha}, ..., x_n s_n^{\alpha}}, where
+\eqn{s_g} is the empirical standard deviation of gene \eqn{g}.
+Setting this to \code{0} means that the effects are exchangeable, setting
+this to \code{1} means corresponds to the p-value prior of
+Wakefield (2009). You would rarely set this to anything but \code{0}
+or \code{1}.}
 }
 \value{
 A list-like S3 object of class \code{ThinData}.
@@ -85,6 +95,12 @@ plot(thinout$coefmat,
      ylab = "Estimated log2-fold change")
 abline(0, 1, col = 2, lwd = 2)
 
+}
+\references{
+\itemize{
+  \item{Stephens, Matthew. "False discovery rates: a new deal." Biostatistics 18, no. 2 (2016): 275-294.}
+  \item{Wakefield, Jon. "Bayes factors for genome‐wide association studies: comparison with P‐values." Genetic epidemiology 33, no. 1 (2009): 79-86.}
+}
 }
 \seealso{
 \describe{

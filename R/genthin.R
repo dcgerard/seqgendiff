@@ -246,6 +246,15 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #'     ith latent confounder. The default is to set this to \code{NULL},
 #'     in which case group assignment is made independently of any
 #'     unobserved confounding.
+#' @param alpha The scaling factor for the signal distribution from
+#'     Stephens (2016). If \eqn{x_1, x_2, ..., x_n} are drawn from
+#'     \code{signal_fun}, then signal is set to
+#'     \eqn{x_1 s_1^{\alpha}, x_2 s_2^{\alpha}, ..., x_n s_n^{\alpha}}, where
+#'     \eqn{s_g} is the empirical standard deviation of gene \eqn{g}.
+#'     Setting this to \code{0} means that the effects are exchangeable, setting
+#'     this to \code{1} means corresponds to the p-value prior of
+#'     Wakefield (2009). You would rarely set this to anything but \code{0}
+#'     or \code{1}.
 #'
 #' @inherit thin_diff return
 #'
@@ -260,6 +269,12 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #'       ThinData object to a SummarizedExperiment object.}
 #'   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
 #'       ThinData object to a DESeqDataSet object.}
+#' }
+#'
+#' @references
+#' \itemize{
+#'   \item{Stephens, Matthew. "False discovery rates: a new deal." Biostatistics 18, no. 2 (2016): 275-294.}
+#'   \item{Wakefield, Jon. "Bayes factors for genome‐wide association studies: comparison with P‐values." Genetic epidemiology 33, no. 1 (2009): 79-86.}
 #' }
 #'
 #' @examples
@@ -292,24 +307,32 @@ thin_2group <- function(mat,
                         signal_fun    = stats::rnorm,
                         signal_params = list(mean = 0, sd = 1),
                         group_prop    = 0.5,
-                        corvec        = NULL) {
+                        corvec        = NULL,
+                        alpha         = 0) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
-  assertthat::are_equal(1L, length(prop_null), length(signal_fun), length(group_prop))
+  assertthat::are_equal(1L, length(prop_null), length(signal_fun), length(group_prop), length(alpha))
   assertthat::assert_that(prop_null <= 1, prop_null >= 0, group_prop <= 1, group_prop >= 0)
   assertthat::assert_that(is.function(signal_fun))
   assertthat::assert_that(is.list(signal_params))
   assertthat::assert_that(is.null(signal_params$n))
+  assertthat::assert_that(is.numeric(alpha))
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
-
 
   ## Generate coef ------------------------------------------------------------
   coef_perm <- matrix(0, nrow = ngene, ncol = 1)
   signal_params$n <- round(ngene * (1 - prop_null))
   if (signal_params$n > 0) {
     signal_vec <- c(do.call(what = signal_fun, args = signal_params))
-    coef_perm[sample(seq_len(ngene), size = signal_params$n), 1] <- signal_vec
+    which_nonnull <- sort(sample(seq_len(ngene), size = signal_params$n))
+
+    if (abs(alpha) > 10^-6) { ## if alpha is non-zero
+      matsd <- apply(X = log2(mat[which_nonnull, ] + 0.5), MARGIN = 1, FUN = stats::sd)
+      signal_vec <- signal_vec * (matsd ^ alpha)
+    }
+
+    coef_perm[which_nonnull, 1] <- signal_vec
   }
 
   ## Generate design ----------------------------------------------------------
