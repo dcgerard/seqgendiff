@@ -574,7 +574,10 @@ thin_diff <- function(mat,
   assertthat::assert_that(is.logical(use_sva))
   assertthat::assert_that(is.logical(relative))
   assertthat::assert_that(is.logical(change_colnames))
-  assertthat::are_equal(1L, length(use_sva), length(relative))
+  assertthat::are_equal(1L,
+                        length(use_sva),
+                        length(relative),
+                        length(change_colnames))
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
 
@@ -595,6 +598,16 @@ thin_diff <- function(mat,
     class(design_obs) <- "numeric"
   }
 
+  assertthat::assert_that(is.matrix(design_fixed))
+  assertthat::assert_that(is.matrix(design_perm))
+  assertthat::assert_that(is.matrix(design_obs))
+  assertthat::assert_that(is.matrix(coef_fixed))
+  assertthat::assert_that(is.matrix(coef_perm))
+  assertthat::assert_that(is.numeric(design_fixed))
+  assertthat::assert_that(is.numeric(design_perm))
+  assertthat::assert_that(is.numeric(design_perm))
+  assertthat::assert_that(is.numeric(coef_fixed))
+  assertthat::assert_that(is.numeric(coef_perm))
   assertthat::are_equal(ncol(mat), nrow(design_fixed), nrow(design_perm), nrow(design_obs))
   assertthat::are_equal(nrow(mat), nrow(coef_fixed), nrow(coef_perm))
   assertthat::are_equal(ncol(design_fixed), ncol(coef_fixed))

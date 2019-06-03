@@ -141,7 +141,7 @@ seqgen_diff <- function(designmat,
 #'
 #' @seealso
 #' \describe{
-#'   \item{\code{\link[DESeq2]{makeExampleDESeqDataSet}}{For a very similar
+#'   \item{\code{\link[DESeq2]{makeExampleDESeqDataSet}}}{For a very similar
 #'       function from the DESeq2 package.}
 #'   \item{\code{\link{seqgen_diff}}}{For the underlying sequence simulation
 #'       function.}

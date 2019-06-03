@@ -49,6 +49,14 @@ variables.}
 Generate a matrix of RNA-seq counts from a theoretical negative-binomial
 model. This is in the special case of the two-group model.
 }
+\seealso{
+\describe{
+  \item{\code{\link[DESeq2]{makeExampleDESeqDataSet}}}{For a very similar
+      function from the DESeq2 package.}
+  \item{\code{\link{seqgen_diff}}}{For the underlying sequence simulation
+      function.}
+}
+}
 \author{
 David Gerard
 }
