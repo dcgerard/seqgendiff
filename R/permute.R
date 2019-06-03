@@ -79,7 +79,7 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
     design_perm <- design_perm[match(lgroup, ogroup), , drop = FALSE]
   } else if (method == "marriage") {
     matchout <- matchingR::galeShapley.marriageMarket(proposerUtils = -1 * t(distmat), reviewerUtils = -1 * distmat)
-    design_perm <- design_perm[matchout$proposals, ]
+    design_perm <- design_perm[matchout$proposals, , drop = FALSE]
   }
   return(list(design_perm = design_perm, latent_var = latent_var))
 }
