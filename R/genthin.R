@@ -311,7 +311,10 @@ thin_2group <- function(mat,
                         alpha         = 0) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
-  assertthat::are_equal(1L, length(prop_null), length(signal_fun), length(group_prop), length(alpha))
+  assertthat::are_equal(1L, length(prop_null))
+  assertthat::are_equal(1L, length(signal_fun))
+  assertthat::are_equal(1L, length(group_prop))
+  assertthat::are_equal(1L, length(alpha))
   assertthat::assert_that(prop_null <= 1, prop_null >= 0, group_prop <= 1, group_prop >= 0)
   assertthat::assert_that(is.function(signal_fun))
   assertthat::assert_that(is.list(signal_params))
@@ -597,10 +600,10 @@ thin_diff <- function(mat,
   assertthat::assert_that(is.logical(use_sva))
   assertthat::assert_that(is.logical(relative))
   assertthat::assert_that(is.logical(change_colnames))
-  assertthat::are_equal(1L,
-                        length(use_sva),
-                        length(relative),
-                        length(change_colnames))
+  assertthat::are_equal(1L, length(use_sva))
+  assertthat::are_equal(1L, length(relative))
+  assertthat::are_equal(1L, length(change_colnames))
+
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
 
