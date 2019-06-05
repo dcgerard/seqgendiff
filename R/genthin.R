@@ -31,6 +31,8 @@
 #'       library size thinning.}
 #'   \item{\code{\link{thin_gene}}}{For the specific application of
 #'       total gene expression thinning.}
+#'   \item{\code{\link{thin_all}}}{For the specific appliciation of
+#'       thinning all counts uniformly.}
 #' }
 #'
 #' @examples
@@ -82,6 +84,74 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
   return(newmat)
 }
 
+#' Poisson thinning for altering read-depth.
+#'
+#' Given a matrix of real RNA-seq counts, this function will apply a
+#' thinning factor uniformly to every count in this matrix. This uniformly
+#' lowers the read-depth for the entire dataset. The thinning factor should
+#' be provided on the log2-scale. This is a specific application of the
+#' Poisson thinning approach in \code{\link{thin_diff}}. Though this particular
+#' form of thinning was used by Robinson and Storey (2014) in the context
+#' of deriving read-depth suggestions.
+#'
+#' @inheritParams thin_diff
+#' @param thinlog2 A numeric scalar. This is the amount to shrink each count
+#'     in \code{mat} (on the log2-scale).  For
+#'     example, a value of 0 means that we do not thin, a value of 1 means
+#'     that we thin by a factor of 2, a value of 2 means we thin by a factor
+#'     of 4, etc.
+#'
+#' @seealso
+#' \describe{
+#'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
+#'   \item{\code{\link{thin_lib}}}{For thinning sample-wise.}
+#'   \item{\code{\link{thin_gene}}}{For thinning gene-wise.}
+#'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
+#'       ThinData object to a SummarizedExperiment object.}
+#'   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
+#'       ThinData object to a DESeqDataSet object.}
+#' }
+#'
+#' @inherit thin_diff return
+#'
+#' @author David Gerard
+#'
+#' @export
+#'
+#' @references
+#' \itemize{
+#'   \item{Robinson, David G., and John D. Storey. "subSeq: determining appropriate sequencing depth through efficient read subsampling." Bioinformatics 30, no. 23 (2014): 3424-3426.}
+#' }
+#'
+#' @examples
+#' ## Generate count data and set thinning factor
+#' ## In practice, you would obtain mat from a real dataset, not simulate it.
+#' set.seed(1)
+#' n <- 10
+#' p <- 1000
+#' lambda <- 1000
+#' mat <- matrix(lambda, ncol = n, nrow = p)
+#' thinlog2 <- 1
+#'
+#' ## Thin read-depths
+#' thout <- thin_all(mat = mat, thinlog2 = thinlog2)
+#'
+#' ## Compare empirical and theoretical proportions
+#' mean(thout$mat) / lambda
+#' 2 ^ -thinlog2
+#'
+thin_all <- function(mat, thinlog2) {
+  assertthat::assert_that(is.matrix(mat))
+  assertthat::assert_that(is.numeric(mat))
+  stopifnot(1 == length(thinlog2))
+  assertthat::assert_that(thinlog2 > 0)
+
+  thout <- thin_lib(mat      = mat,
+                    thinlog2 = rep(thinlog2, ncol(mat)),
+                    relative = FALSE)
+  return(thout)
+}
+
 #' Poisson thinning for altering library size.
 #'
 #' Given a matrix of real RNA-seq counts, this function will apply a
@@ -92,7 +162,7 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #'
 #' @inheritParams thin_diff
 #' @param thinlog2 A vector of numerics. Element i is the amount to thin
-#'     (on the log2 scale) for sample i. For
+#'     (on the log2-scale) for sample i. For
 #'     example, a value of 0 means that we do not thin, a value of 1 means
 #'     that we thin by a factor of 2, a value of 2 means we thin by a factor
 #'     of 4, etc.
@@ -103,6 +173,7 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #' \describe{
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
 #'   \item{\code{\link{thin_gene}}}{For thinning gene-wise instead of sample-wise.}
+#'   \item{\code{\link{thin_all}}}{For thinning all counts uniformly.}
 #'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
 #'       ThinData object to a SummarizedExperiment object.}
 #'   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
@@ -172,6 +243,7 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 #' \describe{
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
 #'   \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of gene-wise.}
+#'   \item{\code{\link{thin_all}}}{For thinning all counts uniformly.}
 #'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
 #'       ThinData object to a SummarizedExperiment object.}
 #'   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
@@ -501,6 +573,8 @@ thin_2group <- function(mat,
 #'       \code{thin_diff} to library size thinning.}
 #'   \item{\code{\link{thin_gene}}}{For the specific application of
 #'       \code{thin_diff} to total gene expression thinning.}
+#'   \item{\code{\link{thin_all}}}{For the specific appliciation of
+#'       \code{thin_diff} to thinning all counts uniformly.}
 #'   \item{\code{\link{thin_base}}}{For the underlying thinning function
 #'       used in \code{thin_diff}.}
 #'   \item{\code{\link[sva]{sva}}}{For the implementation of surrogate

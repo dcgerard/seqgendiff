@@ -227,6 +227,8 @@ abline(0, 1, col = 2, lwd = 2)
       \code{thin_diff} to library size thinning.}
   \item{\code{\link{thin_gene}}}{For the specific application of
       \code{thin_diff} to total gene expression thinning.}
+  \item{\code{\link{thin_all}}}{For the specific appliciation of
+      \code{thin_diff} to thinning all counts uniformly.}
   \item{\code{\link{thin_base}}}{For the underlying thinning function
       used in \code{thin_diff}.}
   \item{\code{\link[sva]{sva}}}{For the implementation of surrogate

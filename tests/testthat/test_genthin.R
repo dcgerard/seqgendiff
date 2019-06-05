@@ -97,6 +97,18 @@ test_that("library thinning works", {
 })
 
 
+test_that("total thinning works", {
+  set.seed(1)
+  n <- 100
+  p <- 101
+  thinlog2 <- 1
+  mat <- matrix(100, ncol = n, nrow = p)
+  thout <- thin_all(mat = mat, thinlog2 = 1)
+
+  expect_equal(mean(thout$mat) / 100, 0.5, tol = 0.01)
+})
+
+
 
 test_that("fix_cor fixes the correlation", {
   set.seed(1)

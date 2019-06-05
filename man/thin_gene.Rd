@@ -73,6 +73,7 @@ abline(0, 1, col = 2, lwd = 2)
 \describe{
   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
   \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of gene-wise.}
+  \item{\code{\link{thin_all}}}{For thinning all counts uniformly.}
   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
       ThinData object to a SummarizedExperiment object.}
   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
