@@ -8,8 +8,8 @@ Description: Generates/modifies RNA-seq data for use in simulations. We provide
     RNA-seq dataset. The advantage to using this approach over simulating under
     a theoretical distribution is that common/annoying aspects of the data
     are more preserved, giving a more realistic evaluation of your method. 
-    The main functions are thin_diff(), thin_lib(), thin_gene(), and 
-    thin_2group().
+    The main functions are thin_diff(), thin_lib(), thin_gene(), 
+    thin_2group(), and thin_all().
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

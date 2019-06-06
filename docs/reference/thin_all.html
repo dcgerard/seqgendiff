@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Poisson thinning for altering library size. — thin_lib • seqgendiff</title>
+<title>Poisson thinning for altering read-depth. — thin_all • seqgendiff</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,15 @@
 
 
 
-<meta property="og:title" content="Poisson thinning for altering library size. — thin_lib" />
+<meta property="og:title" content="Poisson thinning for altering read-depth. — thin_all" />
 
 <meta property="og:description" content="Given a matrix of real RNA-seq counts, this function will apply a
-separate, user-provided thinning factor to each sample. This uniformly
-lowers the counts for all genes in a sample. The thinning factor
-should be provided on the log2-scale. This is a specific application
-of the Poisson thinning approach in thin_diff." />
+thinning factor uniformly to every count in this matrix. This uniformly
+lowers the read-depth for the entire dataset. The thinning factor should
+be provided on the log2-scale. This is a specific application of the
+Poisson thinning approach in thin_diff. Though this particular
+form of thinning was used by Robinson and Storey (2014) in the context
+of deriving read-depth suggestions." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,22 +120,24 @@ of the Poisson thinning approach in thin_diff." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Poisson thinning for altering library size.</h1>
+    <h1>Poisson thinning for altering read-depth.</h1>
     <small class="dont-index">Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/R/genthin.R'><code>R/genthin.R</code></a></small>
-    <div class="hidden name"><code>thin_lib.Rd</code></div>
+    <div class="hidden name"><code>thin_all.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
     <p>Given a matrix of real RNA-seq counts, this function will apply a
-separate, user-provided thinning factor to each sample. This uniformly
-lowers the counts for all genes in a sample. The thinning factor
-should be provided on the log2-scale. This is a specific application
-of the Poisson thinning approach in <code><a href='thin_diff.html'>thin_diff</a></code>.</p>
+thinning factor uniformly to every count in this matrix. This uniformly
+lowers the read-depth for the entire dataset. The thinning factor should
+be provided on the log2-scale. This is a specific application of the
+Poisson thinning approach in <code><a href='thin_diff.html'>thin_diff</a></code>. Though this particular
+form of thinning was used by Robinson and Storey (2014) in the context
+of deriving read-depth suggestions.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>thin_lib</span>(<span class='no'>mat</span>, <span class='no'>thinlog2</span>, <span class='kw'>relative</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>thin_all</span>(<span class='no'>mat</span>, <span class='no'>thinlog2</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,17 +149,11 @@ columns index the samples.</p></td>
     </tr>
     <tr>
       <th>thinlog2</th>
-      <td><p>A vector of numerics. Element i is the amount to thin
-(on the log2-scale) for sample i. For
+      <td><p>A numeric scalar. This is the amount to shrink each count
+in <code>mat</code> (on the log2-scale).  For
 example, a value of 0 means that we do not thin, a value of 1 means
 that we thin by a factor of 2, a value of 2 means we thin by a factor
 of 4, etc.</p></td>
-    </tr>
-    <tr>
-      <th>relative</th>
-      <td><p>A logical. Should we apply relative thinning (<code>TRUE</code>)
-or absolute thinning (<code>FALSE</code>). Only experts should change
-the default.</p></td>
     </tr>
     </table>
     
@@ -180,12 +178,18 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
 </dl>
 
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <ul>
+<li><p>Robinson, David G., and John D. Storey. "subSeq: determining appropriate sequencing depth through efficient read subsampling." Bioinformatics 30, no. 23 (2014): 3424-3426.</p></li>
+</ul>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><dl class='dl-horizontal'>
   <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>For the more general thinning approach.</p></dd>
-  <dt><code><a href='thin_gene.html'>thin_gene</a></code></dt><dd><p>For thinning gene-wise instead of sample-wise.</p></dd>
-  <dt><code><a href='thin_all.html'>thin_all</a></code></dt><dd><p>For thinning all counts uniformly.</p></dd>
+  <dt><code><a href='thin_lib.html'>thin_lib</a></code></dt><dd><p>For thinning sample-wise.</p></dd>
+  <dt><code><a href='thin_gene.html'>thin_gene</a></code></dt><dd><p>For thinning gene-wise.</p></dd>
   <dt><code><a href='ThinDataToSummarizedExperiment.html'>ThinDataToSummarizedExperiment</a></code></dt><dd><p>For converting a
       ThinData object to a SummarizedExperiment object.</p></dd>
   <dt><code><a href='ThinDataToDESeqDataSet.html'>ThinDataToDESeqDataSet</a></code></dt><dd><p>For converting a
@@ -194,24 +198,20 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## Generate count data and thinning factors</span>
+    <pre class="examples"><div class='input'><span class='co'>## Generate count data and set thinning factor</span>
 <span class='co'>## In practice, you would obtain mat from a real dataset, not simulate it.</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>10</span>
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
 <span class='no'>lambda</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
 <span class='no'>mat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='no'>lambda</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>p</span>)
-<span class='no'>thinlog2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Exponential'>rexp</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>rate</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>thinlog2</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
 
-<span class='co'>## Thin library sizes</span>
-<span class='no'>thout</span> <span class='kw'>&lt;-</span> <span class='fu'>thin_lib</span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>mat</span>, <span class='kw'>thinlog2</span> <span class='kw'>=</span> <span class='no'>thinlog2</span>)
+<span class='co'>## Thin read-depths</span>
+<span class='no'>thout</span> <span class='kw'>&lt;-</span> <span class='fu'>thin_all</span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>mat</span>, <span class='kw'>thinlog2</span> <span class='kw'>=</span> <span class='no'>thinlog2</span>)
 
-<span class='co'>## Compare empirical thinning proportions to specified thinning proportions</span>
-<span class='no'>empirical_propvec</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colSums'>colMeans</a></span>(<span class='no'>thout</span>$<span class='no'>mat</span>) / <span class='no'>lambda</span>
-<span class='no'>specified_propvec</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span> ^ (-<span class='no'>thinlog2</span>)
-<span class='no'>empirical_propvec</span></div><div class='output co'>#&gt;  [1] 0.593540 0.440856 0.904004 0.907761 0.739050 0.134163 0.426668 0.688737
-#&gt;  [9] 0.515567 0.903628</div><div class='input'><span class='no'>specified_propvec</span></div><div class='output co'>#&gt;  [1] 0.5924717 0.4408492 0.9039365 0.9076480 0.7391461 0.1344397 0.4264469
-#&gt;  [8] 0.6879221 0.5152814 0.9030977</div><div class='input'>
+<span class='co'>## Compare empirical and theoretical proportions</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>thout</span>$<span class='no'>mat</span>) / <span class='no'>lambda</span></div><div class='output co'>#&gt; [1] 0.5000418</div><div class='input'><span class='fl'>2</span> ^ -<span class='no'>thinlog2</span></div><div class='output co'>#&gt; [1] 0.5</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -220,6 +220,8 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
 
       <li><a href="#see-also">See also</a></li>
       
