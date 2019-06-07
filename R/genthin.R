@@ -392,6 +392,7 @@ thin_2group <- function(mat,
   assertthat::assert_that(is.list(signal_params))
   assertthat::assert_that(is.null(signal_params$n))
   assertthat::assert_that(is.numeric(alpha))
+
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
 
@@ -677,6 +678,7 @@ thin_diff <- function(mat,
   assertthat::are_equal(1L, length(use_sva))
   assertthat::are_equal(1L, length(relative))
   assertthat::are_equal(1L, length(change_colnames))
+  stopifnot(mat >= 0)
 
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
