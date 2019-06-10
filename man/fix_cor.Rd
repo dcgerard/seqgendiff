@@ -25,7 +25,7 @@ grid search for the shrinkage factor. The step-size would be
 \code{1 / (num_steps - 1)}.}
 }
 \description{
-Shrinks the target correlation using a uniform scaling facter so that
+Shrinks the target correlation using a uniform scaling factor so that
 the overall correlation matrix is positive semi-definite.
 }
 \details{

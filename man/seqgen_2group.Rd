@@ -21,7 +21,7 @@ seqgen_2group(ngene, nsamp, dispvec = rep(0.1, times = ngene),
 
 \item{signal_fun}{The signal function for the non-null genes.
 A function that takes at least the argument \code{n}
-and returns \code{n} draws. Additioanl parameters may be passed
+and returns \code{n} draws. Additional parameters may be passed
 through \code{signal_params}.}
 
 \item{signal_params}{Additional arguments to be passed to \code{signal_fun}.}

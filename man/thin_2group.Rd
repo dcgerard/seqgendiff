@@ -26,7 +26,7 @@ a vector of samples. Additional parameters may be passed through
 
 \item{corvec}{A vector of target correlations. \code{corvec[i]} is the
 target correlation of the latent group assignment vector with the
-ith latent confounder. The default is to set this to \code{NULL},
+ith surrogate variable. The default is to set this to \code{NULL},
 in which case group assignment is made independently of any
 unobserved confounding.}
 

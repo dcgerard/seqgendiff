@@ -84,18 +84,53 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
   return(list(design_perm = design_perm, latent_var = latent_var))
 }
 
-#' Estimate the effective correlation
+#' Estimates the effective correlation.
 #'
-#' Will return the actual correlation between the design matrix and the
-#' surrogate variables when you use \code{\link{permute_design}}.
+#' Will return the estimated correlation between the design matrix and the
+#' surrogate variables when you assign a target correlation.
 #'
 #' @inheritParams thin_diff
 #' @inheritParams permute_design
 #' @param iternum The total number of simulated correlations to consider.
 #'
+#' @export
+#'
 #' @author David Gerard
-effective_cor <- function(design_perm, sv, target_cor, method = c("optmatch", "marriage"), iternum = 1000) {
+#'
+#' @examples
+#' ## Generate the design matrices and set target correlation -----------------
+#' n <- 10
+#' design_perm <- cbind(rep(c(0, 1), each = n / 2),
+#'                      rep(c(0, 1), length.out = n))
+#' sv <- matrix(rnorm(n))
+#' target_cor <- matrix(c(0.9, 0.1), ncol = 1)
+#'
+#' ## Get estimated true correlation ------------------------------------------
+#' ## You should use a much larger iternum in practice
+#' effective_cor(design_perm = design_perm,
+#'               sv = sv,
+#'               target_cor = target_cor,
+#'               iternum = 10)
+#'
+effective_cor <- function(design_perm,
+                          sv,
+                          target_cor,
+                          method = c("optmatch", "marriage"),
+                          iternum = 1000) {
+  ## Check input -------------------------------------------------------------
   method <- match.arg(method)
+  assertthat::assert_that(is.matrix(design_perm))
+  assertthat::assert_that(is.numeric(design_perm))
+  assertthat::assert_that(is.matrix(sv))
+  assertthat::assert_that(is.numeric(sv))
+  assertthat::assert_that(is.matrix(target_cor))
+  assertthat::assert_that(is.numeric(target_cor))
+  assertthat::are_equal(nrow(sv), nrow(design_perm))
+  assertthat::are_equal(ncol(sv), ncol(target_cor))
+  assertthat::are_equal(ncol(design_perm), nrow(target_cor))
+  assertthat::is.count(iternum)
+
+  ## Get estimated correlation
   target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
   itermax <- 1000
   corarray <- array(0, dim = c(ncol(design_perm), ncol(sv), itermax))
@@ -109,7 +144,7 @@ effective_cor <- function(design_perm, sv, target_cor, method = c("optmatch", "m
 
 #' Fixes an invalid target correlation.
 #'
-#' Shrinks the target correlation using a uniform scaling facter so that
+#' Shrinks the target correlation using a uniform scaling factor so that
 #' the overall correlation matrix is positive semi-definite.
 #'
 #' Let \eqn{W} = \code{cor(design_perm)}. Let \eqn{R} = \code{target_cor}.

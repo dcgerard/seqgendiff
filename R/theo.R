@@ -120,7 +120,7 @@ seqgen_diff <- function(designmat,
 #' @param prop_null The proportion of sgenes that are null.
 #' @param signal_fun The signal function for the non-null genes.
 #'     A function that takes at least the argument \code{n}
-#'     and returns \code{n} draws. Additioanl parameters may be passed
+#'     and returns \code{n} draws. Additional parameters may be passed
 #'     through \code{signal_params}.
 #' @param signal_params Additional arguments to be passed to \code{signal_fun}.
 #' @param intercept_fun The function for the intercept coefficients. A function

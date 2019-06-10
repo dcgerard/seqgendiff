@@ -2,7 +2,8 @@
 #'
 #' This package is designed to take real RNA-seq data and alter it by
 #' adding a known amount of signal. You can then use this modified dataset
-#' in simulation studies for differential expression analysis. The
+#' in simulation studies for differential expression analysis, factor
+#' analysis, confounder adjustment, or library size adjustment. The
 #' advantage of this way of simulating data is that you can see how
 #' your method behaves when the simulated data exhibit common
 #' (and annoying) features of real data. For example, in the real world
@@ -12,16 +13,21 @@
 #'
 #' @section seqgendiff Functions:
 #' \describe{
-#'   \item{\code{\link{thin_diff}}}{For the function most users should
+#'   \item{\code{\link{thin_diff}}}{The function most users should
 #'       be using for general-purpose Poisson thinning. For the special
 #'       applications of the two-group model or library/gene thinning, see
 #'       the functions listed below.}
-#'   \item{\code{\link{thin_2group}}}{For the specific application of
+#'   \item{\code{\link{thin_2group}}}{The specific application of
 #'       thinning in the two-group model.}
-#'   \item{\code{\link{thin_lib}}}{For the specific application of
+#'   \item{\code{\link{thin_lib}}}{The specific application of
 #'       library size thinning.}
-#'   \item{\code{\link{thin_gene}}}{For the specific application of
+#'   \item{\code{\link{thin_gene}}}{The specific application of
 #'       total gene expression thinning.}
+#'   \item{\code{\link{thin_all}}}{The specific application of thinning
+#'       all counts.}
+#'   \item{\code{\link{effective_cor}}}{Returns an estimate of the actual
+#'       correlation between surrogate variables and a user-specified
+#'       design matrix.}
 #'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
 #'       ThinData object to a SummarizedExperiment object.}
 #'   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a

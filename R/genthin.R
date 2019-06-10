@@ -31,7 +31,7 @@
 #'       library size thinning.}
 #'   \item{\code{\link{thin_gene}}}{For the specific application of
 #'       total gene expression thinning.}
-#'   \item{\code{\link{thin_all}}}{For the specific appliciation of
+#'   \item{\code{\link{thin_all}}}{For the specific application of
 #'       thinning all counts uniformly.}
 #' }
 #'
@@ -315,7 +315,7 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #' @param group_prop The proportion of individuals that are in group 1.
 #' @param corvec A vector of target correlations. \code{corvec[i]} is the
 #'     target correlation of the latent group assignment vector with the
-#'     ith latent confounder. The default is to set this to \code{NULL},
+#'     ith surrogate variable. The default is to set this to \code{NULL},
 #'     in which case group assignment is made independently of any
 #'     unobserved confounding.
 #' @param alpha The scaling factor for the signal distribution from
@@ -574,7 +574,7 @@ thin_2group <- function(mat,
 #'       \code{thin_diff} to library size thinning.}
 #'   \item{\code{\link{thin_gene}}}{For the specific application of
 #'       \code{thin_diff} to total gene expression thinning.}
-#'   \item{\code{\link{thin_all}}}{For the specific appliciation of
+#'   \item{\code{\link{thin_all}}}{For the specific application of
 #'       \code{thin_diff} to thinning all counts uniformly.}
 #'   \item{\code{\link{thin_base}}}{For the underlying thinning function
 #'       used in \code{thin_diff}.}

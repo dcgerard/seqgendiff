@@ -2,7 +2,7 @@
 % Please edit documentation in R/permute.R
 \name{effective_cor}
 \alias{effective_cor}
-\title{Estimate the effective correlation}
+\title{Estimates the effective correlation.}
 \usage{
 effective_cor(design_perm, sv, target_cor, method = c("optmatch",
   "marriage"), iternum = 1000)
@@ -34,8 +34,24 @@ samples.}
 \item{iternum}{The total number of simulated correlations to consider.}
 }
 \description{
-Will return the actual correlation between the design matrix and the
-surrogate variables when you use \code{\link{permute_design}}.
+Will return the estimated correlation between the design matrix and the
+surrogate variables when you assign a target correlation.
+}
+\examples{
+## Generate the design matrices and set target correlation -----------------
+n <- 10
+design_perm <- cbind(rep(c(0, 1), each = n / 2),
+                     rep(c(0, 1), length.out = n))
+sv <- matrix(rnorm(n))
+target_cor <- matrix(c(0.9, 0.1), ncol = 1)
+
+## Get estimated true correlation ------------------------------------------
+## You should use a much larger iternum in practice
+effective_cor(design_perm = design_perm,
+              sv = sv,
+              target_cor = target_cor,
+              iternum = 10)
+
 }
 \author{
 David Gerard

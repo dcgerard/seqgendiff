@@ -54,7 +54,7 @@ abline(0, 1, col = 2, lwd = 2)
       library size thinning.}
   \item{\code{\link{thin_gene}}}{For the specific application of
       total gene expression thinning.}
-  \item{\code{\link{thin_all}}}{For the specific appliciation of
+  \item{\code{\link{thin_all}}}{For the specific application of
       thinning all counts uniformly.}
 }
 }
