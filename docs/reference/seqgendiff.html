@@ -34,7 +34,8 @@
 
 <meta property="og:description" content="This package is designed to take real RNA-seq data and alter it by
 adding a known amount of signal. You can then use this modified dataset
-in simulation studies for differential expression analysis. The
+in simulation studies for differential expression analysis, factor
+analysis, confounder adjustment, or library size adjustment. The
 advantage of this way of simulating data is that you can see how
 your method behaves when the simulated data exhibit common
 (and annoying) features of real data. For example, in the real world
@@ -131,7 +132,8 @@ data that exhibit these characteristics." />
     
     <p>This package is designed to take real RNA-seq data and alter it by
 adding a known amount of signal. You can then use this modified dataset
-in simulation studies for differential expression analysis. The
+in simulation studies for differential expression analysis, factor
+analysis, confounder adjustment, or library size adjustment. The
 advantage of this way of simulating data is that you can see how
 your method behaves when the simulated data exhibit common
 (and annoying) features of real data. For example, in the real world
@@ -146,16 +148,21 @@ data that exhibit these characteristics.</p>
 
     
     <dl class='dl-horizontal'>
-  <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>For the function most users should
+  <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>The function most users should
       be using for general-purpose Poisson thinning. For the special
       applications of the two-group model or library/gene thinning, see
       the functions listed below.</p></dd>
-  <dt><code><a href='thin_2group.html'>thin_2group</a></code></dt><dd><p>For the specific application of
+  <dt><code><a href='thin_2group.html'>thin_2group</a></code></dt><dd><p>The specific application of
       thinning in the two-group model.</p></dd>
-  <dt><code><a href='thin_lib.html'>thin_lib</a></code></dt><dd><p>For the specific application of
+  <dt><code><a href='thin_lib.html'>thin_lib</a></code></dt><dd><p>The specific application of
       library size thinning.</p></dd>
-  <dt><code><a href='thin_gene.html'>thin_gene</a></code></dt><dd><p>For the specific application of
+  <dt><code><a href='thin_gene.html'>thin_gene</a></code></dt><dd><p>The specific application of
       total gene expression thinning.</p></dd>
+  <dt><code><a href='thin_all.html'>thin_all</a></code></dt><dd><p>The specific application of thinning
+      all counts.</p></dd>
+  <dt><code><a href='effective_cor.html'>effective_cor</a></code></dt><dd><p>Returns an estimate of the actual
+      correlation between surrogate variables and a user-specified
+      design matrix.</p></dd>
   <dt><code><a href='ThinDataToSummarizedExperiment.html'>ThinDataToSummarizedExperiment</a></code></dt><dd><p>For converting a
       ThinData object to a SummarizedExperiment object.</p></dd>
   <dt><code><a href='ThinDataToDESeqDataSet.html'>ThinDataToDESeqDataSet</a></code></dt><dd><p>For converting a

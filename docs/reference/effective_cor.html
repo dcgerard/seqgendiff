@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate the effective correlation — effective_cor • seqgendiff</title>
+<title>Estimates the effective correlation. — effective_cor • seqgendiff</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Estimate the effective correlation — effective_cor" />
+<meta property="og:title" content="Estimates the effective correlation. — effective_cor" />
 
-<meta property="og:description" content="Will return the actual correlation between the design matrix and the
-surrogate variables when you use permute_design." />
+<meta property="og:description" content="Will return the estimated correlation between the design matrix and the
+surrogate variables when you assign a target correlation." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,15 +115,15 @@ surrogate variables when you use permute_design." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate the effective correlation</h1>
+    <h1>Estimates the effective correlation.</h1>
     <small class="dont-index">Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/R/permute.R'><code>R/permute.R</code></a></small>
     <div class="hidden name"><code>effective_cor.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Will return the actual correlation between the design matrix and the
-surrogate variables when you use <code><a href='permute_design.html'>permute_design</a></code>.</p>
+    <p>Will return the estimated correlation between the design matrix and the
+surrogate variables when you assign a target correlation.</p>
     
     </div>
 
@@ -171,12 +171,31 @@ samples.</p></td>
     </table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>## Generate the design matrices and set target correlation -----------------</span>
+<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>10</span>
+<span class='no'>design_perm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n</span> / <span class='fl'>2</span>),
+                     <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='no'>n</span>))
+<span class='no'>sv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='no'>n</span>))
+<span class='no'>target_cor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.9</span>, <span class='fl'>0.1</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='co'>## Get estimated true correlation ------------------------------------------</span>
+<span class='co'>## You should use a much larger iternum in practice</span>
+<span class='fu'>effective_cor</span>(<span class='kw'>design_perm</span> <span class='kw'>=</span> <span class='no'>design_perm</span>,
+              <span class='kw'>sv</span> <span class='kw'>=</span> <span class='no'>sv</span>,
+              <span class='kw'>target_cor</span> <span class='kw'>=</span> <span class='no'>target_cor</span>,
+              <span class='kw'>iternum</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt;           [,1]
+#&gt; [1,] 0.6919144
+#&gt; [2,] 0.1157426</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>David Gerard</p>
