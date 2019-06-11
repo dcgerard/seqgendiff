@@ -2,7 +2,7 @@
 % Please edit documentation in R/genthin.R
 \name{thin_2group}
 \alias{thin_2group}
-\title{Poisson thinning in the two-group model.}
+\title{Binomial thinning in the two-group model.}
 \usage{
 thin_2group(mat, prop_null = 1, signal_fun = stats::rnorm,
   signal_params = list(mean = 0, sd = 1), group_prop = 0.5,
@@ -68,7 +68,7 @@ and add this signal to the RNA-seq counts matrix. The user may specify
 the proportion of samples in each group, the proportion of null genes
 (where the log2-fold change is 0),
 and the signal function. This is a specific application of the
-general Poisson thinning approach implemented in \code{\link{thin_diff}}.
+general binomial thinning approach implemented in \code{\link{thin_diff}}.
 }
 \examples{
 ## Simulate data from given matrix of counts

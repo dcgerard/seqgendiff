@@ -2,7 +2,7 @@
 % Please edit documentation in R/genthin.R
 \name{thin_lib}
 \alias{thin_lib}
-\title{Poisson thinning for altering library size.}
+\title{Binomial thinning for altering library size.}
 \usage{
 thin_lib(mat, thinlog2, relative = FALSE)
 }
@@ -45,7 +45,7 @@ Given a matrix of real RNA-seq counts, this function will apply a
 separate, user-provided thinning factor to each sample. This uniformly
 lowers the counts for all genes in a sample. The thinning factor
 should be provided on the log2-scale. This is a specific application
-of the Poisson thinning approach in \code{\link{thin_diff}}.
+of the binomial thinning approach in \code{\link{thin_diff}}.
 }
 \examples{
 ## Generate count data and thinning factors

@@ -2,7 +2,7 @@
 % Please edit documentation in R/genthin.R
 \name{thin_diff}
 \alias{thin_diff}
-\title{Poisson thinning for differential expression analysis.}
+\title{Binomial thinning for differential expression analysis.}
 \usage{
 thin_diff(mat, design_fixed = NULL, coef_fixed = NULL,
   design_perm = NULL, coef_perm = NULL, target_cor = NULL,
@@ -90,7 +90,8 @@ Components include some or all of the following:
 \description{
 Given a matrix of real RNA-seq counts, this function will add a known
 amount of signal to the count matrix. This signal is given in the form
-of a Poisson generalized linear model with a log (base 2) link. The user may
+of a Poisson / negative binomial / mixture of negative binomials
+generalized linear model with a log (base 2) link. The user may
 specify any arbitrary design matrix and coefficient matrix. The user
 may also control for the amount of correlation between the observed
 covariates and any unobserved surrogate variables.
@@ -124,6 +125,8 @@ We assume that \eqn{Y} is Poisson distributed given \eqn{X_3} and
 where \eqn{W} is an \eqn{N} by \eqn{N} permutation matrix. \eqn{W} is randomly
 drawn so that \eqn{X_2} and \eqn{Z} are correlated approximately according
 to a target correlation matrix.
+
+The Poisson assumption may be generalized to a mixture of negative binomials.
 }
 
 \section{Unestimable Components}{

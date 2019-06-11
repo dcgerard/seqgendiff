@@ -2,7 +2,7 @@
 % Please edit documentation in R/genthin.R
 \name{thin_all}
 \alias{thin_all}
-\title{Poisson thinning for altering read-depth.}
+\title{Binomial thinning for altering read-depth.}
 \usage{
 thin_all(mat, thinlog2)
 }
@@ -41,7 +41,7 @@ Given a matrix of real RNA-seq counts, this function will apply a
 thinning factor uniformly to every count in this matrix. This uniformly
 lowers the read-depth for the entire dataset. The thinning factor should
 be provided on the log2-scale. This is a specific application of the
-Poisson thinning approach in \code{\link{thin_diff}}. Though this particular
+binomial thinning approach in \code{\link{thin_diff}}. Though this particular
 form of thinning was used by Robinson and Storey (2014) in the context
 of deriving read-depth suggestions.
 }

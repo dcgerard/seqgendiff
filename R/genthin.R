@@ -2,7 +2,7 @@
 ## General Thinning functions
 #########################
 
-#' Base Poisson thinning function.
+#' Base binomial thinning function.
 #'
 #' Given a matrix of counts (\eqn{Y}), a design matrix (\eqn{X}),
 #' and a matrix of coefficients (\eqn{B}), \code{thin_diff} will generate a new
@@ -24,7 +24,7 @@
 #' @seealso
 #' \describe{
 #'   \item{\code{\link{thin_diff}}}{For the function most users should
-#'       be using for general-purpose Poisson thinning.}
+#'       be using for general-purpose binomial thinning.}
 #'   \item{\code{\link{thin_2group}}}{For the specific application of
 #'       thinning in the two-group model.}
 #'   \item{\code{\link{thin_lib}}}{For the specific application of
@@ -84,13 +84,13 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
   return(newmat)
 }
 
-#' Poisson thinning for altering read-depth.
+#' Binomial thinning for altering read-depth.
 #'
 #' Given a matrix of real RNA-seq counts, this function will apply a
 #' thinning factor uniformly to every count in this matrix. This uniformly
 #' lowers the read-depth for the entire dataset. The thinning factor should
 #' be provided on the log2-scale. This is a specific application of the
-#' Poisson thinning approach in \code{\link{thin_diff}}. Though this particular
+#' binomial thinning approach in \code{\link{thin_diff}}. Though this particular
 #' form of thinning was used by Robinson and Storey (2014) in the context
 #' of deriving read-depth suggestions.
 #'
@@ -152,13 +152,13 @@ thin_all <- function(mat, thinlog2) {
   return(thout)
 }
 
-#' Poisson thinning for altering library size.
+#' Binomial thinning for altering library size.
 #'
 #' Given a matrix of real RNA-seq counts, this function will apply a
 #' separate, user-provided thinning factor to each sample. This uniformly
 #' lowers the counts for all genes in a sample. The thinning factor
 #' should be provided on the log2-scale. This is a specific application
-#' of the Poisson thinning approach in \code{\link{thin_diff}}.
+#' of the binomial thinning approach in \code{\link{thin_diff}}.
 #'
 #' @inheritParams thin_diff
 #' @param thinlog2 A vector of numerics. Element i is the amount to thin
@@ -221,13 +221,13 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 }
 
 
-#' Poisson thinning for altering total gene expression levels
+#' Binomial thinning for altering total gene expression levels
 #'
 #' Given a matrix of real RNA-seq counts, this function will apply a
 #' separate, user-provided thinning factor to each gene. This uniformly
 #' lowers the counts for all samples in a gene. The thinning factor
 #' should be provided on the log2-scale. This is a specific application
-#' of the Poisson thinning approach in \code{\link{thin_diff}}.
+#' of the binomial thinning approach in \code{\link{thin_diff}}.
 #'
 #'
 #' @inheritParams thin_diff
@@ -293,7 +293,7 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 
 }
 
-#' Poisson thinning in the two-group model.
+#' Binomial thinning in the two-group model.
 #'
 #' Given a matrix of real RNA-seq counts, this function will
 #' randomly assign samples to one of two groups, draw
@@ -302,7 +302,7 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #' the proportion of samples in each group, the proportion of null genes
 #' (where the log2-fold change is 0),
 #' and the signal function. This is a specific application of the
-#' general Poisson thinning approach implemented in \code{\link{thin_diff}}.
+#' general binomial thinning approach implemented in \code{\link{thin_diff}}.
 #'
 #' @inheritParams thin_diff
 #' @param prop_null The proportion of genes that are null.
@@ -439,11 +439,12 @@ thin_2group <- function(mat,
   return(thout)
 }
 
-#' Poisson thinning for differential expression analysis.
+#' Binomial thinning for differential expression analysis.
 #'
 #' Given a matrix of real RNA-seq counts, this function will add a known
 #' amount of signal to the count matrix. This signal is given in the form
-#' of a Poisson generalized linear model with a log (base 2) link. The user may
+#' of a Poisson / negative binomial / mixture of negative binomials
+#' generalized linear model with a log (base 2) link. The user may
 #' specify any arbitrary design matrix and coefficient matrix. The user
 #' may also control for the amount of correlation between the observed
 #' covariates and any unobserved surrogate variables.
@@ -476,6 +477,8 @@ thin_2group <- function(mat,
 #' where \eqn{W} is an \eqn{N} by \eqn{N} permutation matrix. \eqn{W} is randomly
 #' drawn so that \eqn{X_2} and \eqn{Z} are correlated approximately according
 #' to a target correlation matrix.
+#'
+#' The Poisson assumption may be generalized to a mixture of negative binomials.
 #'
 #' @section Unestimable Components:
 #'

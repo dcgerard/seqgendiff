@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Poisson thinning for differential expression analysis. — thin_diff • seqgendiff</title>
+<title>Binomial thinning for differential expression analysis. — thin_diff • seqgendiff</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,12 @@
 
 
 
-<meta property="og:title" content="Poisson thinning for differential expression analysis. — thin_diff" />
+<meta property="og:title" content="Binomial thinning for differential expression analysis. — thin_diff" />
 
 <meta property="og:description" content="Given a matrix of real RNA-seq counts, this function will add a known
 amount of signal to the count matrix. This signal is given in the form
-of a Poisson generalized linear model with a log (base 2) link. The user may
+of a Poisson / negative binomial / mixture of negative binomials
+generalized linear model with a log (base 2) link. The user may
 specify any arbitrary design matrix and coefficient matrix. The user
 may also control for the amount of correlation between the observed
 covariates and any unobserved surrogate variables." />
@@ -119,7 +120,7 @@ covariates and any unobserved surrogate variables." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Poisson thinning for differential expression analysis.</h1>
+    <h1>Binomial thinning for differential expression analysis.</h1>
     <small class="dont-index">Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/R/genthin.R'><code>R/genthin.R</code></a></small>
     <div class="hidden name"><code>thin_diff.Rd</code></div>
     </div>
@@ -128,7 +129,8 @@ covariates and any unobserved surrogate variables." />
     
     <p>Given a matrix of real RNA-seq counts, this function will add a known
 amount of signal to the count matrix. This signal is given in the form
-of a Poisson generalized linear model with a log (base 2) link. The user may
+of a Poisson / negative binomial / mixture of negative binomials
+generalized linear model with a log (base 2) link. The user may
 specify any arbitrary design matrix and coefficient matrix. The user
 may also control for the amount of correlation between the observed
 covariates and any unobserved surrogate variables.</p>
@@ -271,6 +273,7 @@ $$\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + A
 where \(W\) is an \(N\) by \(N\) permutation matrix. \(W\) is randomly
 drawn so that \(X_2\) and \(Z\) are correlated approximately according
 to a target correlation matrix.</p>
+<p>The Poisson assumption may be generalized to a mixture of negative binomials.</p>
     
     <h2 class="hasAnchor" id="unestimable-components"><a class="anchor" href="#unestimable-components"></a>Unestimable Components</h2>
 

@@ -17,7 +17,7 @@ seqgen_2group(ngene, nsamp, dispvec = rep(0.1, times = ngene),
 
 \item{dispvec}{A numeric vector of dispersions.}
 
-\item{prop_null}{The proportion of sgenes that are null.}
+\item{prop_null}{The proportion of genes that are null.}
 
 \item{signal_fun}{The signal function for the non-null genes.
 A function that takes at least the argument \code{n}

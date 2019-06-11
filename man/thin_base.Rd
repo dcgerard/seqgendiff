@@ -2,7 +2,7 @@
 % Please edit documentation in R/genthin.R
 \name{thin_base}
 \alias{thin_base}
-\title{Base Poisson thinning function.}
+\title{Base binomial thinning function.}
 \usage{
 thin_base(mat, designmat, coefmat, relative = TRUE)
 }
@@ -47,7 +47,7 @@ abline(0, 1, col = 2, lwd = 2)
 \seealso{
 \describe{
   \item{\code{\link{thin_diff}}}{For the function most users should
-      be using for general-purpose Poisson thinning.}
+      be using for general-purpose binomial thinning.}
   \item{\code{\link{thin_2group}}}{For the specific application of
       thinning in the two-group model.}
   \item{\code{\link{thin_lib}}}{For the specific application of

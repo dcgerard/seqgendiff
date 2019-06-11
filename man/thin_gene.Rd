@@ -2,7 +2,7 @@
 % Please edit documentation in R/genthin.R
 \name{thin_gene}
 \alias{thin_gene}
-\title{Poisson thinning for altering total gene expression levels}
+\title{Binomial thinning for altering total gene expression levels}
 \usage{
 thin_gene(mat, thinlog2, relative = FALSE)
 }
@@ -45,7 +45,7 @@ Given a matrix of real RNA-seq counts, this function will apply a
 separate, user-provided thinning factor to each gene. This uniformly
 lowers the counts for all samples in a gene. The thinning factor
 should be provided on the log2-scale. This is a specific application
-of the Poisson thinning approach in \code{\link{thin_diff}}.
+of the binomial thinning approach in \code{\link{thin_diff}}.
 }
 \examples{
 ## Generate count data and thinning factors

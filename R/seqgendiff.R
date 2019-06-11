@@ -14,7 +14,7 @@
 #' @section seqgendiff Functions:
 #' \describe{
 #'   \item{\code{\link{thin_diff}}}{The function most users should
-#'       be using for general-purpose Poisson thinning. For the special
+#'       be using for general-purpose binomial thinning. For the special
 #'       applications of the two-group model or library/gene thinning, see
 #'       the functions listed below.}
 #'   \item{\code{\link{thin_2group}}}{The specific application of

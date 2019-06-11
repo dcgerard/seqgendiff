@@ -117,7 +117,7 @@ seqgen_diff <- function(designmat,
 #' @param ngene The number of genes.
 #' @param nsamp The number of samples.
 #' @param dispvec A numeric vector of dispersions.
-#' @param prop_null The proportion of sgenes that are null.
+#' @param prop_null The proportion of genes that are null.
 #' @param signal_fun The signal function for the non-null genes.
 #'     A function that takes at least the argument \code{n}
 #'     and returns \code{n} draws. Additional parameters may be passed
