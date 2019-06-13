@@ -92,7 +92,11 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
 #' @inheritParams thin_diff
 #' @inheritParams permute_design
 #' @param iternum The total number of simulated correlations to consider.
-#'
+#' @param calc_first Should we calculate the correlation of the mean
+#'     \code{design_perm} and \code{sv} (\code{calc_first = "mean"}), or should we
+#'     calculate the mean of the correlations between \code{design_perm} and
+#'     \code{sv} (\code{calc_first = "cor"})? Only \code{calc_first = "mean"}
+#'     is theoretically justified.
 #' @export
 #'
 #' @author David Gerard
@@ -115,10 +119,12 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
 effective_cor <- function(design_perm,
                           sv,
                           target_cor,
+                          calc_first = c("mean", "cor"),
                           method = c("optmatch", "marriage"),
                           iternum = 1000) {
   ## Check input -------------------------------------------------------------
-  method <- match.arg(method)
+  method     <- match.arg(method)
+  calc_first <- match.arg(calc_first)
   assertthat::assert_that(is.matrix(design_perm))
   assertthat::assert_that(is.numeric(design_perm))
   assertthat::assert_that(is.matrix(sv))
@@ -132,13 +138,28 @@ effective_cor <- function(design_perm,
 
   ## Get estimated correlation
   target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
-  itermax <- 1000
-  corarray <- array(0, dim = c(ncol(design_perm), ncol(sv), itermax))
-  for (index in seq_len(itermax)) {
-    pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = method)
-    corarray[,,index] <- stats::cor(pout$design_perm, sv)
+
+  if (calc_first == "cor") {
+    corarray <- array(NA, dim = c(ncol(design_perm), ncol(sv), iternum))
+    for (index in seq_len(iternum)) {
+      pout <- permute_design(design_perm = design_perm,
+                             sv          = sv,
+                             target_cor  = target_cor,
+                             method      = method)
+      corarray[, , index] <- stats::cor(pout$design_perm, sv)
+    }
+    truecor <- apply(corarray, c(1, 2), mean)
+  } else if (calc_first == "mean") {
+    perm_array <- array(NA, dim = c(nrow(design_perm), ncol(design_perm), iternum))
+    for (index in seq_len(iternum)) {
+      pout <- permute_design(design_perm = design_perm,
+                             sv          = sv,
+                             target_cor  = target_cor,
+                             method      = method)
+      perm_array[, , index] <- pout$design_perm
+    }
+    truecor <- stats::cor(apply(perm_array, c(1, 2), mean), sv)
   }
-  truecor <- apply(corarray, c(1, 2), mean)
   return(truecor)
 }
 

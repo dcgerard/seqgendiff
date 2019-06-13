@@ -4,8 +4,8 @@
 \alias{effective_cor}
 \title{Estimates the effective correlation.}
 \usage{
-effective_cor(design_perm, sv, target_cor, method = c("optmatch",
-  "marriage"), iternum = 1000)
+effective_cor(design_perm, sv, target_cor, calc_first = c("mean", "cor"),
+  method = c("optmatch", "marriage"), iternum = 1000)
 }
 \arguments{
 \item{design_perm}{A numeric design matrix whose rows are to be permuted (thus
@@ -22,6 +22,12 @@ observed covariates and the columns index the surrogate variables.
 The number of columns specifies the number of surrogate variables.
 Set this to \code{NULL} to indicate that \code{design_perm} and the
 surrogate variables are uncorrelated.}
+
+\item{calc_first}{Should we calculate the correlation of the mean
+\code{design_perm} and \code{sv} (\code{calc_first = "mean"}), or should we
+calculate the mean of the correlations between \code{design_perm} and
+\code{sv} (\code{calc_first = "cor"})? Only \code{calc_first = "mean"}
+is theoretically justified.}
 
 \item{method}{Should we use the optimal matching technique from Hansen and
 Klopfer (2006) (\code{"optmatch"}) or the Gale-Shapley algorithm
