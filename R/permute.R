@@ -95,8 +95,9 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
 #' @param calc_first Should we calculate the correlation of the mean
 #'     \code{design_perm} and \code{sv} (\code{calc_first = "mean"}), or should we
 #'     calculate the mean of the correlations between \code{design_perm} and
-#'     \code{sv} (\code{calc_first = "cor"})? Only \code{calc_first = "mean"}
-#'     is theoretically justified.
+#'     \code{sv} (\code{calc_first = "cor"})? This should only be changed
+#'     by expert users.
+#'
 #' @export
 #'
 #' @author David Gerard
@@ -119,7 +120,7 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
 effective_cor <- function(design_perm,
                           sv,
                           target_cor,
-                          calc_first = c("mean", "cor"),
+                          calc_first = c("cor", "mean"),
                           method = c("optmatch", "marriage"),
                           iternum = 1000) {
   ## Check input -------------------------------------------------------------
@@ -141,22 +142,26 @@ effective_cor <- function(design_perm,
 
   if (calc_first == "cor") {
     corarray <- array(NA, dim = c(ncol(design_perm), ncol(sv), iternum))
+    ## latent_cor_array <- array(NA, dim = dim(corarray))
     for (index in seq_len(iternum)) {
       pout <- permute_design(design_perm = design_perm,
                              sv          = sv,
                              target_cor  = target_cor,
                              method      = method)
       corarray[, , index] <- stats::cor(pout$design_perm, sv)
+      ## latent_cor_array[, , index] <- stats::cor(pout$latent_var, sv)
     }
     truecor <- apply(corarray, c(1, 2), mean)
   } else if (calc_first == "mean") {
     perm_array <- array(NA, dim = c(nrow(design_perm), ncol(design_perm), iternum))
+    ## latent_array <- array(NA, dim = dim(perm_array))
     for (index in seq_len(iternum)) {
       pout <- permute_design(design_perm = design_perm,
                              sv          = sv,
                              target_cor  = target_cor,
                              method      = method)
       perm_array[, , index] <- pout$design_perm
+      ## latent_array[, , index] <- pout$latent_var
     }
     truecor <- stats::cor(apply(perm_array, c(1, 2), mean), sv)
   }
