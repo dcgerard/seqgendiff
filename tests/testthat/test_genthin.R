@@ -6,14 +6,14 @@ test_that("general thinning works", {
   p <- 100
   Z <- rnorm(n)
   alpha <- rnorm(p)
-  mat <- round(2^(alpha %*% t(Z) + matrix(rnorm(n * p), nrow = p, ncol = n)))
+  mat <- round(2 ^ (alpha %*% t(Z) + matrix(rnorm(n * p), nrow = p, ncol = n)))
   design_perm <- matrix(runif(n))
   coef_perm <- matrix(1, nrow = p, ncol = 1)
   target_cor <- matrix(runif(ncol(design_perm) * 2), nrow = ncol(design_perm))
   thinlog2 <- stats::rexp(n = n)
   design_fixed <- matrix(rep(c(0, 1), length.out = n))
   coef_fixed <- matrix(rnorm(p))
-  design_obs = matrix(runif(n))
+  design_obs <- matrix(runif(n))
 
   thout <- thin_diff(mat = mat,
                      design_perm = design_perm,
@@ -54,14 +54,14 @@ test_that("conversion to DESeq2DataSet and SummarizedExperiment works", {
     p <- 100
     Z <- rnorm(n)
     alpha <- rnorm(p)
-    mat <- round(2^(alpha %*% t(Z) + matrix(rnorm(n * p), nrow = p, ncol = n)))
+    mat <- round(2 ^ (alpha %*% t(Z) + matrix(rnorm(n * p), nrow = p, ncol = n)))
     design_perm <- matrix(runif(n))
     coef_perm <- matrix(1, nrow = p, ncol = 1)
     target_cor <- matrix(runif(ncol(design_perm) * 2), nrow = ncol(design_perm))
     thinlog2 <- stats::rexp(n = n)
     design_fixed <- matrix(rep(c(0, 1), length.out = n))
     coef_fixed <- matrix(rnorm(p))
-    design_obs = matrix(runif(n))
+    design_obs <- matrix(runif(n))
 
     thout <- thin_diff(mat = mat,
                        design_fixed = design_fixed,
@@ -147,7 +147,7 @@ test_that("permute design approximates target correlation", {
   n <- 1000
   p <- 2
   k <- 3
-  A <- matrix(rnorm((k + p)^2), nrow = p + k)
+  A <- matrix(rnorm((k + p) ^ 2), nrow = p + k)
   cormat <- cov2cor(crossprod(A))
   sigma11 <- cormat[seq_len(p), seq_len(p)]
   target_cor <- cormat[seq_len(p), (p + 1):(k + p)]
@@ -169,7 +169,7 @@ test_that("permute_design orders 0's and 1's for binary designs", {
   k <- 3
   design_perm <- matrix(rep(c(0, 1), length.out = n))
   sv <- scale(matrix(runif(k * n), nrow = n))
-  A <- matrix(rnorm((k + p)^2), nrow = p + k)
+  A <- matrix(rnorm((k + p) ^ 2), nrow = p + k)
   cormat <- cov2cor(crossprod(A))
   target_cor <- cormat[seq_len(p), (p + 1):(k + p), drop = FALSE]
   target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
@@ -183,13 +183,11 @@ test_that("thin_2group doesn't alter zero coef genes", {
   p <- 100
   Z <- rnorm(n)
   alpha <- rnorm(p)
-  mat <- round(2^(alpha %*% t(Z) + matrix(rnorm(n * p), nrow = p, ncol = n)))
+  mat <- round(2 ^ (alpha %*% t(Z) + matrix(rnorm(n * p), nrow = p, ncol = n)))
 
   thout <- thin_2group(mat = mat)
   expect_equal(thout$mat, mat)
 
   thout <- thin_2group(mat = mat, prop_null = 0.5, alpha = 1)
-  expect_equal(thout$mat[abs(thout$coefmat) < 10^-6, ], mat[abs(thout$coefmat) < 10^-6, ])
+  expect_equal(thout$mat[abs(thout$coefmat) < 10 ^ -6, ], mat[abs(thout$coefmat) < 10 ^ -6, ])
 })
-
-

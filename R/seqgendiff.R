@@ -1,4 +1,4 @@
-#' seqgendiff: Sequence Generation/Modification for Differential Expression Analysis Simulations.
+#' seqgendiff: Sequence Generation/Modification for Differential Expression Analysis and Beyond.
 #'
 #' This package is designed to take real RNA-seq data and alter it by
 #' adding a known amount of signal. You can then use this modified dataset
@@ -28,9 +28,9 @@
 #'   \item{\code{\link{effective_cor}}}{Returns an estimate of the actual
 #'       correlation between surrogate variables and a user-specified
 #'       design matrix.}
-#'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
+#'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{Converts a
 #'       ThinData object to a SummarizedExperiment object.}
-#'   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
+#'   \item{\code{\link{ThinDataToDESeqDataSet}}}{Converts a
 #'       ThinData object to a DESeqDataSet object.}
 #' }
 #'

@@ -7,18 +7,23 @@
 fix_cor(design_perm, target_cor, num_steps = 51)
 }
 \arguments{
-\item{design_perm}{A numeric design matrix whose rows are to be permuted (thus
-controlling the amount by which they are correlated with the surrogate variables).
-The rows index the samples and the columns index the variables.
-The intercept should \emph{not} be included
+\item{design_perm}{A numeric design matrix whose rows are to be permuted
+(thus controlling the amount by which they are correlated with the
+surrogate variables). The rows index the samples and the columns index
+the variables. The intercept should \emph{not} be included
 (though see Section "Unestimable Components").}
 
-\item{target_cor}{A numeric matrix of target correlations between the variables in
-\code{design_perm} and the surrogate variables. The rows index the
-observed covariates and the columns index the surrogate variables.
-The number of columns specifies the number of surrogate variables.
-Set this to \code{NULL} to indicate that \code{design_perm} and the
-surrogate variables are uncorrelated.}
+\item{target_cor}{A numeric matrix of target correlations between the
+variables in \code{design_perm} and the surrogate variables. The
+rows index the observed covariates and the columns index the surrogate
+variables. That is, \code{target_cor[i, j]} specifies the target
+correlation between the \code{i}th column of \code{design_perm} and the
+\code{j}th surrogate variable. The surrogate variables are estimated
+either using factor analysis or surrogate variable analysis (see the
+parameter \code{use_sva}).
+The number of columns in \code{target_cor} specifies the number of
+surrogate variables. Set \code{target_cor} to \code{NULL} to indicate
+that \code{design_perm} and the surrogate variables are independent.}
 
 \item{num_steps}{The number of steps between 0 and 1 to take in the
 grid search for the shrinkage factor. The step-size would be

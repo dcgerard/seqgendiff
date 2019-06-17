@@ -7,8 +7,8 @@
 thin_gene(mat, thinlog2, relative = FALSE)
 }
 \arguments{
-\item{mat}{A numeric matrix of counts. The rows index the genes and the
-columns index the samples.}
+\item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes and
+the columns index the samples.}
 
 \item{thinlog2}{A vector of numerics. Element i is the amount to thin
 (on the log2 scale) for gene i. For
@@ -26,18 +26,24 @@ Components include some or all of the following:
 \describe{
   \item{\code{mat}}{The modified matrix of counts.}
   \item{\code{designmat}}{The design matrix of variables used to simulate
-      signal.}
-  \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
+      signal. This is made by column-binding \code{design_fixed} and the
+      permuted version of \code{design_perm}.}
+  \item{\code{coefmat}}{A matrix of coefficients corresponding to
+      \code{designmat}.}
   \item{\code{design_obs}}{Additional variables that should be included in
-      your design matrix in downstream fittings. This contains at the very
-      least a vector of 1's for the intercept term.}
+      your design matrix in downstream fittings. This is made by
+      column-binding the vector of 1's with \code{design_obs}.}
   \item{\code{sv}}{A matrix of estimated surrogate variables. In simulation
       studies you would probably leave this out and estimate your own
       surrogate variables.}
   \item{\code{cormat}}{A matrix of target correlations between the
-      surrogate variables and the permuted variables in the design matrix.}
+      surrogate variables and the permuted variables in the design matrix.
+      This might be different from the \code{target_cor} you input because
+      we pass it through \code{\link{fix_cor}} to ensure
+      positive semi-definiteness of the resulting covariance matrix.}
   \item{\code{matching_var}}{A matrix of simulated variables used to
-      permute \code{design_perm}.}
+      permute \code{design_perm} if the \code{target_cor} is not
+      \code{NULL}.}
 }
 }
 \description{
@@ -72,7 +78,8 @@ abline(0, 1, col = 2, lwd = 2)
 \seealso{
 \describe{
   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
-  \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of gene-wise.}
+  \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of
+      gene-wise.}
   \item{\code{\link{thin_all}}}{For thinning all counts uniformly.}
   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
       ThinData object to a SummarizedExperiment object.}

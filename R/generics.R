@@ -49,12 +49,13 @@ cat(
 
 #' Converts a ThinData S3 object into a SummarizedExperiment S4 object.
 #'
-#' This only keeps the \code{mat}, \code{designmat}, and \code{coefmat}
-#' elements of the ThinData object.
+#' This only keeps the \code{mat}, \code{design_obs}, \code{designmat},
+#' and \code{coefmat} elements of the ThinData object.
 #'
 #' @param obj A ThinData S3 object. This is generally output by either
 #'     \code{\link{thin_diff}}, \code{\link{thin_2group}},
-#'     \code{\link{thin_lib}}, or \code{\link{thin_gene}}.
+#'     \code{\link{thin_lib}}, \code{\link{thin_gene}}, or
+#'     \code{\link{thin_all}}.
 #'
 #' @return A \code{\link[SummarizedExperiment]{SummarizedExperiment}} S4
 #'     object. This is often used in Bioconductor when performing
@@ -71,14 +72,16 @@ ThinDataToSummarizedExperiment <- function(obj) {
     }
     rownames(obj$coefmat) <- paste0("gene", seq_len(nrow(obj$coefmat)))
     rownames(obj$mat)     <- paste0("gene", seq_len(nrow(obj$mat)))
-    overall_design <- cbind(obj$design_obs[, -1, drop = FALSE], obj$designmat) ## drop intercept
+    ## drop intercept
+    overall_design <- cbind(obj$design_obs[, -1, drop = FALSE], obj$designmat)
     rownames(overall_design) <- paste0("sample", seq_len(nrow(overall_design)))
     colnames(obj$mat) <- paste0("sample", seq_len(ncol(obj$mat)))
     se <- SummarizedExperiment::SummarizedExperiment(assays = obj$mat,
                                                      colData = overall_design,
                                                      rowData = obj$coefmat)
   } else {
-    warning(paste0("Need to install SummarizedExperiment to use ThinDataToSummarizedExperiment()\n",
+    warning(paste0("Need to install SummarizedExperiment to use ",
+                   "ThinDataToSummarizedExperiment()\n",
                    "Type in R:\n\n",
                    "install.packages('BiocManager')\n",
                    "BiocManager::install('SummarizedExperiment')\n\n",

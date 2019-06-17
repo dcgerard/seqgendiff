@@ -64,7 +64,7 @@ surrogate variables when you assign a target correlation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -127,18 +127,18 @@ surrogate variables when you assign a target correlation.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>effective_cor</span>(<span class='no'>design_perm</span>, <span class='no'>sv</span>, <span class='no'>target_cor</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"optmatch"</span>,
-  <span class='st'>"marriage"</span>), <span class='kw'>iternum</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
+    <pre class="usage"><span class='fu'>effective_cor</span>(<span class='no'>design_perm</span>, <span class='no'>sv</span>, <span class='no'>target_cor</span>, <span class='kw'>calc_first</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"cor"</span>, <span class='st'>"mean"</span>),
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"optmatch"</span>, <span class='st'>"marriage"</span>), <span class='kw'>iternum</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>design_perm</th>
-      <td><p>A numeric design matrix whose rows are to be permuted (thus
-controlling the amount by which they are correlated with the surrogate variables).
-The rows index the samples and the columns index the variables.
-The intercept should <em>not</em> be included
+      <td><p>A numeric design matrix whose rows are to be permuted
+(thus controlling the amount by which they are correlated with the
+surrogate variables). The rows index the samples and the columns index
+the variables. The intercept should <em>not</em> be included
 (though see Section "Unestimable Components").</p></td>
     </tr>
     <tr>
@@ -147,12 +147,25 @@ The intercept should <em>not</em> be included
     </tr>
     <tr>
       <th>target_cor</th>
-      <td><p>A numeric matrix of target correlations between the variables in
-<code>design_perm</code> and the surrogate variables. The rows index the
-observed covariates and the columns index the surrogate variables.
-The number of columns specifies the number of surrogate variables.
-Set this to <code>NULL</code> to indicate that <code>design_perm</code> and the
-surrogate variables are uncorrelated.</p></td>
+      <td><p>A numeric matrix of target correlations between the
+variables in <code>design_perm</code> and the surrogate variables. The
+rows index the observed covariates and the columns index the surrogate
+variables. That is, <code>target_cor[i, j]</code> specifies the target
+correlation between the <code>i</code>th column of <code>design_perm</code> and the
+<code>j</code>th surrogate variable. The surrogate variables are estimated
+either using factor analysis or surrogate variable analysis (see the
+parameter <code>use_sva</code>).
+The number of columns in <code>target_cor</code> specifies the number of
+surrogate variables. Set <code>target_cor</code> to <code>NULL</code> to indicate
+that <code>design_perm</code> and the surrogate variables are independent.</p></td>
+    </tr>
+    <tr>
+      <th>calc_first</th>
+      <td><p>Should we calculate the correlation of the mean
+<code>design_perm</code> and <code>sv</code> (<code>calc_first = "mean"</code>), or
+should we calculate the mean of the correlations between
+<code>design_perm</code> and <code>sv</code> (<code>calc_first = "cor"</code>)? This
+should only be changed by expert users.</p></td>
     </tr>
     <tr>
       <th>method</th>
@@ -170,6 +183,14 @@ samples.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function permutes the rows of <code>design_perm</code> many times, each
+time calculating the Pearson correlation between the columns of
+<code>design_perm</code> and the columns of <code>sv</code>. It then returns the
+averages of these Pearson correlations. The permutation is done
+using <code><a href='permute_design.html'>permute_design</a></code>.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Generate the design matrices and set target correlation -----------------</span>
@@ -185,15 +206,17 @@ samples.</p></td>
               <span class='kw'>sv</span> <span class='kw'>=</span> <span class='no'>sv</span>,
               <span class='kw'>target_cor</span> <span class='kw'>=</span> <span class='no'>target_cor</span>,
               <span class='kw'>iternum</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt;           [,1]
-#&gt; [1,] 0.6919144
-#&gt; [2,] 0.1157426</div><div class='input'>
+#&gt; [1,] 0.7059494
+#&gt; [2,] 0.1696641</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -8,26 +8,31 @@ effective_cor(design_perm, sv, target_cor, calc_first = c("cor", "mean"),
   method = c("optmatch", "marriage"), iternum = 1000)
 }
 \arguments{
-\item{design_perm}{A numeric design matrix whose rows are to be permuted (thus
-controlling the amount by which they are correlated with the surrogate variables).
-The rows index the samples and the columns index the variables.
-The intercept should \emph{not} be included
+\item{design_perm}{A numeric design matrix whose rows are to be permuted
+(thus controlling the amount by which they are correlated with the
+surrogate variables). The rows index the samples and the columns index
+the variables. The intercept should \emph{not} be included
 (though see Section "Unestimable Components").}
 
 \item{sv}{A matrix of surrogate variables}
 
-\item{target_cor}{A numeric matrix of target correlations between the variables in
-\code{design_perm} and the surrogate variables. The rows index the
-observed covariates and the columns index the surrogate variables.
-The number of columns specifies the number of surrogate variables.
-Set this to \code{NULL} to indicate that \code{design_perm} and the
-surrogate variables are uncorrelated.}
+\item{target_cor}{A numeric matrix of target correlations between the
+variables in \code{design_perm} and the surrogate variables. The
+rows index the observed covariates and the columns index the surrogate
+variables. That is, \code{target_cor[i, j]} specifies the target
+correlation between the \code{i}th column of \code{design_perm} and the
+\code{j}th surrogate variable. The surrogate variables are estimated
+either using factor analysis or surrogate variable analysis (see the
+parameter \code{use_sva}).
+The number of columns in \code{target_cor} specifies the number of
+surrogate variables. Set \code{target_cor} to \code{NULL} to indicate
+that \code{design_perm} and the surrogate variables are independent.}
 
 \item{calc_first}{Should we calculate the correlation of the mean
-\code{design_perm} and \code{sv} (\code{calc_first = "mean"}), or should we
-calculate the mean of the correlations between \code{design_perm} and
-\code{sv} (\code{calc_first = "cor"})? This should only be changed
-by expert users.}
+\code{design_perm} and \code{sv} (\code{calc_first = "mean"}), or
+should we calculate the mean of the correlations between
+\code{design_perm} and \code{sv} (\code{calc_first = "cor"})? This
+should only be changed by expert users.}
 
 \item{method}{Should we use the optimal matching technique from Hansen and
 Klopfer (2006) (\code{"optmatch"}) or the Gale-Shapley algorithm
@@ -42,6 +47,13 @@ samples.}
 \description{
 Will return the estimated correlation between the design matrix and the
 surrogate variables when you assign a target correlation.
+}
+\details{
+This function permutes the rows of \code{design_perm} many times, each
+time calculating the Pearson correlation between the columns of
+\code{design_perm} and the columns of \code{sv}. It then returns the
+averages of these Pearson correlations. The permutation is done
+using \code{\link{permute_design}}.
 }
 \examples{
 ## Generate the design matrices and set target correlation -----------------

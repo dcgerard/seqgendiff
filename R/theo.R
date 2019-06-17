@@ -5,12 +5,20 @@
 #' The main difference between \code{seqgen_base} and \code{seqgen_diff}
 #' is the output format.
 #'
+#' You should be using \code{\link{thin_base}} instead of this. If you must
+#' simulate from the theoretical model, I would recommend trying out
+#' the powsimR package (\url{https://github.com/bvieth/powsimR}) from
+#' Vieth et al. (2017).
+#'
 #' @inheritParams seqgen_diff
 #'
 #' @return A matrix of RNA-seq counts. The rows index the genes and the columns
 #'     index the samples.
 #'
-#' @export
+#' @references
+#' \itemize{
+#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.}
+#' }
 #'
 #' @author David Gerard
 seqgen_base <- function(designmat,
@@ -42,11 +50,15 @@ seqgen_base <- function(designmat,
   return(mat)
 }
 
-
 #' Theoretical sequence simulation for differential expression analysis.
 #'
 #' Generate a matrix of RNA-seq counts from a theoretical negative-binomial
 #' model.
+#'
+#' You should be using \code{\link{thin_diff}} instead of this. If you must
+#' simulate from the theoretical model, I would recommend trying out
+#' the powsimR package (\url{https://github.com/bvieth/powsimR}) from
+#' Vieth et al. (2017).
 #'
 #' @param designmat A numeric design matrix. The rows index the samples
 #'     and the columns index the variables.
@@ -61,7 +73,10 @@ seqgen_base <- function(designmat,
 #'     variables. The rows index the genes and the columns index the
 #'     variables.
 #'
-#' @export
+#' @references
+#' \itemize{
+#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.}
+#' }
 #'
 #' @author David Gerard
 seqgen_diff <- function(designmat,
@@ -114,6 +129,11 @@ seqgen_diff <- function(designmat,
 #' Generate a matrix of RNA-seq counts from a theoretical negative-binomial
 #' model. This is in the special case of the two-group model.
 #'
+#' You should be using \code{\link{thin_2group}} instead of this. If you must
+#' simulate from the theoretical model, I would recommend trying out
+#' the powsimR package (\url{https://github.com/bvieth/powsimR}) from
+#' Vieth et al. (2017).
+#'
 #' @param ngene The number of genes.
 #' @param nsamp The number of samples.
 #' @param dispvec A numeric vector of dispersions.
@@ -137,7 +157,10 @@ seqgen_diff <- function(designmat,
 #'     variables. The rows index the genes and the columns index the surrogate
 #'     variables.
 #'
-#' @export
+#' @references
+#' \itemize{
+#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.}
+#' }
 #'
 #' @seealso
 #' \describe{
@@ -213,24 +236,3 @@ seqgen_2group  <- function(ngene,
 
   return(retlist)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -70,7 +70,7 @@ general binomial thinning approach implemented in thin_diff." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -148,8 +148,8 @@ general binomial thinning approach implemented in <code><a href='thin_diff.html'
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mat</th>
-      <td><p>A numeric matrix of counts. The rows index the genes and the
-columns index the samples.</p></td>
+      <td><p>A numeric matrix of RNA-seq counts. The rows index the genes and
+the columns index the samples.</p></td>
     </tr>
     <tr>
       <th>prop_null</th>
@@ -175,7 +175,7 @@ a vector of samples. Additional parameters may be passed through
       <th>corvec</th>
       <td><p>A vector of target correlations. <code>corvec[i]</code> is the
 target correlation of the latent group assignment vector with the
-ith surrogate variable. The default is to set this to <code>NULL</code>,
+<code>i</code>th surrogate variable. The default is to set this to <code>NULL</code>,
 in which case group assignment is made independently of any
 unobserved confounding.</p></td>
     </tr>
@@ -187,7 +187,7 @@ Stephens (2016). If \(x_1, x_2, ..., x_n\) are drawn from
 \(x_1 s_1^{\alpha}, x_2 s_2^{\alpha}, ..., x_n s_n^{\alpha}\), where
 \(s_g\) is the empirical standard deviation of gene \(g\).
 Setting this to <code>0</code> means that the effects are exchangeable, setting
-this to <code>1</code> means corresponds to the p-value prior of
+this to <code>1</code> corresponds to the p-value prior of
 Wakefield (2009). You would rarely set this to anything but <code>0</code>
 or <code>1</code>.</p></td>
     </tr>
@@ -199,18 +199,24 @@ or <code>1</code>.</p></td>
 Components include some or all of the following:</p><dl class='dl-horizontal'>
   <dt><code>mat</code></dt><dd><p>The modified matrix of counts.</p></dd>
   <dt><code>designmat</code></dt><dd><p>The design matrix of variables used to simulate
-      signal.</p></dd>
-  <dt><code>coefmat</code></dt><dd><p>A matrix of coefficients corresponding to <code>designmat</code></p></dd>
+      signal. This is made by column-binding <code>design_fixed</code> and the
+      permuted version of <code>design_perm</code>.</p></dd>
+  <dt><code>coefmat</code></dt><dd><p>A matrix of coefficients corresponding to
+      <code>designmat</code>.</p></dd>
   <dt><code>design_obs</code></dt><dd><p>Additional variables that should be included in
-      your design matrix in downstream fittings. This contains at the very
-      least a vector of 1's for the intercept term.</p></dd>
+      your design matrix in downstream fittings. This is made by
+      column-binding the vector of 1's with <code>design_obs</code>.</p></dd>
   <dt><code>sv</code></dt><dd><p>A matrix of estimated surrogate variables. In simulation
       studies you would probably leave this out and estimate your own
       surrogate variables.</p></dd>
   <dt><code>cormat</code></dt><dd><p>A matrix of target correlations between the
-      surrogate variables and the permuted variables in the design matrix.</p></dd>
+      surrogate variables and the permuted variables in the design matrix.
+      This might be different from the <code>target_cor</code> you input because
+      we pass it through <code><a href='fix_cor.html'>fix_cor</a></code> to ensure
+      positive semi-definiteness of the resulting covariance matrix.</p></dd>
   <dt><code>matching_var</code></dt><dd><p>A matrix of simulated variables used to
-      permute <code>design_perm</code>.</p></dd>
+      permute <code>design_perm</code> if the <code>target_cor</code> is not
+      <code>NULL</code>.</p></dd>
 </dl>
 
     

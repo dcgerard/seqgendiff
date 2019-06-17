@@ -29,6 +29,17 @@ variables.}
 Generate a matrix of RNA-seq counts from a theoretical negative-binomial
 model.
 }
+\details{
+You should be using \code{\link{thin_diff}} instead of this. If you must
+simulate from the theoretical model, I would recommend trying out
+the powsimR package (\url{https://github.com/bvieth/powsimR}) from
+Vieth et al. (2017).
+}
+\references{
+\itemize{
+  \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.}
+}
+}
 \author{
 David Gerard
 }

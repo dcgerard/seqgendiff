@@ -86,4 +86,3 @@ test_that("poisthin input works with many zeros", {
 
 }
 )
-

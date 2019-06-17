@@ -172,7 +172,8 @@ thin_all <- function(mat, thinlog2) {
 #' @seealso
 #' \describe{
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
-#'   \item{\code{\link{thin_gene}}}{For thinning gene-wise instead of sample-wise.}
+#'   \item{\code{\link{thin_gene}}}{For thinning gene-wise instead of
+#'       sample-wise.}
 #'   \item{\code{\link{thin_all}}}{For thinning all counts uniformly.}
 #'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
 #'       ThinData object to a SummarizedExperiment object.}
@@ -242,7 +243,8 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 #' @seealso
 #' \describe{
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
-#'   \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of gene-wise.}
+#'   \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of
+#'       gene-wise.}
 #'   \item{\code{\link{thin_all}}}{For thinning all counts uniformly.}
 #'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
 #'       ThinData object to a SummarizedExperiment object.}
@@ -315,7 +317,7 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #' @param group_prop The proportion of individuals that are in group 1.
 #' @param corvec A vector of target correlations. \code{corvec[i]} is the
 #'     target correlation of the latent group assignment vector with the
-#'     ith surrogate variable. The default is to set this to \code{NULL},
+#'     \code{i}th surrogate variable. The default is to set this to \code{NULL},
 #'     in which case group assignment is made independently of any
 #'     unobserved confounding.
 #' @param alpha The scaling factor for the signal distribution from
@@ -324,7 +326,7 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #'     \eqn{x_1 s_1^{\alpha}, x_2 s_2^{\alpha}, ..., x_n s_n^{\alpha}}, where
 #'     \eqn{s_g} is the empirical standard deviation of gene \eqn{g}.
 #'     Setting this to \code{0} means that the effects are exchangeable, setting
-#'     this to \code{1} means corresponds to the p-value prior of
+#'     this to \code{1} corresponds to the p-value prior of
 #'     Wakefield (2009). You would rarely set this to anything but \code{0}
 #'     or \code{1}.
 #'
@@ -387,7 +389,10 @@ thin_2group <- function(mat,
   assertthat::are_equal(1L, length(signal_fun))
   assertthat::are_equal(1L, length(group_prop))
   assertthat::are_equal(1L, length(alpha))
-  assertthat::assert_that(prop_null <= 1, prop_null >= 0, group_prop <= 1, group_prop >= 0)
+  assertthat::assert_that(prop_null  <= 1,
+                          prop_null  >= 0,
+                          group_prop <= 1,
+                          group_prop >= 0)
   assertthat::assert_that(is.function(signal_fun))
   assertthat::assert_that(is.list(signal_params))
   assertthat::assert_that(is.null(signal_params$n))
@@ -403,8 +408,11 @@ thin_2group <- function(mat,
     signal_vec <- c(do.call(what = signal_fun, args = signal_params))
     which_nonnull <- sort(sample(seq_len(ngene), size = signal_params$n))
 
-    if (abs(alpha) > 10^-6) { ## if alpha is non-zero
-      matsd <- apply(X = log2(mat[which_nonnull, ] + 0.5), MARGIN = 1, FUN = stats::sd)
+    ## if alpha is non-zero
+    if (abs(alpha) > 10 ^ -6) {
+      matsd <- apply(X      = log2(mat[which_nonnull, ] + 0.5),
+                     MARGIN = 1,
+                     FUN    = stats::sd)
       signal_vec <- signal_vec * (matsd ^ alpha)
     }
 
@@ -475,17 +483,17 @@ thin_2group <- function(mat,
 #' \eqn{W}, and \eqn{Z} such that
 #' \deqn{\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',}
 #' where \eqn{W} is an \eqn{N} by \eqn{N} permutation matrix. \eqn{W} is randomly
-#' drawn so that \eqn{X_2} and \eqn{Z} are correlated approximately according
-#' to a target correlation matrix.
+#' drawn so that \eqn{WX_2} and \eqn{Z} are correlated approximately according
+#' to the target correlation matrix.
 #'
 #' The Poisson assumption may be generalized to a mixture of negative binomials.
 #'
 #' @section Unestimable Components:
 #'
-#' It is possible to include an intercept term or a column from \code{design_obs}
-#' into either \code{design_fixed} or \code{design_perm}. This will not
-#' produce an error and the specified thinning will be applied. However,
-#' If any column of \code{design_fixed} or
+#' It is possible to include an intercept term or a column from
+#' \code{design_obs} into either \code{design_fixed} or \code{design_perm}.
+#' This will not produce an error and the specified thinning will be applied.
+#' However, If any column of \code{design_fixed} or
 #' \code{design_perm} is a vector of ones or contains a column from
 #' \code{design_obs}, then the corresponding columns in \code{coef_fixed}
 #' or \code{coef_designed} cannot be estimated by \emph{any} method. This is
@@ -498,27 +506,34 @@ thin_2group <- function(mat,
 #' Including an intercept term in \code{design_obs} will produce an error if
 #' you are specifying correlated surrogate variables.
 #'
-#' @param mat A numeric matrix of counts. The rows index the genes and the
-#'     columns index the samples.
-#' @param design_fixed A numeric design matrix whose rows are fixed and not permuted.
-#'     The rows index the samples and the columns index the variables.
-#'     The intercept should \emph{not} be included
+#' @param mat A numeric matrix of RNA-seq counts. The rows index the genes and
+#'     the columns index the samples.
+#' @param design_fixed A numeric design matrix whose rows are fixed and not
+#'     to be permuted. The rows index the samples and the columns index the
+#'     variables. The intercept should \emph{not} be included
 #'     (though see Section "Unestimable Components").
-#' @param coef_fixed A numeric matrix. The coefficients corresponding to \code{design_fixed}.
-#'     The rows index the genes and the columns index the variables.
-#' @param design_perm A numeric design matrix whose rows are to be permuted (thus
-#'     controlling the amount by which they are correlated with the surrogate variables).
-#'     The rows index the samples and the columns index the variables.
-#'     The intercept should \emph{not} be included
+#' @param coef_fixed A numeric matrix. The coefficients corresponding to
+#'     \code{design_fixed}. The rows index the genes and the columns index
+#'     the variables.
+#' @param design_perm A numeric design matrix whose rows are to be permuted
+#'     (thus controlling the amount by which they are correlated with the
+#'     surrogate variables). The rows index the samples and the columns index
+#'     the variables. The intercept should \emph{not} be included
 #'     (though see Section "Unestimable Components").
-#' @param coef_perm A numeric matrix. The coefficients corresponding to \code{design_perm}.
-#'     The rows index the genes and the columns index the variables.
-#' @param target_cor A numeric matrix of target correlations between the variables in
-#'     \code{design_perm} and the surrogate variables. The rows index the
-#'     observed covariates and the columns index the surrogate variables.
-#'     The number of columns specifies the number of surrogate variables.
-#'     Set this to \code{NULL} to indicate that \code{design_perm} and the
-#'     surrogate variables are uncorrelated.
+#' @param coef_perm A numeric matrix. The coefficients corresponding to
+#'     \code{design_perm}. The rows index the genes and the columns index
+#'     the variables.
+#' @param target_cor A numeric matrix of target correlations between the
+#'     variables in \code{design_perm} and the surrogate variables. The
+#'     rows index the observed covariates and the columns index the surrogate
+#'     variables. That is, \code{target_cor[i, j]} specifies the target
+#'     correlation between the \code{i}th column of \code{design_perm} and the
+#'     \code{j}th surrogate variable. The surrogate variables are estimated
+#'     either using factor analysis or surrogate variable analysis (see the
+#'     parameter \code{use_sva}).
+#'     The number of columns in \code{target_cor} specifies the number of
+#'     surrogate variables. Set \code{target_cor} to \code{NULL} to indicate
+#'     that \code{design_perm} and the surrogate variables are independent.
 #' @param use_sva A logical. Should we use surrogate variable analysis
 #'     (Leek and Storey, 2008) using \code{design_obs}
 #'     to estimate the hidden covariates (\code{TRUE})
@@ -529,8 +544,8 @@ thin_2group <- function(mat,
 #'     the surrogate variables are orthogonal to the observed covariates. This
 #'     option only matters if \code{design_obs} is not \code{NULL}.
 #'     Defaults to \code{FALSE}.
-#' @param design_obs A numeric matrix of observed covariates that are NOT to be a
-#'     part of the signal generating process. Only used in estimating the
+#' @param design_obs A numeric matrix of observed covariates that are NOT to
+#'     be a part of the signal generating process. Only used in estimating the
 #'     surrogate variables (if \code{target_cor} is not \code{NULL}).
 #'     The intercept should \emph{not} be included (it will sometimes
 #'     produce an error if it is included).
@@ -551,18 +566,24 @@ thin_2group <- function(mat,
 #' \describe{
 #'   \item{\code{mat}}{The modified matrix of counts.}
 #'   \item{\code{designmat}}{The design matrix of variables used to simulate
-#'       signal.}
-#'   \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
+#'       signal. This is made by column-binding \code{design_fixed} and the
+#'       permuted version of \code{design_perm}.}
+#'   \item{\code{coefmat}}{A matrix of coefficients corresponding to
+#'       \code{designmat}.}
 #'   \item{\code{design_obs}}{Additional variables that should be included in
-#'       your design matrix in downstream fittings. This contains at the very
-#'       least a vector of 1's for the intercept term.}
+#'       your design matrix in downstream fittings. This is made by
+#'       column-binding the vector of 1's with \code{design_obs}.}
 #'   \item{\code{sv}}{A matrix of estimated surrogate variables. In simulation
 #'       studies you would probably leave this out and estimate your own
 #'       surrogate variables.}
 #'   \item{\code{cormat}}{A matrix of target correlations between the
-#'       surrogate variables and the permuted variables in the design matrix.}
+#'       surrogate variables and the permuted variables in the design matrix.
+#'       This might be different from the \code{target_cor} you input because
+#'       we pass it through \code{\link{fix_cor}} to ensure
+#'       positive semi-definiteness of the resulting covariance matrix.}
 #'   \item{\code{matching_var}}{A matrix of simulated variables used to
-#'       permute \code{design_perm}.}
+#'       permute \code{design_perm} if the \code{target_cor} is not
+#'       \code{NULL}.}
 #' }
 #'
 #' @export
@@ -785,5 +806,3 @@ thin_diff <- function(mat,
 
   return(retval)
 }
-
-

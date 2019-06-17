@@ -1,3 +1,9 @@
+# seqgendiff 0.4.0
+
+This version mostly updates the documentation. Beyond this major 
+documentation update, we also added `thin_all()`, a function that 
+uniformly thins all counts.
+
 # seqgendiff 0.3.0
 
 This has been a massive rewrite of the seqgendiff package.

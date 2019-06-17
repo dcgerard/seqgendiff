@@ -7,13 +7,13 @@
 est_sv(mat, n_sv, design_obs, use_sva = FALSE)
 }
 \arguments{
-\item{mat}{A numeric matrix of counts. The rows index the genes and the
-columns index the samples.}
+\item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes and
+the columns index the samples.}
 
 \item{n_sv}{The number of surrogate variables.}
 
-\item{design_obs}{A numeric matrix of observed covariates that are NOT to be a
-part of the signal generating process. Only used in estimating the
+\item{design_obs}{A numeric matrix of observed covariates that are NOT to
+be a part of the signal generating process. Only used in estimating the
 surrogate variables (if \code{target_cor} is not \code{NULL}).
 The intercept should \emph{not} be included (it will sometimes
 produce an error if it is included).}

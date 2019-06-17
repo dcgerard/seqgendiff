@@ -6,7 +6,7 @@ test_that("length of corvec and nfac are 0", {
   p <- 100
   Z <- rnorm(n)
   alpha <- rnorm(p)
-  Y <- round(2^(Z %*% t(alpha) + matrix(rnorm(n * p), nrow = n, ncol = p)))
+  Y <- round(2 ^ (Z %*% t(alpha) + matrix(rnorm(n * p), nrow = n, ncol = p)))
 
   expect_error(corassign(mat = Y, nfac = 0, corvec = 0.2))
 
@@ -45,7 +45,7 @@ test_that("getting correlation close to what you expect", {
   p <- 10
   Z <- rnorm(n)
   alpha <- rnorm(p)
-  Y <- round(2^(Z %*% t(alpha) + matrix(rnorm(n * p), nrow = n, ncol = p)))
+  Y <- round(2 ^ (Z %*% t(alpha) + matrix(rnorm(n * p), nrow = n, ncol = p)))
   tol <- 0.02
 
   cout5 <- corassign(mat = Y, nfac = 1, corvec = 0.5, return = "full")
@@ -74,7 +74,7 @@ test_that("get about the right proportions in 'frac' and 'random'", {
   p <- 10
   Z <- rnorm(n)
   alpha <- rnorm(p)
-  Y <- round(2^(Z %*% t(alpha) + matrix(rnorm(n * p), nrow = n, ncol = p)))
+  Y <- round(2 ^ (Z %*% t(alpha) + matrix(rnorm(n * p), nrow = n, ncol = p)))
   pout <- poisthin(mat = Y, group_assign = "frac", group_prop = 0.2)
   expect_equal(sum(pout$X[, 2]), 2000)
 

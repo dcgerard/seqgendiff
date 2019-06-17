@@ -9,8 +9,8 @@ thin_2group(mat, prop_null = 1, signal_fun = stats::rnorm,
   corvec = NULL, alpha = 0)
 }
 \arguments{
-\item{mat}{A numeric matrix of counts. The rows index the genes and the
-columns index the samples.}
+\item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes and
+the columns index the samples.}
 
 \item{prop_null}{The proportion of genes that are null.}
 
@@ -26,7 +26,7 @@ a vector of samples. Additional parameters may be passed through
 
 \item{corvec}{A vector of target correlations. \code{corvec[i]} is the
 target correlation of the latent group assignment vector with the
-ith surrogate variable. The default is to set this to \code{NULL},
+\code{i}th surrogate variable. The default is to set this to \code{NULL},
 in which case group assignment is made independently of any
 unobserved confounding.}
 
@@ -36,7 +36,7 @@ Stephens (2016). If \eqn{x_1, x_2, ..., x_n} are drawn from
 \eqn{x_1 s_1^{\alpha}, x_2 s_2^{\alpha}, ..., x_n s_n^{\alpha}}, where
 \eqn{s_g} is the empirical standard deviation of gene \eqn{g}.
 Setting this to \code{0} means that the effects are exchangeable, setting
-this to \code{1} means corresponds to the p-value prior of
+this to \code{1} corresponds to the p-value prior of
 Wakefield (2009). You would rarely set this to anything but \code{0}
 or \code{1}.}
 }
@@ -46,18 +46,24 @@ Components include some or all of the following:
 \describe{
   \item{\code{mat}}{The modified matrix of counts.}
   \item{\code{designmat}}{The design matrix of variables used to simulate
-      signal.}
-  \item{\code{coefmat}}{A matrix of coefficients corresponding to \code{designmat}}
+      signal. This is made by column-binding \code{design_fixed} and the
+      permuted version of \code{design_perm}.}
+  \item{\code{coefmat}}{A matrix of coefficients corresponding to
+      \code{designmat}.}
   \item{\code{design_obs}}{Additional variables that should be included in
-      your design matrix in downstream fittings. This contains at the very
-      least a vector of 1's for the intercept term.}
+      your design matrix in downstream fittings. This is made by
+      column-binding the vector of 1's with \code{design_obs}.}
   \item{\code{sv}}{A matrix of estimated surrogate variables. In simulation
       studies you would probably leave this out and estimate your own
       surrogate variables.}
   \item{\code{cormat}}{A matrix of target correlations between the
-      surrogate variables and the permuted variables in the design matrix.}
+      surrogate variables and the permuted variables in the design matrix.
+      This might be different from the \code{target_cor} you input because
+      we pass it through \code{\link{fix_cor}} to ensure
+      positive semi-definiteness of the resulting covariance matrix.}
   \item{\code{matching_var}}{A matrix of simulated variables used to
-      permute \code{design_perm}.}
+      permute \code{design_perm} if the \code{target_cor} is not
+      \code{NULL}.}
 }
 }
 \description{

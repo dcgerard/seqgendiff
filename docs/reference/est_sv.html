@@ -65,7 +65,7 @@ surrogate variables." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -136,8 +136,8 @@ surrogate variables.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mat</th>
-      <td><p>A numeric matrix of counts. The rows index the genes and the
-columns index the samples.</p></td>
+      <td><p>A numeric matrix of RNA-seq counts. The rows index the genes and
+the columns index the samples.</p></td>
     </tr>
     <tr>
       <th>n_sv</th>
@@ -145,8 +145,8 @@ columns index the samples.</p></td>
     </tr>
     <tr>
       <th>design_obs</th>
-      <td><p>A numeric matrix of observed covariates that are NOT to be a
-part of the signal generating process. Only used in estimating the
+      <td><p>A numeric matrix of observed covariates that are NOT to
+be a part of the signal generating process. Only used in estimating the
 surrogate variables (if <code>target_cor</code> is not <code>NULL</code>).
 The intercept should <em>not</em> be included (it will sometimes
 produce an error if it is included).</p></td>

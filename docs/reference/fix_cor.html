@@ -64,7 +64,7 @@ the overall correlation matrix is positive semi-definite." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -134,20 +134,25 @@ the overall correlation matrix is positive semi-definite.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>design_perm</th>
-      <td><p>A numeric design matrix whose rows are to be permuted (thus
-controlling the amount by which they are correlated with the surrogate variables).
-The rows index the samples and the columns index the variables.
-The intercept should <em>not</em> be included
+      <td><p>A numeric design matrix whose rows are to be permuted
+(thus controlling the amount by which they are correlated with the
+surrogate variables). The rows index the samples and the columns index
+the variables. The intercept should <em>not</em> be included
 (though see Section "Unestimable Components").</p></td>
     </tr>
     <tr>
       <th>target_cor</th>
-      <td><p>A numeric matrix of target correlations between the variables in
-<code>design_perm</code> and the surrogate variables. The rows index the
-observed covariates and the columns index the surrogate variables.
-The number of columns specifies the number of surrogate variables.
-Set this to <code>NULL</code> to indicate that <code>design_perm</code> and the
-surrogate variables are uncorrelated.</p></td>
+      <td><p>A numeric matrix of target correlations between the
+variables in <code>design_perm</code> and the surrogate variables. The
+rows index the observed covariates and the columns index the surrogate
+variables. That is, <code>target_cor[i, j]</code> specifies the target
+correlation between the <code>i</code>th column of <code>design_perm</code> and the
+<code>j</code>th surrogate variable. The surrogate variables are estimated
+either using factor analysis or surrogate variable analysis (see the
+parameter <code>use_sva</code>).
+The number of columns in <code>target_cor</code> specifies the number of
+surrogate variables. Set <code>target_cor</code> to <code>NULL</code> to indicate
+that <code>design_perm</code> and the surrogate variables are independent.</p></td>
     </tr>
     <tr>
       <th>num_steps</th>

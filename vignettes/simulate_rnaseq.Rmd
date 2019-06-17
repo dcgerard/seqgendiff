@@ -60,7 +60,7 @@ library(qvalue)
 The last five packages are all from Bioconductor, which you need to install
 using `BiocManager::install()`.
 
-The airway dataset comes with few observed variables which affect gene
+The airway dataset comes with a few observed variables which affect gene
 expression. We'll consider these "surrogate variables". That is, we'll
 add signal to the data and trying to account for these surrogate variables.
 ```{r}
@@ -76,7 +76,7 @@ allzero <- rowSums(assay(airway)) < 10^-6
 airway <- airway[!allzero, ]
 ```
 Then we'll use the convenient `thin_2group()` function from the seqgendiff
-package to add a N(0, 0.8^2) log2-effect size to 10% of the genes:
+package to add a $N(0, 0.8^2)$ log2-effect size to 10% of the genes:
 ```{r}
 thout <- thin_2group(mat = assay(airway), 
                      prop_null = 0.9, 
@@ -171,9 +171,6 @@ boxplot(svout$sv[, 2] ~ true_sv[, 4],
         ylab = "2nd Surrogate Variable")
 points(jitter(true_sv[, 4] + 1), svout$sv[, 2])
 ```
-
-
-
 
 # References
 

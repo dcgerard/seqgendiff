@@ -89,14 +89,20 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
 #' Will return the estimated correlation between the design matrix and the
 #' surrogate variables when you assign a target correlation.
 #'
+#' This function permutes the rows of \code{design_perm} many times, each
+#' time calculating the Pearson correlation between the columns of
+#' \code{design_perm} and the columns of \code{sv}. It then returns the
+#' averages of these Pearson correlations. The permutation is done
+#' using \code{\link{permute_design}}.
+#'
 #' @inheritParams thin_diff
 #' @inheritParams permute_design
 #' @param iternum The total number of simulated correlations to consider.
 #' @param calc_first Should we calculate the correlation of the mean
-#'     \code{design_perm} and \code{sv} (\code{calc_first = "mean"}), or should we
-#'     calculate the mean of the correlations between \code{design_perm} and
-#'     \code{sv} (\code{calc_first = "cor"})? This should only be changed
-#'     by expert users.
+#'     \code{design_perm} and \code{sv} (\code{calc_first = "mean"}), or
+#'     should we calculate the mean of the correlations between
+#'     \code{design_perm} and \code{sv} (\code{calc_first = "cor"})? This
+#'     should only be changed by expert users.
 #'
 #' @export
 #'
@@ -153,7 +159,9 @@ effective_cor <- function(design_perm,
     }
     truecor <- apply(corarray, c(1, 2), mean)
   } else if (calc_first == "mean") {
-    perm_array <- array(NA, dim = c(nrow(design_perm), ncol(design_perm), iternum))
+    perm_array <- array(NA, dim = c(nrow(design_perm),
+                                    ncol(design_perm),
+                                    iternum))
     ## latent_array <- array(NA, dim = dim(perm_array))
     for (index in seq_len(iternum)) {
       pout <- permute_design(design_perm = design_perm,
@@ -201,6 +209,8 @@ effective_cor <- function(design_perm,
 #'
 #' @author David Gerard
 #'
+#' @export
+#'
 #' @examples
 #' n <- 10
 #' design_perm <- matrix(rep(c(0, 1), length.out = n))
@@ -237,7 +247,7 @@ fix_cor <- function(design_perm, target_cor, num_steps = 51) {
   shrink_vec <- seq(1, 0, length.out = num_steps)
   valid <- FALSE
   step_index <- 1
-  while(!valid) {
+  while (!valid) {
     step_index <- step_index + 1
     current_shrink <- shrink_vec[step_index]
     eout <- eigen(top_left_cor - current_shrink * RRt, only.values = TRUE)
@@ -251,8 +261,8 @@ fix_cor <- function(design_perm, target_cor, num_steps = 51) {
 
 # Generate multivariate normal random samples.
 #
-# @param mu A matrix of means. The rows index the independent samples, the columns
-#    index the variables.
+# @param mu A matrix of means. The rows index the independent samples,
+#    the columns index the variables.
 # @param sigma A covariance matrix of the columns.
 rmvnorm <- function(mu, sigma) {
   stopifnot(nrow(sigma) == ncol(mu))

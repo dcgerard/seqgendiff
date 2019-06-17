@@ -42,3 +42,5 @@ _region_.tex
 *.zip
 *.egg-info
 inst/doc
+doc
+Meta

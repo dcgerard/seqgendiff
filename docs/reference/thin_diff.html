@@ -69,7 +69,7 @@ covariates and any unobserved surrogate variables." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -147,42 +147,49 @@ covariates and any unobserved surrogate variables.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mat</th>
-      <td><p>A numeric matrix of counts. The rows index the genes and the
-columns index the samples.</p></td>
+      <td><p>A numeric matrix of RNA-seq counts. The rows index the genes and
+the columns index the samples.</p></td>
     </tr>
     <tr>
       <th>design_fixed</th>
-      <td><p>A numeric design matrix whose rows are fixed and not permuted.
-The rows index the samples and the columns index the variables.
-The intercept should <em>not</em> be included
+      <td><p>A numeric design matrix whose rows are fixed and not
+to be permuted. The rows index the samples and the columns index the
+variables. The intercept should <em>not</em> be included
 (though see Section "Unestimable Components").</p></td>
     </tr>
     <tr>
       <th>coef_fixed</th>
-      <td><p>A numeric matrix. The coefficients corresponding to <code>design_fixed</code>.
-The rows index the genes and the columns index the variables.</p></td>
+      <td><p>A numeric matrix. The coefficients corresponding to
+<code>design_fixed</code>. The rows index the genes and the columns index
+the variables.</p></td>
     </tr>
     <tr>
       <th>design_perm</th>
-      <td><p>A numeric design matrix whose rows are to be permuted (thus
-controlling the amount by which they are correlated with the surrogate variables).
-The rows index the samples and the columns index the variables.
-The intercept should <em>not</em> be included
+      <td><p>A numeric design matrix whose rows are to be permuted
+(thus controlling the amount by which they are correlated with the
+surrogate variables). The rows index the samples and the columns index
+the variables. The intercept should <em>not</em> be included
 (though see Section "Unestimable Components").</p></td>
     </tr>
     <tr>
       <th>coef_perm</th>
-      <td><p>A numeric matrix. The coefficients corresponding to <code>design_perm</code>.
-The rows index the genes and the columns index the variables.</p></td>
+      <td><p>A numeric matrix. The coefficients corresponding to
+<code>design_perm</code>. The rows index the genes and the columns index
+the variables.</p></td>
     </tr>
     <tr>
       <th>target_cor</th>
-      <td><p>A numeric matrix of target correlations between the variables in
-<code>design_perm</code> and the surrogate variables. The rows index the
-observed covariates and the columns index the surrogate variables.
-The number of columns specifies the number of surrogate variables.
-Set this to <code>NULL</code> to indicate that <code>design_perm</code> and the
-surrogate variables are uncorrelated.</p></td>
+      <td><p>A numeric matrix of target correlations between the
+variables in <code>design_perm</code> and the surrogate variables. The
+rows index the observed covariates and the columns index the surrogate
+variables. That is, <code>target_cor[i, j]</code> specifies the target
+correlation between the <code>i</code>th column of <code>design_perm</code> and the
+<code>j</code>th surrogate variable. The surrogate variables are estimated
+either using factor analysis or surrogate variable analysis (see the
+parameter <code>use_sva</code>).
+The number of columns in <code>target_cor</code> specifies the number of
+surrogate variables. Set <code>target_cor</code> to <code>NULL</code> to indicate
+that <code>design_perm</code> and the surrogate variables are independent.</p></td>
     </tr>
     <tr>
       <th>use_sva</th>
@@ -199,8 +206,8 @@ Defaults to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>design_obs</th>
-      <td><p>A numeric matrix of observed covariates that are NOT to be a
-part of the signal generating process. Only used in estimating the
+      <td><p>A numeric matrix of observed covariates that are NOT to
+be a part of the signal generating process. Only used in estimating the
 surrogate variables (if <code>target_cor</code> is not <code>NULL</code>).
 The intercept should <em>not</em> be included (it will sometimes
 produce an error if it is included).</p></td>
@@ -230,18 +237,24 @@ Defaults to <code>TRUE</code>.</p></td>
 Components include some or all of the following:</p><dl class='dl-horizontal'>
   <dt><code>mat</code></dt><dd><p>The modified matrix of counts.</p></dd>
   <dt><code>designmat</code></dt><dd><p>The design matrix of variables used to simulate
-      signal.</p></dd>
-  <dt><code>coefmat</code></dt><dd><p>A matrix of coefficients corresponding to <code>designmat</code></p></dd>
+      signal. This is made by column-binding <code>design_fixed</code> and the
+      permuted version of <code>design_perm</code>.</p></dd>
+  <dt><code>coefmat</code></dt><dd><p>A matrix of coefficients corresponding to
+      <code>designmat</code>.</p></dd>
   <dt><code>design_obs</code></dt><dd><p>Additional variables that should be included in
-      your design matrix in downstream fittings. This contains at the very
-      least a vector of 1's for the intercept term.</p></dd>
+      your design matrix in downstream fittings. This is made by
+      column-binding the vector of 1's with <code>design_obs</code>.</p></dd>
   <dt><code>sv</code></dt><dd><p>A matrix of estimated surrogate variables. In simulation
       studies you would probably leave this out and estimate your own
       surrogate variables.</p></dd>
   <dt><code>cormat</code></dt><dd><p>A matrix of target correlations between the
-      surrogate variables and the permuted variables in the design matrix.</p></dd>
+      surrogate variables and the permuted variables in the design matrix.
+      This might be different from the <code>target_cor</code> you input because
+      we pass it through <code><a href='fix_cor.html'>fix_cor</a></code> to ensure
+      positive semi-definiteness of the resulting covariance matrix.</p></dd>
   <dt><code>matching_var</code></dt><dd><p>A matrix of simulated variables used to
-      permute <code>design_perm</code>.</p></dd>
+      permute <code>design_perm</code> if the <code>target_cor</code> is not
+      <code>NULL</code>.</p></dd>
 </dl>
 
     
@@ -271,17 +284,17 @@ $$\log_2(EY) = \mu 1_N' + B_3X_3' + AZ'.$$
 \(W\), and \(Z\) such that
 $$\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',$$
 where \(W\) is an \(N\) by \(N\) permutation matrix. \(W\) is randomly
-drawn so that \(X_2\) and \(Z\) are correlated approximately according
-to a target correlation matrix.</p>
+drawn so that \(WX_2\) and \(Z\) are correlated approximately according
+to the target correlation matrix.</p>
 <p>The Poisson assumption may be generalized to a mixture of negative binomials.</p>
     
     <h2 class="hasAnchor" id="unestimable-components"><a class="anchor" href="#unestimable-components"></a>Unestimable Components</h2>
 
     
-    <p>It is possible to include an intercept term or a column from <code>design_obs</code>
-into either <code>design_fixed</code> or <code>design_perm</code>. This will not
-produce an error and the specified thinning will be applied. However,
-If any column of <code>design_fixed</code> or
+    <p>It is possible to include an intercept term or a column from
+<code>design_obs</code> into either <code>design_fixed</code> or <code>design_perm</code>.
+This will not produce an error and the specified thinning will be applied.
+However, If any column of <code>design_fixed</code> or
 <code>design_perm</code> is a vector of ones or contains a column from
 <code>design_obs</code>, then the corresponding columns in <code>coef_fixed</code>
 or <code>coef_designed</code> cannot be estimated by <em>any</em> method. This is

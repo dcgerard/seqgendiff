@@ -94,7 +94,7 @@ poisthin <- function(mat,
                      group_prop    = 0.5,
                      corvec        = NULL) {
 
-  if(getOption("poisthinwarning", TRUE)) {
+  if (getOption("poisthinwarning", TRUE)) {
     # transition message for 0.4-0 to 0.5-0
     message(paste0(
       "poisthin() is now defunct. Please use thin_2group() instead.",
@@ -156,7 +156,7 @@ poisthin <- function(mat,
   } else if (gselect == "random") {
     gindices <- sample(x = sample(order_vec[(skip_gene + 1):(skip_gene + ngene)]), size = ngene)
   } else if (gselect == "custom") {
-    gindices <- (1:ncol(mat))[gvec]
+    gindices <- (seq_len(ncol(mat)))[gvec]
     if (skip_gene > 0) {
       warning('ignoring skip_gene because gselect = "custom"')
     }
@@ -167,13 +167,13 @@ poisthin <- function(mat,
 
   ## Get submat --------------------------------------------------------------
   gindices <- sort(gindices)
-  samp_indices <- sort(sample(1:nrow(mat), size = nsamp))
+  samp_indices <- sort(sample(seq_len(nrow(mat)), size = nsamp))
   submat <- mat[samp_indices, gindices, drop = FALSE]
 
   ## Group assignment --------------------------------------------------------
   if (group_assign == "frac") {
     group_indicator <- rep(FALSE, length = nsamp)
-    group_indicator[sample(1:nsamp, size = round(nsamp * group_prop))] <- TRUE
+    group_indicator[sample(seq_len(nsamp), size = round(nsamp * group_prop))] <- TRUE
   } else if (group_assign == "random") {
     group_indicator <- sample(x = c(TRUE, FALSE),
                               size = nsamp,
@@ -201,7 +201,7 @@ poisthin <- function(mat,
 
     stopifnot(length(signal_vec) == nsignal)
 
-    which_signal <- sort(sample(1:ncol(submat), nsignal)) # location of signal
+    which_signal <- sort(sample(seq_len(ncol(submat)), nsignal)) # location of signal
 
     ## Deal with alpha here ----------------------------
     if (abs(alpha) > 10 ^ -6) {
@@ -231,7 +231,7 @@ poisthin <- function(mat,
     beta <- rep(0, ngene)
     beta[which_signal] <- -1 * signal_vec ## -1 because of way design matrix is created
   } else if (nsignal == 0 & abs(prop_null - 1) > 10 ^ -6) {
-    warning('no genes were given signal since (1 - prop_null) * ngene was very close to zero')
+    warning("no genes were given signal since (1 - prop_null) * ngene was very close to zero")
     beta <- rep(0, ngene)
   } else {
     beta <- rep(0, ngene)
@@ -456,21 +456,21 @@ EigenDiff <- function (Y,
   n <- length(ev)
   j <- rmax + 1
   diffs <- ev - c(ev[-1], 0)
-  for (i in 1:niter) {
+  for (i in seq_len(niter)) {
     y <- ev[j:(j + 4)]
-    x <- ((j - 1):(j + 3))^(2/3)
+    x <- ((j - 1):(j + 3)) ^ (2/3)
     lm.coef <- stats::lm(y ~ x)
     delta <- 2 * abs(lm.coef$coef[2])
-    idx <- which(diffs[1:rmax] > delta)
+    idx <- which(diffs[seq_len(rmax)] > delta)
     if (length(idx) == 0) {
       hatr <- 0
     } else {
       hatr <- max(idx)
     }
-    newj = hatr + 1
+    newj <- hatr + 1
     if (newj == j)
       break
-    j = newj
+    j <- newj
   }
   return(hatr)
 }

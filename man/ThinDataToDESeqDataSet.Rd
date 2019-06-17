@@ -9,7 +9,8 @@ ThinDataToDESeqDataSet(obj)
 \arguments{
 \item{obj}{A ThinData S3 object. This is generally output by either
 \code{\link{thin_diff}}, \code{\link{thin_2group}},
-\code{\link{thin_lib}}, or \code{\link{thin_gene}}.}
+\code{\link{thin_lib}}, \code{\link{thin_gene}}, or
+\code{\link{thin_all}}.}
 }
 \value{
 A \code{\link[DESeq2]{DESeqDataSet}} S4
