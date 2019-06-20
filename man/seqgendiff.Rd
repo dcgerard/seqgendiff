@@ -20,6 +20,9 @@ data that exhibit these characteristics.
 \section{seqgendiff Functions}{
 
 \describe{
+  \item{\code{\link{select_counts}}}{Subsample the columns and rows
+      of a real RNA-seq count matrix. You would then feed the sub-matrix
+      into one of the thinning functions below.}
   \item{\code{\link{thin_diff}}}{The function most users should
       be using for general-purpose binomial thinning. For the special
       applications of the two-group model or library/gene thinning, see

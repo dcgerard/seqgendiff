@@ -77,6 +77,8 @@ abline(0, 1, col = 2, lwd = 2)
 }
 \seealso{
 \describe{
+  \item{\code{\link{select_counts}}}{For subsampling the rows and columns
+      of your real RNA-seq count matrix prior to applying binomial thinning.}
   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
   \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of
       gene-wise.}

@@ -76,6 +76,8 @@ mean(thout$mat) / lambda
 }
 \seealso{
 \describe{
+  \item{\code{\link{select_counts}}}{For subsampling the rows and columns
+      of your real RNA-seq count matrix prior to applying binomial thinning.}
   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
   \item{\code{\link{thin_lib}}}{For thinning sample-wise.}
   \item{\code{\link{thin_gene}}}{For thinning gene-wise.}

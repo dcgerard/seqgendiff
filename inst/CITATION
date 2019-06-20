@@ -1,0 +1,14 @@
+bibentry(bibtype    = "Article",
+         title      = "Data-based {RNA}-seq Simulations by Binomial Thinning",
+          year      = "2019",
+          journal   = "Unpublished Manuscript",
+          publisher = "",
+          volume    = "",
+	        number    = "",
+	        pages     = "",
+	        issn      = "",
+          doi       = "",
+          author    = person(given  = "David",
+                             family = "Gerard",
+                             email  = "gerard.1787@gmail.com")
+)

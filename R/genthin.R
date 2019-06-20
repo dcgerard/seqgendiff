@@ -23,6 +23,8 @@
 #'
 #' @seealso
 #' \describe{
+#'   \item{\code{\link{select_counts}}}{For subsampling the rows and columns
+#'       of your real RNA-seq count matrix prior to applying binomial thinning.}
 #'   \item{\code{\link{thin_diff}}}{For the function most users should
 #'       be using for general-purpose binomial thinning.}
 #'   \item{\code{\link{thin_2group}}}{For the specific application of
@@ -103,6 +105,8 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #'
 #' @seealso
 #' \describe{
+#'   \item{\code{\link{select_counts}}}{For subsampling the rows and columns
+#'       of your real RNA-seq count matrix prior to applying binomial thinning.}
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
 #'   \item{\code{\link{thin_lib}}}{For thinning sample-wise.}
 #'   \item{\code{\link{thin_gene}}}{For thinning gene-wise.}
@@ -171,6 +175,8 @@ thin_all <- function(mat, thinlog2) {
 #'
 #' @seealso
 #' \describe{
+#'   \item{\code{\link{select_counts}}}{For subsampling the rows and columns
+#'       of your real RNA-seq count matrix prior to applying binomial thinning.}
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
 #'   \item{\code{\link{thin_gene}}}{For thinning gene-wise instead of
 #'       sample-wise.}
@@ -242,6 +248,8 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 #'
 #' @seealso
 #' \describe{
+#'   \item{\code{\link{select_counts}}}{For subsampling the rows and columns
+#'       of your real RNA-seq count matrix prior to applying binomial thinning.}
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
 #'   \item{\code{\link{thin_lib}}}{For thinning sample-wise instead of
 #'       gene-wise.}
@@ -338,6 +346,8 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #'
 #' @seealso
 #' \describe{
+#'   \item{\code{\link{select_counts}}}{For subsampling the rows and columns
+#'       of your real RNA-seq count matrix prior to applying binomial thinning.}
 #'   \item{\code{\link{thin_diff}}}{For the more general thinning approach.}
 #'   \item{\code{\link{ThinDataToSummarizedExperiment}}}{For converting a
 #'       ThinData object to a SummarizedExperiment object.}
@@ -592,6 +602,8 @@ thin_2group <- function(mat,
 #'
 #' @seealso
 #' \describe{
+#'   \item{\code{\link{select_counts}}}{For subsampling the rows and columns
+#'       of your real RNA-seq count matrix prior to applying binomial thinning.}
 #'   \item{\code{\link{thin_2group}}}{For the specific application of
 #'       \code{thin_diff} to the two-group model.}
 #'   \item{\code{\link{thin_lib}}}{For the specific application of
