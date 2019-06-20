@@ -1,8 +1,19 @@
+# seqgendiff 0.4.1
+
+- I added `select_counts()`, a function that will subsample the rows (genes)
+  and columns (samples) of a RNA-seq count matrix. It is generally
+  recommended that you do this subsampling each iteration of a simulation
+  study so that your results do not depend on the specific structure of
+  your data. The samples are just selected randomly. There are four different
+  criteria for selecting the genes.
+- I also added citation information. This will be updated after I submit
+  the manuscript to bioRxiv.
+
 # seqgendiff 0.4.0
 
-This version mostly updates the documentation. Beyond this major 
-documentation update, we also added `thin_all()`, a function that 
-uniformly thins all counts.
+- This version mostly updates the documentation. 
+- Beyond this major documentation update, we also added `thin_all()`, 
+  a function that uniformly thins all counts.
 
 # seqgendiff 0.3.0
 
