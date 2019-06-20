@@ -21,20 +21,36 @@ knitr::opts_chunk$set(
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/seqgendiff)](https://cran.r-project.org/package=seqgendiff)
 
-This package will take real RNA-seq data (either single-cell or bulk) and alter it by adding signal to it. This signal is in the form of a generalized linear model with a log (base-2) link function under a Poisson / negative binomial / mixture of negative binomials distribution. The advantage of this way of simulating data is that you can see how your method behaves when the simulated data exhibit common (and annoying) features of real data. This is without you having to specify these features *a priori*. We call the way we add signal "binomial thinning".
+This package will take real RNA-seq data (either single-cell or bulk) and alter
+it by adding signal to it. This signal is in the form of a generalized linear 
+model with a log (base-2) link function under a Poisson / negative binomial / 
+mixture of negative binomials distribution. The advantage of this way of
+simulating data is that you can see how your method behaves when the simulated
+data exhibit common (and annoying) features of real data. This is without you
+having to specify these features *a priori*. We call the way we add signal
+"binomial thinning".
 
 The main functions are:
 
-- `thin_diff`: The function most users should be using for general-purpose binomial thinning. For the special applications of the two-group model or library/gene thinning, see the functions listed below.
+- `select_counts`: Subsample the columns and rows of a real RNA-seq count 
+  matrix. You would then feed this sub-matrix into one of the thinning 
+  functions below.
+- `thin_diff`: The function most users should be using for general-purpose 
+  binomial thinning. For the special applications of the two-group model or 
+  library/gene thinning, see the functions listed below.
 - `thin_2group`: The specific application of thinning in the two-group model.
 - `thin_lib`: The specific application of library size thinning.
 - `thin_gene`: The specific application of total gene expression thinning.
 - `thin_all`: The specific application of thinning all counts.
-- `effective_cor`: Returns an estimate of the actual correlation between the surrogate variables and a user-specified design matrix.
-- `ThinDataToSummarizedExperiment`: Converts a `ThinData` object to a `SummarizedExperiment` object.
-- `ThinDataToDESeqDataSet`: Converts a `ThinData` object to a `DESeqDataSet` object.
+- `effective_cor`: Returns an estimate of the actual correlation between 
+  the surrogate variables and a user-specified design matrix.
+- `ThinDataToSummarizedExperiment`: Converts a `ThinData` object to a 
+  `SummarizedExperiment` object.
+- `ThinDataToDESeqDataSet`: Converts a `ThinData` object to a `DESeqDataSet`
+  object.
 
-If you find a bug or want a new feature, please submit an [issue](http://github.com/dcgerard/seqgendiff/issues).
+If you find a bug or want a new feature, please submit an 
+[issue](http://github.com/dcgerard/seqgendiff/issues).
 
 Check out [NEWS](NEWS.md) for updates.
 
@@ -51,8 +67,26 @@ library(seqgendiff)
 browseVignettes(package = "seqgendiff")
 ```
 
+# Citation
+
+If you use this package, please cite:
+
+> Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." _Unpublished Manuscript_.
+
+A BibTeX entry for LaTeX users is
+```{tex, eval = FALSE}
+@Article{,
+  title = {Data-based {RNA}-seq Simulations by Binomial Thinning},
+  year = {2019},
+  journal = {Unpublished Manuscript},
+  author = {David Gerard},
+}
+```
+
 # Code of Conduct
 
-Please note that the 'seqgendiff' project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
+Please note that the 'seqgendiff' project is released with a 
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
+project, you agree to abide by its terms.
 
 

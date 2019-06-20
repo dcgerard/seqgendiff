@@ -28,6 +28,9 @@ specify these features *a priori*. We call the way we add signal
 
 The main functions are:
 
+  - `select_counts`: Subsample the columns and rows of a real RNA-seq
+    count matrix. You would then feed this sub-matrix into one of the
+    thinning functions below.
   - `thin_diff`: The function most users should be using for
     general-purpose binomial thinning. For the special applications of
     the two-group model or library/gene thinning, see the functions
@@ -64,6 +67,24 @@ To get started, check out the vignette by running the following in R:
 ``` r
 library(seqgendiff)
 browseVignettes(package = "seqgendiff")
+```
+
+# Citation
+
+If you use this package, please cite:
+
+> Gerard D (2019). “Data-based RNA-seq Simulations by Binomial
+> Thinning.” *Unpublished Manuscript*.
+
+A BibTeX entry for LaTeX users is
+
+``` tex
+@Article{,
+  title = {Data-based {RNA}-seq Simulations by Binomial Thinning},
+  year = {2019},
+  journal = {Unpublished Manuscript},
+  author = {David Gerard},
+}
 ```
 
 # Code of Conduct

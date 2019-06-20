@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -115,10 +115,21 @@
       <small>Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="seqgendiff-0-4-1" class="section level1">
+<h1 class="page-header">
+<a href="#seqgendiff-0-4-1" class="anchor"></a>seqgendiff 0.4.1</h1>
+<ul>
+<li>I added <code><a href="../reference/select_counts.html">select_counts()</a></code>, a function that will subsample the rows (genes) and columns (samples) of a RNA-seq count matrix. It is generally recommended that you do this subsampling each iteration of a simulation study so that your results do not depend on the specific structure of your data. The samples are just selected randomly. There are four different criteria for selecting the genes.</li>
+<li>I also added citation information. This will be updated after I submit the manuscript to bioRxiv.</li>
+</ul>
+</div>
     <div id="seqgendiff-0-4-0" class="section level1">
 <h1 class="page-header">
 <a href="#seqgendiff-0-4-0" class="anchor"></a>seqgendiff 0.4.0</h1>
-<p>This version mostly updates the documentation. Beyond this major documentation update, we also added <code><a href="../reference/thin_all.html">thin_all()</a></code>, a function that uniformly thins all counts.</p>
+<ul>
+<li>This version mostly updates the documentation.</li>
+<li>Beyond this major documentation update, we also added <code><a href="../reference/thin_all.html">thin_all()</a></code>, a function that uniformly thins all counts.</li>
+</ul>
 </div>
     <div id="seqgendiff-0-3-0" class="section level1">
 <h1 class="page-header">
@@ -148,6 +159,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#seqgendiff-0-4-1">0.4.1</a></li>
         <li><a href="#seqgendiff-0-4-0">0.4.0</a></li>
         <li><a href="#seqgendiff-0-3-0">0.3.0</a></li>
         <li><a href="#seqgendiff-0-2-0">0.2.0</a></li>

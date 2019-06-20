@@ -15,8 +15,8 @@
     RNA-seq dataset. The advantage to using this approach over simulating under
     a theoretical distribution is that common/annoying aspects of the data
     are more preserved, giving a more realistic evaluation of your method. 
-    The main functions are thin_diff(), thin_lib(), thin_gene(), 
-    thin_2group(), and thin_all().">
+    The main functions are select_counts(), thin_diff(), thin_lib(), 
+    thin_gene(), thin_2group(), and thin_all().">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -98,6 +98,8 @@
 <p>The main functions are:</p>
 <ul>
 <li>
+<code>select_counts</code>: Subsample the columns and rows of a real RNA-seq count matrix. You would then feed this sub-matrix into one of the thinning functions below.</li>
+<li>
 <code>thin_diff</code>: The function most users should be using for general-purpose binomial thinning. For the special applications of the two-group model or library/gene thinning, see the functions listed below.</li>
 <li>
 <code>thin_2group</code>: The specific application of thinning in the two-group model.</li>
@@ -127,6 +129,21 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(seqgendiff)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/browseVignettes">browseVignettes</a></span>(<span class="dt">package =</span> <span class="st">"seqgendiff"</span>)</a></code></pre></div>
 </div>
+<div id="citation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#citation" class="anchor"></a>Citation</h1>
+<p>If you use this package, please cite:</p>
+<blockquote>
+<p>Gerard D (2019). “Data-based RNA-seq Simulations by Binomial Thinning.” <em>Unpublished Manuscript</em>.</p>
+</blockquote>
+<p>A BibTeX entry for LaTeX users is</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb3-1" data-line-number="1">@Article{,</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  title = {Data-based {RNA}-seq Simulations by Binomial Thinning},</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  year = {2019},</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  journal = {Unpublished Manuscript},</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  author = {David Gerard},</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">}</a></code></pre></div>
+</div>
 <div id="code-of-conduct" class="section level1">
 <h1 class="hasAnchor">
 <a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h1>
@@ -149,6 +166,12 @@
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
+</ul>
+</div>
+<div class="citation">
+<h2>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html">Citing seqgendiff</a></li>
 </ul>
 </div>
 <div class="developers">
