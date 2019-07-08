@@ -35,7 +35,7 @@ environment:
       R_VERSION: 3.6.0
 
 build_script:
-  - travis-tool.sh install_bioc sva SummarizedExperiment DESeq2
+  - travis-tool.sh install_bioc sva SummarizedExperiment DESeq2 airway
   - travis-tool.sh install_bioc_deps
   # install_deps is breaking
   # - travis-tool.sh install_deps
