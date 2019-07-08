@@ -62,7 +62,9 @@ according to one of four schemes (see the description of the \code{gselect}
 argument).
 
 If you have edgeR installed, then some functionality is provided for
-filtering out the lowest expressed genes prior to applying subsampling.
+filtering out the lowest expressed genes prior to applying subsampling
+(see the \code{filter_first} argument).
+This filtering scheme is described in Chen et al. (2016).
 If you want more control over this filtering, you should use
 the \code{\link[edgeR]{filterByExpr}} function from edgeR directly. You
 can install edgeR by following instructions here:
@@ -70,7 +72,7 @@ can install edgeR by following instructions here:
 }
 \examples{
 ## Simulate data from given matrix of counts
-## In practice, you would obtain Y from a real dataset, not simulate it.
+## In practice, you would obtain mat from a real dataset, not simulate it.
 set.seed(1)
 n   <- 100
 p   <- 1000

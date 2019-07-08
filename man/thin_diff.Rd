@@ -151,7 +151,7 @@ This will not produce an error and the specified thinning will be applied.
 However, If any column of \code{design_fixed} or
 \code{design_perm} is a vector of ones or contains a column from
 \code{design_obs}, then the corresponding columns in \code{coef_fixed}
-or \code{coef_designed} cannot be estimated by \emph{any} method. This is
+or \code{coef_perm} cannot be estimated by \emph{any} method. This is
 represented in the output by having duplicate columns in
 \code{designmat} and \code{design_obs}.
 
@@ -211,10 +211,16 @@ Ynew <- log2(t(thout$mat) + 0.5)
 X <- thout$designmat
 coef_est <- t(coef(lm(Ynew ~ X))[2:3, ])
 
-plot(thout$coefmat[, 1], coef_est[, 1])
+plot(thout$coefmat[, 1], coef_est[, 1],
+     main = "First Variable",
+     xlab = "Coefficient",
+     ylab = "Estimated Coefficient")
 abline(0, 1, col = 2, lwd = 2)
 
-plot(thout$coefmat[, 2], coef_est[, 2])
+plot(thout$coefmat[, 2], coef_est[, 2],
+     main = "Second Variable",
+     xlab = "Coefficient",
+     ylab = "Estimated Coefficient")
 abline(0, 1, col = 2, lwd = 2)
 
 ## But estimated coefficient of the first variable is slightly closer when
@@ -223,10 +229,16 @@ Ynew <- log2(t(thout$mat) + 0.5)
 X <- cbind(thout$designmat, thout$sv)
 coef_est <- t(coef(lm(Ynew ~ X))[2:3, ])
 
-plot(thout$coefmat[, 1], coef_est[, 1])
+plot(thout$coefmat[, 1], coef_est[, 1],
+     main = "First Variable",
+     xlab = "Coefficient",
+     ylab = "Estimated Coefficient")
 abline(0, 1, col = 2, lwd = 2)
 
-plot(thout$coefmat[, 2], coef_est[, 2])
+plot(thout$coefmat[, 2], coef_est[, 2],
+     main = "Second Variable",
+     xlab = "Coefficient",
+     ylab = "Estimated Coefficient")
 abline(0, 1, col = 2, lwd = 2)
 
 }

@@ -4,11 +4,12 @@
 
 #' Base binomial thinning function.
 #'
-#' Given a matrix of counts (\eqn{Y}), a design matrix (\eqn{X}),
-#' and a matrix of coefficients (\eqn{B}), \code{thin_diff} will generate a new
-#' matrix of counts such that \eqn{E[log_2(Y)] \approx BX' + u1'}, where
-#' \eqn{u} is some vector of intercept coefficients. This
-#' function is used by all other thinning functions.
+#' Given a matrix of counts (\eqn{Y}) where \eqn{log_2(E[Y]) = Q},
+#' a design matrix (\eqn{X}), and a matrix of coefficients (\eqn{B}),
+#' \code{thin_diff} will generate a new matrix of counts such that
+#' \eqn{log_2(E[Y]) = BX' + u1' + Q}, where \eqn{u} is some vector
+#' of intercept coefficients. This function is used by all other
+#' thinning functions.
 #'
 #' @inheritParams thin_diff
 #' @param designmat A design matrix. The rows index the samples and the columns
@@ -330,7 +331,7 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #'     unobserved confounding.
 #' @param alpha The scaling factor for the signal distribution from
 #'     Stephens (2016). If \eqn{x_1, x_2, ..., x_n} are drawn from
-#'     \code{signal_fun}, then signal is set to
+#'     \code{signal_fun}, then the signal is set to
 #'     \eqn{x_1 s_1^{\alpha}, x_2 s_2^{\alpha}, ..., x_n s_n^{\alpha}}, where
 #'     \eqn{s_g} is the empirical standard deviation of gene \eqn{g}.
 #'     Setting this to \code{0} means that the effects are exchangeable, setting
@@ -506,7 +507,7 @@ thin_2group <- function(mat,
 #' However, If any column of \code{design_fixed} or
 #' \code{design_perm} is a vector of ones or contains a column from
 #' \code{design_obs}, then the corresponding columns in \code{coef_fixed}
-#' or \code{coef_designed} cannot be estimated by \emph{any} method. This is
+#' or \code{coef_perm} cannot be estimated by \emph{any} method. This is
 #' represented in the output by having duplicate columns in
 #' \code{designmat} and \code{design_obs}.
 #'
@@ -677,10 +678,16 @@ thin_2group <- function(mat,
 #' X <- thout$designmat
 #' coef_est <- t(coef(lm(Ynew ~ X))[2:3, ])
 #'
-#' plot(thout$coefmat[, 1], coef_est[, 1])
+#' plot(thout$coefmat[, 1], coef_est[, 1],
+#'      main = "First Variable",
+#'      xlab = "Coefficient",
+#'      ylab = "Estimated Coefficient")
 #' abline(0, 1, col = 2, lwd = 2)
 #'
-#' plot(thout$coefmat[, 2], coef_est[, 2])
+#' plot(thout$coefmat[, 2], coef_est[, 2],
+#'      main = "Second Variable",
+#'      xlab = "Coefficient",
+#'      ylab = "Estimated Coefficient")
 #' abline(0, 1, col = 2, lwd = 2)
 #'
 #' ## But estimated coefficient of the first variable is slightly closer when
@@ -689,10 +696,16 @@ thin_2group <- function(mat,
 #' X <- cbind(thout$designmat, thout$sv)
 #' coef_est <- t(coef(lm(Ynew ~ X))[2:3, ])
 #'
-#' plot(thout$coefmat[, 1], coef_est[, 1])
+#' plot(thout$coefmat[, 1], coef_est[, 1],
+#'      main = "First Variable",
+#'      xlab = "Coefficient",
+#'      ylab = "Estimated Coefficient")
 #' abline(0, 1, col = 2, lwd = 2)
 #'
-#' plot(thout$coefmat[, 2], coef_est[, 2])
+#' plot(thout$coefmat[, 2], coef_est[, 2],
+#'      main = "Second Variable",
+#'      xlab = "Coefficient",
+#'      ylab = "Estimated Coefficient")
 #' abline(0, 1, col = 2, lwd = 2)
 #'
 thin_diff <- function(mat,

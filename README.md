@@ -55,7 +55,14 @@ Check out [NEWS](NEWS.md) for updates.
 
 # Installation
 
-To install, run the following code in R:
+To install from CRAN, run the following code in R:
+
+``` r
+install.packages("seqgendiff")
+```
+
+To install the latest version of seqgendiff, run the following code in
+R:
 
 ``` r
 install.packages("devtools")

@@ -32,7 +32,7 @@ unobserved confounding.}
 
 \item{alpha}{The scaling factor for the signal distribution from
 Stephens (2016). If \eqn{x_1, x_2, ..., x_n} are drawn from
-\code{signal_fun}, then signal is set to
+\code{signal_fun}, then the signal is set to
 \eqn{x_1 s_1^{\alpha}, x_2 s_2^{\alpha}, ..., x_n s_n^{\alpha}}, where
 \eqn{s_g} is the empirical standard deviation of gene \eqn{g}.
 Setting this to \code{0} means that the effects are exchangeable, setting

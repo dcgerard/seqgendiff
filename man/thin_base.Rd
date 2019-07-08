@@ -21,11 +21,12 @@ or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
 }
 \description{
-Given a matrix of counts (\eqn{Y}), a design matrix (\eqn{X}),
-and a matrix of coefficients (\eqn{B}), \code{thin_diff} will generate a new
-matrix of counts such that \eqn{E[log_2(Y)] \approx BX' + u1'}, where
-\eqn{u} is some vector of intercept coefficients. This
-function is used by all other thinning functions.
+Given a matrix of counts (\eqn{Y}) where \eqn{log_2(E[Y]) = Q},
+a design matrix (\eqn{X}), and a matrix of coefficients (\eqn{B}),
+\code{thin_diff} will generate a new matrix of counts such that
+\eqn{log_2(E[Y]) = BX' + u1' + Q}, where \eqn{u} is some vector
+of intercept coefficients. This function is used by all other
+thinning functions.
 }
 \examples{
 ## Simulate data from given matrix of counts

@@ -32,11 +32,12 @@
 
 <meta property="og:title" content="Base binomial thinning function. — thin_base" />
 
-<meta property="og:description" content="Given a matrix of counts (\(Y\)), a design matrix (\(X\)),
-and a matrix of coefficients (\(B\)), thin_diff will generate a new
-matrix of counts such that \(E[log_2(Y)] \approx BX' + u1'\), where
-\(u\) is some vector of intercept coefficients. This
-function is used by all other thinning functions." />
+<meta property="og:description" content="Given a matrix of counts (\(Y\)) where \(log_2(E[Y]) = Q\),
+a design matrix (\(X\)), and a matrix of coefficients (\(B\)),
+thin_diff will generate a new matrix of counts such that
+\(log_2(E[Y]) = BX' + u1' + Q\), where \(u\) is some vector
+of intercept coefficients. This function is used by all other
+thinning functions." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -125,11 +126,12 @@ function is used by all other thinning functions." />
 
     <div class="ref-description">
     
-    <p>Given a matrix of counts (\(Y\)), a design matrix (\(X\)),
-and a matrix of coefficients (\(B\)), <code>thin_diff</code> will generate a new
-matrix of counts such that \(E[log_2(Y)] \approx BX' + u1'\), where
-\(u\) is some vector of intercept coefficients. This
-function is used by all other thinning functions.</p>
+    <p>Given a matrix of counts (\(Y\)) where \(log_2(E[Y]) = Q\),
+a design matrix (\(X\)), and a matrix of coefficients (\(B\)),
+<code>thin_diff</code> will generate a new matrix of counts such that
+\(log_2(E[Y]) = BX' + u1' + Q\), where \(u\) is some vector
+of intercept coefficients. This function is used by all other
+thinning functions.</p>
     
     </div>
 
