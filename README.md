@@ -69,7 +69,7 @@ install.packages("devtools")
 devtools::install_github("dcgerard/seqgendiff")
 ```
 
-To get started, check out the vignette by running the following in R:
+To get started, check out the vignettes by running the following in R:
 
 ``` r
 library(seqgendiff)
