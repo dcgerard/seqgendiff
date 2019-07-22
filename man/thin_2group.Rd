@@ -105,7 +105,7 @@ abline(0, 1, col = 2, lwd = 2)
 \references{
 \itemize{
   \item{Stephens, Matthew. "False discovery rates: a new deal." Biostatistics 18, no. 2 (2016): 275-294.}
-  \item{Wakefield, Jon. "Bayes factors for genome‐wide association studies: comparison with P‐values." Genetic epidemiology 33, no. 1 (2009): 79-86.}
+  \item{Wakefield, Jon. "Bayes factors for genome-wide association studies: comparison with P-values." Genetic epidemiology 33, no. 1 (2009): 79-86.}
 }
 }
 \seealso{
