@@ -484,15 +484,17 @@ thin_2group <- function(mat,
 #'   \item{\eqn{Z}}{Be an \eqn{N} by \eqn{K} matrix of unobserved surrogate
 #'        variables. This is estimated when \code{target_cor} is not
 #'        \code{NULL}.}
+#'   \item{\eqn{M}}{Be a \eqn{G} by \eqn{N} of additional (unknown)
+#'        unwanted variation.}
 #' }
 #' We assume that \eqn{Y} is Poisson distributed given \eqn{X_3} and
 #' \eqn{Z} such that
-#' \deqn{\log_2(EY) = \mu 1_N' + B_3X_3' + AZ'.}
+#' \deqn{\log_2(EY) = \mu 1_N' + B_3X_3' + AZ' + M.}
 #' \code{thin_diff()} will take as input \eqn{X_1}, \eqn{X_2}, \eqn{B_1},
 #' \eqn{B_2}, and will output a \eqn{\tilde{Y}} and \eqn{W} such that
 #' \eqn{\tilde{Y}} is Poisson distributed given \eqn{X_1}, \eqn{X_2}, \eqn{X_3},
-#' \eqn{W}, and \eqn{Z} such that
-#' \deqn{\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',}
+#' \eqn{W}, \eqn{Z}, and \eqn{M} such that
+#' \deqn{\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ' + M,}
 #' where \eqn{W} is an \eqn{N} by \eqn{N} permutation matrix. \eqn{W} is randomly
 #' drawn so that \eqn{WX_2} and \eqn{Z} are correlated approximately according
 #' to the target correlation matrix.

@@ -80,7 +80,8 @@ A list with the following elements:
 }
 }
 \description{
-This is now defunct. Please try out \code{\link{thin_2group}}.
+This is now defunct. Please try out \code{\link{select_counts}} and
+\code{\link{thin_2group}}.
 }
 \details{
 Given a matrix of RNA-seq counts, this function will randomly select two groups of

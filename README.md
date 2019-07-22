@@ -76,6 +76,9 @@ library(seqgendiff)
 browseVignettes(package = "seqgendiff")
 ```
 
+Or you can check out the vignettes I post online:
+<https://dcgerard.github.io/seqgendiff/>.
+
 # Citation
 
 If you use this package, please cite:

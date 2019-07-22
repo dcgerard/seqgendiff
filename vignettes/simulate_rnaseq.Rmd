@@ -62,7 +62,7 @@ using `BiocManager::install()`.
 
 The airway dataset comes with a few observed variables which affect gene
 expression. We'll consider these "surrogate variables". That is, we'll
-add signal to the data and trying to account for these surrogate variables.
+add signal to the data and try to account for these surrogate variables.
 ```{r}
 coldat <- colData(airway)[, c("cell", "dex")]
 true_sv <- model.matrix(~cell + dex, data = coldat)[, -1]
@@ -115,12 +115,20 @@ boxplot(qout$qvalues ~ is_null_gene,
         ylab = "q-value")
 ```
 
-Does the sva-DESeq2 pipeline do any better? First, we'll fit DESeq2.
+Does the sva-DESeq2 pipeline do any better? We'll first use
+`seqgendiff::ThinDataToDESeqDataSet()` to convert the `ThinData` object `thout`
+into a `DESeqDataSet` object.
 ```{r, message=FALSE}
 thout$design_obs <- cbind(thout$design_obs, svout$sv)
 dds <- ThinDataToDESeqDataSet(obj = thout)
 colData(dds)
 design(dds)
+```
+Note that we added the estimated surrogate variables from sva to the
+`ThinData` object before converting to a `DESeqDataSet` object. 
+
+Now we will fit DESeq2.
+```{r}
 dds <- DESeq(object = dds)
 pval_dds <- rowData(dds)[, "WaldPvalue_P1"]
 qval_dds <- qvalue(p = pval_dds)

@@ -1,7 +1,8 @@
 
 #' Apply Poisson thinning to a matrix of count data.
 #'
-#' This is now defunct. Please try out \code{\link{thin_2group}}.
+#' This is now defunct. Please try out \code{\link{select_counts}} and
+#' \code{\link{thin_2group}}.
 #'
 #' Given a matrix of RNA-seq counts, this function will randomly select two groups of
 #' samples and add signal to a known proportion of the genes. This signal

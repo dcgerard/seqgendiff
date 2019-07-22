@@ -278,14 +278,16 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
   <dt>\(Z\)</dt><dd><p>Be an \(N\) by \(K\) matrix of unobserved surrogate
        variables. This is estimated when <code>target_cor</code> is not
        <code>NULL</code>.</p></dd>
+  <dt>\(M\)</dt><dd><p>Be a \(G\) by \(N\) of additional (unknown)
+       unwanted variation.</p></dd>
 </dl><p>We assume that \(Y\) is Poisson distributed given \(X_3\) and
 \(Z\) such that
-$$\log_2(EY) = \mu 1_N' + B_3X_3' + AZ'.$$
+$$\log_2(EY) = \mu 1_N' + B_3X_3' + AZ' + M.$$
 <code>thin_diff()</code> will take as input \(X_1\), \(X_2\), \(B_1\),
 \(B_2\), and will output a \(\tilde{Y}\) and \(W\) such that
 \(\tilde{Y}\) is Poisson distributed given \(X_1\), \(X_2\), \(X_3\),
-\(W\), and \(Z\) such that
-$$\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ',$$
+\(W\), \(Z\), and \(M\) such that
+$$\log_2(E\tilde{Y}) \approx \tilde{\mu}1_N' + B_1X_1' + B_2X_2'W' + B_3X_3' + AZ' + M,$$
 where \(W\) is an \(N\) by \(N\) permutation matrix. \(W\) is randomly
 drawn so that \(WX_2\) and \(Z\) are correlated approximately according
 to the target correlation matrix.</p>

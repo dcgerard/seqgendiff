@@ -23,7 +23,7 @@ set.seed(31) ## for reproducibility
 # Abstract
 
 We demonstrate how to apply the different thinning functions available in
-seqgendiff. These methods are guidelines for the workflow of a single
+seqgendiff. The following contains guidelines for the workflow of a single
 repetition in a simulation study.
 
 # Generate Data
