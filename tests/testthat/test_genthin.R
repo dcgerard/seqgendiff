@@ -164,10 +164,14 @@ test_that("permute design approximates target correlation", {
   design_perm <- rmvnorm(mu = matrix(0, nrow = n, ncol = p), sigma = sigma11)
   sv <- scale(matrix(runif(k * n), nrow = n))
   target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
+
   pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "marriage")
-  expect_equal(cor(pout$latent_var, sv), target_cor, tol = 0.1)
+  expect_equal(cor(pout$design_perm, sv), target_cor, tol = 0.1)
+  expect_true(all(diag(cor(pout$design_perm, pout$latent_var)) > 0.9))
+
   pout2 <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "hungarian")
-  expect_equal(cor(pout2$latent_var, sv), target_cor, tol = 0.1)
+  expect_equal(cor(pout2$design_perm, sv), target_cor, tol = 0.1)
+  expect_true(all(diag(cor(pout2$design_perm, pout2$latent_var)) > 0.9))
 
   # pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "optmatch")
   # cor(pout$design_perm, sv)
@@ -188,6 +192,9 @@ test_that("permute_design orders 0's and 1's for binary designs", {
 
   pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "optmatch")
   expect_true(min(pout$latent_var[pout$design_perm == 1]) >= max(pout$latent_var[pout$design_perm == 0]))
+
+  pout2 <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "hungarian")
+  expect_true(min(pout2$latent_var[pout2$design_perm == 1]) >= max(pout2$latent_var[pout2$design_perm == 0]))
 })
 
 test_that("thin_2group doesn't alter zero coef genes", {

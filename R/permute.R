@@ -102,10 +102,10 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
     lgroup <- matchout[!attributes(matchout)$contrast.group]
     design_perm <- design_perm[match(lgroup, ogroup), , drop = FALSE]
   } else if (method == "marriage") {
-    matchout <- matchingR::galeShapley.marriageMarket(proposerUtils = -1 * t(distmat), reviewerUtils = -1 * distmat)
+    matchout <- matchingR::galeShapley.marriageMarket(proposerUtils = -1 * distmat, reviewerUtils = -1 * t(distmat))
     design_perm <- design_perm[matchout$proposals, , drop = FALSE]
   } else if (method == "hungarian") {
-    clue_out <- clue::solve_LSAP(x = distmat, maximum = FALSE)
+    clue_out <- clue::solve_LSAP(x = t(distmat), maximum = FALSE)
     design_perm <- design_perm[as.numeric(clue_out), , drop = FALSE]
   }
   return(list(design_perm = design_perm, latent_var = latent_var))
