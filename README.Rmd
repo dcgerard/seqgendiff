@@ -92,7 +92,7 @@ A BibTeX entry for LaTeX users is
 # Code of Conduct
 
 Please note that the 'seqgendiff' project is released with a 
-[Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms.
+[Contributor Code of Conduct](https://github.com/dcgerard/seqgendiff/blob/master/CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
 
 

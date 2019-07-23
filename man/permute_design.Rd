@@ -31,7 +31,7 @@ that \code{design_perm} and the surrogate variables are independent.}
 
 \item{method}{Should we use the optimal matching technique from Hansen and
 Klopfer (2006) (\code{"optmatch"}) or the Gale-Shapley algorithm
-for stable marriages (\code{marriage}) (Gale and Shapley, 1962)
+for stable marriages (\code{"marriage"}) (Gale and Shapley, 1962)
 as implemented in the matchingR package.
 The \code{"optmatch"} method works almost uniformly better in practice,
 but does take a lot more computational time if you have, say, 1000
