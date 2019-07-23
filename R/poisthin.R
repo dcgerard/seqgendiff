@@ -96,7 +96,6 @@ poisthin <- function(mat,
                      corvec        = NULL) {
 
   if (getOption("poisthinwarning", TRUE)) {
-    # transition message for 0.4-0 to 0.5-0
     message(paste0(
       "poisthin() is now defunct. Please use thin_2group() instead.",
       "\nThis message is displayed once per R session"))

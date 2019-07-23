@@ -38,29 +38,53 @@ est_sv <- function(mat, n_sv, design_obs, use_sva = FALSE) {
 #' @inheritParams thin_diff
 #' @param sv A matrix of surrogate variables
 #' @param method Should we use the optimal matching technique from Hansen and
-#'     Klopfer (2006) (\code{"optmatch"}) or the Gale-Shapley algorithm
+#'     Klopfer (2006) (\code{"optmatch"}), the Gale-Shapley algorithm
 #'     for stable marriages (\code{"marriage"}) (Gale and Shapley, 1962)
-#'     as implemented in the matchingR package.
-#'     The \code{"optmatch"} method works almost uniformly better in practice,
+#'     as implemented in the matchingR package, or the Hungarian algorithm
+#'     (Papadimitriou and Steiglitz, 1982) (\code{"hungarian"})
+#'     as implemented in the clue package (Hornik, 2005)?
+#'     The \code{"optmatch"} method works really well
 #'     but does take a lot more computational time if you have, say, 1000
-#'     samples.
+#'     samples. If you use the \code{"optmatch"} option, you should note
+#'     that the optmatch package uses a super strange license:
+#'     \url{https://cran.r-project.org/web/packages/optmatch/LICENSE}. If this
+#'     license doesn't work for you (because you are not in academia, or
+#'     because you don't believe in restrictive licenses), then
+#'     try out the \code{"hungarian"} method.
 #'
 #' @references
 #' \itemize{
 #'   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
 #'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
+#'   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
+#'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
 #' }
 #'
 #' @author David Gerard
-permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "marriage")) {
+permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "hungarian", "marriage")) {
   ## Check input --------------------------------------------------------------
   assertthat::are_equal(nrow(design_perm), nrow(sv))
   assertthat::are_equal(ncol(design_perm), nrow(target_cor))
   assertthat::are_equal(ncol(sv), ncol(target_cor))
-  method <- match.arg(method)
   nsamp <- nrow(design_perm)
   ## in case a non-standard sv is given ---------------------------------------
   sv <- scale(sv)
+
+  method <- match.arg(method)
+  if (method == "optmatch" & !requireNamespace("optmatch", quietly = TRUE)) {
+    stop(paste0("\nPackage optmatch must be installed to use `method = \"optmatch\"`\n",
+                "You can install it with\n\n",
+                "install.packages(\"optmatch\")\n\n",
+                "Note that optmatch uses a strange non-standard license:\n",
+                "https://cran.r-project.org/web/packages/optmatch/LICENSE\n"))
+  } else if (method == "optmatch") {
+    if (getOption("optmatch_message", TRUE)) {
+      message(paste0("Note that optmatch uses a strange non-standard license:\n",
+                     "https://cran.r-project.org/web/packages/optmatch/LICENSE\n\n",
+                     "This message is displayed once per R session."))
+      options("optmatch_message" = FALSE)
+    }
+  }
 
   ## Generate latent factors --------------------------------------------------
   sigma11 <- stats::cor(design_perm)
@@ -80,6 +104,9 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
   } else if (method == "marriage") {
     matchout <- matchingR::galeShapley.marriageMarket(proposerUtils = -1 * t(distmat), reviewerUtils = -1 * distmat)
     design_perm <- design_perm[matchout$proposals, , drop = FALSE]
+  } else if (method == "hungarian") {
+    clue_out <- clue::solve_LSAP(x = distmat, maximum = FALSE)
+    design_perm <- design_perm[as.numeric(clue_out), , drop = FALSE]
   }
   return(list(design_perm = design_perm, latent_var = latent_var))
 }
@@ -108,6 +135,14 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
 #'
 #' @author David Gerard
 #'
+#' @references
+#' \itemize{
+#'   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
+#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
+#'   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
+#'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
+#' }
+#'
 #' @examples
 #' ## Generate the design matrices and set target correlation -----------------
 #' n <- 10
@@ -127,10 +162,9 @@ effective_cor <- function(design_perm,
                           sv,
                           target_cor,
                           calc_first = c("cor", "mean"),
-                          method = c("optmatch", "marriage"),
+                          method = c("optmatch", "hungarian", "marriage"),
                           iternum = 1000) {
   ## Check input -------------------------------------------------------------
-  method     <- match.arg(method)
   calc_first <- match.arg(calc_first)
   assertthat::assert_that(is.matrix(design_perm))
   assertthat::assert_that(is.numeric(design_perm))
@@ -142,6 +176,22 @@ effective_cor <- function(design_perm,
   assertthat::are_equal(ncol(sv), ncol(target_cor))
   assertthat::are_equal(ncol(design_perm), nrow(target_cor))
   assertthat::is.count(iternum)
+
+  method <- match.arg(method)
+  if (method == "optmatch" & !requireNamespace("optmatch", quietly = TRUE)) {
+    stop(paste0("\nPackage optmatch must be installed to use `method = \"optmatch\"`\n",
+                "You can install it with\n\n",
+                "install.packages(\"optmatch\")\n\n",
+                "Note that optmatch uses a strange non-standard license:\n",
+                "https://cran.r-project.org/web/packages/optmatch/LICENSE\n"))
+  } else if (method == "optmatch") {
+    if (getOption("optmatch_message", TRUE)) {
+      message(paste0("Note that optmatch uses a strange non-standard license:\n",
+                     "https://cran.r-project.org/web/packages/optmatch/LICENSE\n\n",
+                     "This message is displayed once per R session."))
+      options("optmatch_message" = FALSE)
+    }
+  }
 
   ## Get estimated correlation
   target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)

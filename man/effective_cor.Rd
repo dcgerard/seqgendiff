@@ -5,7 +5,7 @@
 \title{Estimates the effective correlation.}
 \usage{
 effective_cor(design_perm, sv, target_cor, calc_first = c("cor", "mean"),
-  method = c("optmatch", "marriage"), iternum = 1000)
+  method = c("optmatch", "hungarian", "marriage"), iternum = 1000)
 }
 \arguments{
 \item{design_perm}{A numeric design matrix whose rows are to be permuted
@@ -35,12 +35,19 @@ should we calculate the mean of the correlations between
 should only be changed by expert users.}
 
 \item{method}{Should we use the optimal matching technique from Hansen and
-Klopfer (2006) (\code{"optmatch"}) or the Gale-Shapley algorithm
+Klopfer (2006) (\code{"optmatch"}), the Gale-Shapley algorithm
 for stable marriages (\code{"marriage"}) (Gale and Shapley, 1962)
-as implemented in the matchingR package.
-The \code{"optmatch"} method works almost uniformly better in practice,
+as implemented in the matchingR package, or the Hungarian algorithm
+(Papadimitriou and Steiglitz, 1982) (\code{"hungarian"})
+as implemented in the clue package (Hornik, 2005)?
+The \code{"optmatch"} method works really well
 but does take a lot more computational time if you have, say, 1000
-samples.}
+samples. If you use the \code{"optmatch"} option, you should note
+that the optmatch package uses a super strange license:
+\url{https://cran.r-project.org/web/packages/optmatch/LICENSE}. If this
+license doesn't work for you (because you are not in academia, or
+because you don't believe in restrictive licenses), then
+try out the \code{"hungarian"} method.}
 
 \item{iternum}{The total number of simulated correlations to consider.}
 }
@@ -70,6 +77,14 @@ effective_cor(design_perm = design_perm,
               target_cor = target_cor,
               iternum = 10)
 
+}
+\references{
+\itemize{
+  \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
+  \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
+  \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
+  \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
+}
 }
 \author{
 David Gerard

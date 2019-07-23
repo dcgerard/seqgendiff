@@ -28,6 +28,16 @@ test_that("general thinning works", {
                      design_obs = design_obs,
                      use_sva = TRUE)
 
+  thout2 <- thin_diff(mat = mat,
+                     design_fixed = design_fixed,
+                     coef_fixed = coef_fixed,
+                     design_perm = design_perm,
+                     coef_perm = coef_perm,
+                     target_cor = target_cor,
+                     design_obs = design_obs,
+                     use_sva = TRUE,
+                     permute_method = "hungarian")
+
   trash <- capture.output(summary(thout))
 
   # cor(thout$sv, thout$matching_var)
@@ -156,6 +166,8 @@ test_that("permute design approximates target correlation", {
   target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)
   pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "marriage")
   expect_equal(cor(pout$latent_var, sv), target_cor, tol = 0.1)
+  pout2 <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "hungarian")
+  expect_equal(cor(pout2$latent_var, sv), target_cor, tol = 0.1)
 
   # pout <- permute_design(design_perm = design_perm, sv = sv, target_cor = target_cor, method = "optmatch")
   # cor(pout$design_perm, sv)
@@ -190,4 +202,10 @@ test_that("thin_2group doesn't alter zero coef genes", {
 
   thout <- thin_2group(mat = mat, prop_null = 0.5, alpha = 1)
   expect_equal(thout$mat[abs(thout$coefmat) < 10 ^ -6, ], mat[abs(thout$coefmat) < 10 ^ -6, ])
+
+  thout <- thin_2group(mat = mat,
+                       prop_null = 0.5,
+                       alpha = 1,
+                       corvec = c(0.5, 0.5),
+                       permute_method = "hungarian")
 })

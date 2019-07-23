@@ -26,12 +26,13 @@ Suggests:
     airway,
     limma,
     qvalue,
-    edgeR
+    edgeR,
+    optmatch
 Imports: 
     assertthat,
     irlba,
     sva,
     pdist,
-    optmatch,
-    matchingR
+    matchingR,
+    clue
 VignetteBuilder: knitr
