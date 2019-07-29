@@ -589,7 +589,7 @@ thin_2group <- function(mat,
 #'     but does take a lot more computational time if you have, say, 1000
 #'     samples. If you use the \code{"optmatch"} option, you should note
 #'     that the optmatch package uses a super strange license:
-#'     \url{https://cran.r-project.org/web/packages/optmatch/LICENSE}. If this
+#'     \url{https://cran.r-project.org/package=optmatch/LICENSE}. If this
 #'     license doesn't work for you (because you are not in academia, or
 #'     because you don't believe in restrictive licenses), then
 #'     try out the \code{"hungarian"} method.
@@ -797,11 +797,11 @@ thin_diff <- function(mat,
                 "You can install it with\n\n",
                 "install.packages(\"optmatch\")\n\n",
                 "Note that optmatch uses a strange non-standard license:\n",
-                "https://cran.r-project.org/web/packages/optmatch/LICENSE\n"))
+                "https://cran.r-project.org/package=optmatch/LICENSE\n"))
   } else if (!is.null(target_cor) & permute_method == "optmatch") {
     if (getOption("optmatch_message", TRUE)) {
       message(paste0("Note that optmatch uses a strange non-standard license:\n",
-                     "https://cran.r-project.org/web/packages/optmatch/LICENSE\n\n",
+                     "https://cran.r-project.org/package=optmatch/LICENSE\n\n",
                      "This message is displayed once per R session."))
       options("optmatch_message" = FALSE)
     }

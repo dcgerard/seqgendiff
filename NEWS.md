@@ -3,7 +3,7 @@
 - The biggest change here is that the optmatch package is now only
   suggested rather than imported. This is because the optmatch package
   is under a super weird license that I didn't previously know about
-  <https://cran.r-project.org/web/packages/optmatch/LICENSE>.
+  <https://cran.r-project.org/package=optmatch/LICENSE>.
 - The user may also now specify the permutation method in the thinner
   functions.
 - The Hungarian algorithm, implemented in the clue package, seems to

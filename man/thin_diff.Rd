@@ -85,7 +85,7 @@ The \code{"optmatch"} method works really well
 but does take a lot more computational time if you have, say, 1000
 samples. If you use the \code{"optmatch"} option, you should note
 that the optmatch package uses a super strange license:
-\url{https://cran.r-project.org/web/packages/optmatch/LICENSE}. If this
+\url{https://cran.r-project.org/package=optmatch/LICENSE}. If this
 license doesn't work for you (because you are not in academia, or
 because you don't believe in restrictive licenses), then
 try out the \code{"hungarian"} method.}

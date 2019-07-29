@@ -47,7 +47,7 @@ est_sv <- function(mat, n_sv, design_obs, use_sva = FALSE) {
 #'     but does take a lot more computational time if you have, say, 1000
 #'     samples. If you use the \code{"optmatch"} option, you should note
 #'     that the optmatch package uses a super strange license:
-#'     \url{https://cran.r-project.org/web/packages/optmatch/LICENSE}. If this
+#'     \url{https://cran.r-project.org/package=optmatch/LICENSE}. If this
 #'     license doesn't work for you (because you are not in academia, or
 #'     because you don't believe in restrictive licenses), then
 #'     try out the \code{"hungarian"} method.
@@ -76,11 +76,11 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
                 "You can install it with\n\n",
                 "install.packages(\"optmatch\")\n\n",
                 "Note that optmatch uses a strange non-standard license:\n",
-                "https://cran.r-project.org/web/packages/optmatch/LICENSE\n"))
+                "https://cran.r-project.org/package=optmatch/LICENSE\n"))
   } else if (method == "optmatch") {
     if (getOption("optmatch_message", TRUE)) {
       message(paste0("Note that optmatch uses a strange non-standard license:\n",
-                     "https://cran.r-project.org/web/packages/optmatch/LICENSE\n\n",
+                     "https://cran.r-project.org/package=optmatch/LICENSE\n\n",
                      "This message is displayed once per R session."))
       options("optmatch_message" = FALSE)
     }
@@ -183,11 +183,11 @@ effective_cor <- function(design_perm,
                 "You can install it with\n\n",
                 "install.packages(\"optmatch\")\n\n",
                 "Note that optmatch uses a strange non-standard license:\n",
-                "https://cran.r-project.org/web/packages/optmatch/LICENSE\n"))
+                "https://cran.r-project.org/package=optmatch/LICENSE\n"))
   } else if (method == "optmatch") {
     if (getOption("optmatch_message", TRUE)) {
       message(paste0("Note that optmatch uses a strange non-standard license:\n",
-                     "https://cran.r-project.org/web/packages/optmatch/LICENSE\n\n",
+                     "https://cran.r-project.org/package=optmatch/LICENSE\n\n",
                      "This message is displayed once per R session."))
       options("optmatch_message" = FALSE)
     }
