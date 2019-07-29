@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -118,6 +118,15 @@
       <small>Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="seqgendiff-1-0-0" class="section level1">
+<h1 class="page-header">
+<a href="#seqgendiff-1-0-0" class="anchor"></a>seqgendiff 1.0.0</h1>
+<ul>
+<li>The biggest change here is that the optmatch package is now only suggested rather than imported. This is because the optmatch package is under a super weird license that I didn’t previously know about <a href="https://cran.r-project.org/web/packages/optmatch/LICENSE" class="uri">https://cran.r-project.org/web/packages/optmatch/LICENSE</a>.</li>
+<li>The user may also now specify the permutation method in the thinner functions.</li>
+<li>The Hungarian algorithm, implemented in the clue package, seems to work just as well as optmatch, and so I added it as an option. However, since I used optmatch in the simulations for the paper, I have kept <code>permute_method = "optmatch"</code> as the default option.</li>
+</ul>
+</div>
     <div id="seqgendiff-0-4-1" class="section level1">
 <h1 class="page-header">
 <a href="#seqgendiff-0-4-1" class="anchor"></a>seqgendiff 0.4.1</h1>
@@ -162,6 +171,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#seqgendiff-1-0-0">1.0.0</a></li>
         <li><a href="#seqgendiff-0-4-1">0.4.1</a></li>
         <li><a href="#seqgendiff-0-4-0">0.4.0</a></li>
         <li><a href="#seqgendiff-0-3-0">0.3.0</a></li>

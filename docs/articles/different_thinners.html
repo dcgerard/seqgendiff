@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -229,7 +229,11 @@
 <a class="sourceLine" id="cb15-6" data-line-number="6">thout_cor &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thin_diff.html">thin_diff</a></span>(<span class="dt">mat         =</span> submat,</a>
 <a class="sourceLine" id="cb15-7" data-line-number="7">                       <span class="dt">design_perm =</span> designmat, </a>
 <a class="sourceLine" id="cb15-8" data-line-number="8">                       <span class="dt">coef_perm   =</span> coefmat, </a>
-<a class="sourceLine" id="cb15-9" data-line-number="9">                       <span class="dt">target_cor  =</span> target_cor)</a></code></pre></div>
+<a class="sourceLine" id="cb15-9" data-line-number="9">                       <span class="dt">target_cor  =</span> target_cor)</a>
+<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt; Note that optmatch uses a strange non-standard license:</span></a>
+<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt; https://cran.r-project.org/web/packages/optmatch/LICENSE</span></a>
+<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt; This message is displayed once per R session.</span></a></code></pre></div>
 <p>The first variable is indeed more strongly correlated with the estimated surrogate variable:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/cor">cor</a></span>(thout_cor<span class="op">$</span>designmat, thout_cor<span class="op">$</span>sv)</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#&gt;         [,1]</span></a>

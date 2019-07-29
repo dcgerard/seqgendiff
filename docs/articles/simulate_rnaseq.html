@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -181,7 +181,7 @@
 <a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; sample8  -0.350195681016686  0.222308068280647         0</span></a>
 <a class="sourceLine" id="cb11-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/design">design</a></span>(dds)</a>
 <a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; ~V1 + V2 + P1</span></a>
-<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; &lt;environment: 0x556ab70c6b28&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; &lt;environment: 0x55b87226ae38&gt;</span></a></code></pre></div>
 <p>Note that we added the estimated surrogate variables from sva to the <code>ThinData</code> object before converting to a <code>DESeqDataSet</code> object.</p>
 <p>Now we will fit DESeq2.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeq">DESeq</a></span>(<span class="dt">object =</span> dds)</a>
