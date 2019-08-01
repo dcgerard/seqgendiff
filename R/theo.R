@@ -78,6 +78,16 @@ seqgen_base <- function(designmat,
 #'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.}
 #' }
 #'
+#' @return A list object with some or all of the following elements:
+#' \describe{
+#'  \item{\code{mat}}{A matrix of RNA-seq counts. The rows index the genes and
+#'      the columns index the samples.}
+#'  \item{\code{designmat}}{The user-provided \code{designmat}.}
+#'  \item{\code{coefmat}}{The user-provided \code{coefmat}.}
+#'  \item{\code{sv}}{The user-provided \code{design_sv}.}
+#'  \item{\code{coef_sv}}{The user-provided \code{coef_sv}.}
+#' }
+#'
 #' @author David Gerard
 seqgen_diff <- function(designmat,
                         coefmat,
@@ -169,6 +179,8 @@ seqgen_diff <- function(designmat,
 #'   \item{\code{\link{seqgen_diff}}}{For the underlying sequence simulation
 #'       function.}
 #' }
+#'
+#' @inherit seqgen_diff return
 #'
 #' @author David Gerard
 seqgen_2group  <- function(ngene,

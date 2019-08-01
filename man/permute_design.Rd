@@ -44,6 +44,15 @@ license doesn't work for you (because you are not in academia, or
 because you don't believe in restrictive licenses), then
 try out the \code{"hungarian"} method.}
 }
+\value{
+A list with two elements:
+\describe{
+  \item{\code{design_perm}}{A row-permuted version of the user-provided
+      \code{design_perm}.}
+  \item{\code{latent_var}}{A matrix of the latent variables on which
+      \code{design_perm} was matched.}
+}
+}
 \description{
 Permute the design matrix so that it is approximately correlated with
 the surrogate variables.

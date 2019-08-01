@@ -13,6 +13,10 @@
 
 \item{...}{Not used.}
 }
+\value{
+Returns nothing. Prints out some summary information on
+    \code{object}.
+}
 \description{
 Provide summary output of a ThinData S3 object.
 }

@@ -38,6 +38,9 @@
 #'       thinning all counts uniformly.}
 #' }
 #'
+#' @return A matrix of new RNA-seq read-counts. This matrix has the signal
+#'     added from \code{designmat} and \code{coefmat}.
+#'
 #' @examples
 #' ## Simulate data from given matrix of counts
 #' ## In practice, you would obtain Y from a real dataset, not simulate it.
@@ -799,12 +802,7 @@ thin_diff <- function(mat,
                 "Note that optmatch uses a strange non-standard license:\n",
                 "https://cran.r-project.org/package=optmatch/LICENSE\n"))
   } else if (!is.null(target_cor) & permute_method == "optmatch") {
-    if (getOption("optmatch_message", TRUE)) {
-      message(paste0("Note that optmatch uses a strange non-standard license:\n",
-                     "https://cran.r-project.org/package=optmatch/LICENSE\n\n",
-                     "This message is displayed once per R session."))
-      options("optmatch_message" = FALSE)
-    }
+    message_fun("optmatch")
   }
 
   ## Permute ------------------------------------------------------------------

@@ -1,3 +1,15 @@
+# seqgendiff 1.1.0
+
+Fixes a lot of things for CRAN resubmission.
+
+- Adds more information on return values.
+- Changes title to less than 65 characters.
+- Uses local environments rather than global environment to assess
+  messages.
+- Removes `seqgendiff::EigenDiff()`. Replaces its usage 
+  with `cate::est.factor.num()`. This is fine since it was only 
+  used in the now defunct `seqgendiff::poisthin()`.
+
 # seqgendiff 1.0.0
 
 - The biggest change here is that the optmatch package is now only

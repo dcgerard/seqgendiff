@@ -29,6 +29,12 @@ that \code{design_perm} and the surrogate variables are independent.}
 grid search for the shrinkage factor. The step-size would be
 \code{1 / (num_steps - 1)}.}
 }
+\value{
+A matrix of correlations the same dimension as \code{target_cor}.
+   Actually, the returned matrix is \code{a * target_cor}, where \code{a}
+   was determined to make the overall correlation matrix positive
+   semi-definite.
+}
 \description{
 Shrinks the target correlation using a uniform scaling factor so that
 the overall correlation matrix is positive semi-definite.

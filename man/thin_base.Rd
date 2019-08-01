@@ -20,6 +20,10 @@ columns index the samples.}
 or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
 }
+\value{
+A matrix of new RNA-seq read-counts. This matrix has the signal
+    added from \code{designmat} and \code{coefmat}.
+}
 \description{
 Given a matrix of counts (\eqn{Y}) where \eqn{log_2(E[Y]) = Q},
 a design matrix (\eqn{X}), and a matrix of coefficients (\eqn{B}),

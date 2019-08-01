@@ -12,8 +12,8 @@ corassign(mat, nfac = NULL, corvec = NULL, return = c("group",
 the columns index the genes.}
 
 \item{nfac}{The number of latent factors. If \code{NULL}, then we will
-use \code{\link{EigenDiff}} to choose the number of latent
-factors.}
+use \code{\link[cate]{est.factor.num}} from the cate
+package to choose the number of latent factors.}
 
 \item{corvec}{The vector of correlations. \code{corvec[i]} is the correlation
 between latent factor \code{i} and the underlying group-assignment variable.
@@ -54,6 +54,13 @@ elements of \code{corvec} are the underlying correlations, if \code{nfac} turns 
 smaller than the length of \code{corvec}. If \code{nfac} turns
 out to be larger than the length of \code{corvec}, then the factors without
 defined correlations are assumed to have correlation 0.
+}
+\references{
+\itemize{
+  \item{Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
+    Factor Analysis and Confounder Adjusted Testing and Estimation.
+    R package version 1.0.4. https://CRAN.R-project.org/package=cate}
+}
 }
 \author{
 David Gerard

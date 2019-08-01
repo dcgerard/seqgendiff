@@ -66,7 +66,7 @@ group-assignment variable is used to assign groups." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -148,8 +148,8 @@ the columns index the genes.</p></td>
     <tr>
       <th>nfac</th>
       <td><p>The number of latent factors. If <code>NULL</code>, then we will
-use <code><a href='EigenDiff.html'>EigenDiff</a></code> to choose the number of latent
-factors.</p></td>
+use <code><a href='https://www.rdocumentation.org/packages/cate/topics/est.confounder.num'>est.factor.num</a></code> from the cate
+package to choose the number of latent factors.</p></td>
     </tr>
     <tr>
       <th>corvec</th>
@@ -191,6 +191,14 @@ smaller than the length of <code>corvec</code>. If <code>nfac</code> turns
 out to be larger than the length of <code>corvec</code>, then the factors without
 defined correlations are assumed to have correlation 0.</p>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <ul>
+<li><p>Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
+    Factor Analysis and Confounder Adjusted Testing and Estimation.
+    R package version 1.0.4. https://CRAN.R-project.org/package=cate</p></li>
+</ul>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -201,6 +209,8 @@ defined correlations are assumed to have correlation 0.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
           </ul>
 
     <h2>Author</h2>

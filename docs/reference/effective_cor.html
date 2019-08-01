@@ -64,7 +64,7 @@ surrogate variables when you assign a target correlation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -193,6 +193,13 @@ try out the <code>"hungarian"</code> method.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A matrix of correlations. The rows index the observed covariates
+    and the columns index the surrogate variables. Element (i, j) is
+    the estimated correlation between the ith variable in
+    <code>design_perm</code> and the jth variable in <code>sv</code>.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function permutes the rows of <code>design_perm</code> many times, each
@@ -227,6 +234,8 @@ using <code><a href='permute_design.html'>permute_design</a></code>.</p>
               <span class='kw'>iternum</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='message'>Note that optmatch uses a strange non-standard license:</span>
 #&gt; <span class='message'>https://cran.r-project.org/package=optmatch/LICENSE</span>
 #&gt; <span class='message'></span>
+#&gt; <span class='message'>If this doesn't work for you, try permute_method = "hungarian"</span>
+#&gt; <span class='message'></span>
 #&gt; <span class='message'>This message is displayed once per R session.</span></div><div class='output co'>#&gt;           [,1]
 #&gt; [1,] 0.7059494
 #&gt; [2,] 0.1696641</div><div class='input'>
@@ -237,6 +246,8 @@ using <code><a href='permute_design.html'>permute_design</a></code>.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>

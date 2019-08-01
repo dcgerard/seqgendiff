@@ -29,6 +29,11 @@ the surrogate variables are orthogonal to the observed covariates. This
 option only matters if \code{design_obs} is not \code{NULL}.
 Defaults to \code{FALSE}.}
 }
+\value{
+A matrix of estimated surrogate variables. The columns index the
+    surrogate variables and the rows index the individuals. The surrogate
+    variables are centered and scaled to have mean 0 and variance 1.
+}
 \description{
 This will use either \code{\link[sva]{sva}} or an SVD on the residuals
 of a regression of \code{mat} on \code{design_obs} to estimate the

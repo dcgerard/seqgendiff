@@ -64,7 +64,7 @@ the overall correlation matrix is positive semi-definite." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -165,6 +165,13 @@ grid search for the shrinkage factor. The step-size would be
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A matrix of correlations the same dimension as <code>target_cor</code>.
+   Actually, the returned matrix is <code>a * target_cor</code>, where <code>a</code>
+   was determined to make the overall correlation matrix positive
+   semi-definite.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Let \(W\) = <code><a href='https://www.rdocumentation.org/packages/stats/topics/cor'>cor(design_perm)</a></code>. Let \(R\) = <code>target_cor</code>.
@@ -207,6 +214,8 @@ is positive semi-definite.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>

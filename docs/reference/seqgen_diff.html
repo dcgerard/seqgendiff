@@ -64,7 +64,7 @@ model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -165,6 +165,18 @@ variables.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list object with some or all of the following elements:</p><dl class='dl-horizontal'>
+ <dt><code>mat</code></dt><dd><p>A matrix of RNA-seq counts. The rows index the genes and
+     the columns index the samples.</p></dd>
+ <dt><code>designmat</code></dt><dd><p>The user-provided <code>designmat</code>.</p></dd>
+ <dt><code>coefmat</code></dt><dd><p>The user-provided <code>coefmat</code>.</p></dd>
+ <dt><code>sv</code></dt><dd><p>The user-provided <code>design_sv</code>.</p></dd>
+ <dt><code>coef_sv</code></dt><dd><p>The user-provided <code>coef_sv</code>.</p></dd>
+</dl>
+
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>You should be using <code><a href='thin_diff.html'>thin_diff</a></code> instead of this. If you must
@@ -185,6 +197,8 @@ Vieth et al. (2017).</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>

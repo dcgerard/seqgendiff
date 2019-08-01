@@ -1,7 +1,7 @@
 Package: seqgendiff
 Type: Package
-Title: Sequence Generation/Modification for Differential Expression Analysis and Beyond
-Version: 1.0.0
+Title: RNA-Seq Generation/Modification for Simulation
+Version: 1.1.0
 Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9450-5023"))
 Description: Generates/modifies RNA-seq data for use in simulations. We provide
     a suite of functions that will add a known amount of signal to a real 
@@ -34,5 +34,6 @@ Imports:
     sva,
     pdist,
     matchingR,
-    clue
+    clue,
+    cate
 VignetteBuilder: knitr

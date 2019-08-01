@@ -25,6 +25,17 @@ variables.}
 variables. The rows index the genes and the columns index the
 variables.}
 }
+\value{
+A list object with some or all of the following elements:
+\describe{
+ \item{\code{mat}}{A matrix of RNA-seq counts. The rows index the genes and
+     the columns index the samples.}
+ \item{\code{designmat}}{The user-provided \code{designmat}.}
+ \item{\code{coefmat}}{The user-provided \code{coefmat}.}
+ \item{\code{sv}}{The user-provided \code{design_sv}.}
+ \item{\code{coef_sv}}{The user-provided \code{coef_sv}.}
+}
+}
 \description{
 Generate a matrix of RNA-seq counts from a theoretical negative-binomial
 model.

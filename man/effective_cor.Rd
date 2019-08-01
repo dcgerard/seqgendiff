@@ -51,6 +51,12 @@ try out the \code{"hungarian"} method.}
 
 \item{iternum}{The total number of simulated correlations to consider.}
 }
+\value{
+A matrix of correlations. The rows index the observed covariates
+    and the columns index the surrogate variables. Element (i, j) is
+    the estimated correlation between the ith variable in
+    \code{design_perm} and the jth variable in \code{sv}.
+}
 \description{
 Will return the estimated correlation between the design matrix and the
 surrogate variables when you assign a target correlation.

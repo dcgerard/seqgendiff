@@ -12,6 +12,10 @@
 #' @inheritParams thin_diff
 #' @param n_sv The number of surrogate variables.
 #'
+#' @return A matrix of estimated surrogate variables. The columns index the
+#'     surrogate variables and the rows index the individuals. The surrogate
+#'     variables are centered and scaled to have mean 0 and variance 1.
+#'
 #' @author David Gerard
 est_sv <- function(mat, n_sv, design_obs, use_sva = FALSE) {
   assertthat::is.count(n_sv)
@@ -60,6 +64,14 @@ est_sv <- function(mat, n_sv, design_obs, use_sva = FALSE) {
 #'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
 #' }
 #'
+#' @return A list with two elements:
+#' \describe{
+#'   \item{\code{design_perm}}{A row-permuted version of the user-provided
+#'       \code{design_perm}.}
+#'   \item{\code{latent_var}}{A matrix of the latent variables on which
+#'       \code{design_perm} was matched.}
+#' }
+#'
 #' @author David Gerard
 permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "hungarian", "marriage")) {
   ## Check input --------------------------------------------------------------
@@ -78,12 +90,7 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
                 "Note that optmatch uses a strange non-standard license:\n",
                 "https://cran.r-project.org/package=optmatch/LICENSE\n"))
   } else if (method == "optmatch") {
-    if (getOption("optmatch_message", TRUE)) {
-      message(paste0("Note that optmatch uses a strange non-standard license:\n",
-                     "https://cran.r-project.org/package=optmatch/LICENSE\n\n",
-                     "This message is displayed once per R session."))
-      options("optmatch_message" = FALSE)
-    }
+    message_fun("optmatch")
   }
 
   ## Generate latent factors --------------------------------------------------
@@ -143,6 +150,11 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
 #'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
 #' }
 #'
+#' @return A matrix of correlations. The rows index the observed covariates
+#'     and the columns index the surrogate variables. Element (i, j) is
+#'     the estimated correlation between the ith variable in
+#'     \code{design_perm} and the jth variable in \code{sv}.
+#'
 #' @examples
 #' ## Generate the design matrices and set target correlation -----------------
 #' n <- 10
@@ -185,12 +197,7 @@ effective_cor <- function(design_perm,
                 "Note that optmatch uses a strange non-standard license:\n",
                 "https://cran.r-project.org/package=optmatch/LICENSE\n"))
   } else if (method == "optmatch") {
-    if (getOption("optmatch_message", TRUE)) {
-      message(paste0("Note that optmatch uses a strange non-standard license:\n",
-                     "https://cran.r-project.org/package=optmatch/LICENSE\n\n",
-                     "This message is displayed once per R session."))
-      options("optmatch_message" = FALSE)
-    }
+    message_fun("optmatch")
   }
 
   ## Get estimated correlation
@@ -258,6 +265,11 @@ effective_cor <- function(design_perm,
 #'     \code{1 / (num_steps - 1)}.
 #'
 #' @author David Gerard
+#'
+#' @return A matrix of correlations the same dimension as \code{target_cor}.
+#'    Actually, the returned matrix is \code{a * target_cor}, where \code{a}
+#'    was determined to make the overall correlation matrix positive
+#'    semi-definite.
 #'
 #' @export
 #'

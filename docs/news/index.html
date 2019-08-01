@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -118,34 +118,45 @@
       <small>Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="seqgendiff-1-0-0" class="section level1">
+    <div id="seqgendiff-110" class="section level1">
 <h1 class="page-header">
-<a href="#seqgendiff-1-0-0" class="anchor"></a>seqgendiff 1.0.0</h1>
+<a href="#seqgendiff-110" class="anchor"></a>seqgendiff 1.1.0</h1>
+<p>Fixes a lot of things for CRAN resubmission.</p>
+<ul>
+<li>Adds more information on return values.</li>
+<li>Changes title to less than 65 characters.</li>
+<li>Uses local environments rather than global environment to assess messages.</li>
+<li>Removes <code>seqgendiff::EigenDiff()</code>. Replaces its usage with <code><a href="https://www.rdocumentation.org/packages/cate/topics/est.confounder.num">cate::est.factor.num()</a></code>. This is fine since it was only used in the now defunct <code><a href="../reference/poisthin.html">seqgendiff::poisthin()</a></code>.</li>
+</ul>
+</div>
+    <div id="seqgendiff-100" class="section level1">
+<h1 class="page-header">
+<a href="#seqgendiff-100" class="anchor"></a>seqgendiff 1.0.0</h1>
 <ul>
 <li>The biggest change here is that the optmatch package is now only suggested rather than imported. This is because the optmatch package is under a super weird license that I didn’t previously know about <a href="https://cran.r-project.org/package=optmatch/LICENSE" class="uri">https://cran.r-project.org/package=optmatch/LICENSE</a>.</li>
 <li>The user may also now specify the permutation method in the thinner functions.</li>
 <li>The Hungarian algorithm, implemented in the clue package, seems to work just as well as optmatch, and so I added it as an option. However, since I used optmatch in the simulations for the paper, I have kept <code>permute_method = "optmatch"</code> as the default option.</li>
 </ul>
 </div>
-    <div id="seqgendiff-0-4-1" class="section level1">
+    <div id="seqgendiff-041" class="section level1">
 <h1 class="page-header">
-<a href="#seqgendiff-0-4-1" class="anchor"></a>seqgendiff 0.4.1</h1>
+<a href="#seqgendiff-041" class="anchor"></a>seqgendiff 0.4.1</h1>
 <ul>
 <li>I added <code><a href="../reference/select_counts.html">select_counts()</a></code>, a function that will subsample the rows (genes) and columns (samples) of a RNA-seq count matrix. It is generally recommended that you do this subsampling each iteration of a simulation study so that your results do not depend on the specific structure of your data. The samples are just selected randomly. There are four different criteria for selecting the genes.</li>
 <li>I also added citation information. This will be updated after I submit the manuscript to bioRxiv.</li>
 </ul>
 </div>
-    <div id="seqgendiff-0-4-0" class="section level1">
+    <div id="seqgendiff-040" class="section level1">
 <h1 class="page-header">
-<a href="#seqgendiff-0-4-0" class="anchor"></a>seqgendiff 0.4.0</h1>
+<a href="#seqgendiff-040" class="anchor"></a>seqgendiff 0.4.0</h1>
 <ul>
 <li>This version mostly updates the documentation.</li>
 <li>Beyond this major documentation update, we also added <code><a href="../reference/thin_all.html">thin_all()</a></code>, a function that uniformly thins all counts.</li>
 </ul>
 </div>
-    <div id="seqgendiff-0-3-0" class="section level1">
+    <div id="seqgendiff-030" class="section level1">
 <h1 class="page-header">
-<a href="#seqgendiff-0-3-0" class="anchor"></a>seqgendiff 0.3.0</h1>
+<a href="#seqgendiff-030" class="anchor"></a>seqgendiff 0.3.0</h1>
 <p>This has been a massive rewrite of the seqgendiff package.</p>
 <ul>
 <li>
@@ -156,9 +167,9 @@
 <li>Functions now exist to convert the simulation output to common Bioconductor S4 classes. See <code><a href="../reference/ThinDataToSummarizedExperiment.html">ThinDataToSummarizedExperiment()</a></code> and <code><a href="../reference/ThinDataToDESeqDataSet.html">ThinDataToDESeqDataSet()</a></code>.</li>
 </ul>
 </div>
-    <div id="seqgendiff-0-2-0" class="section level1">
+    <div id="seqgendiff-020" class="section level1">
 <h1 class="page-header">
-<a href="#seqgendiff-0-2-0" class="anchor"></a>seqgendiff 0.2.0</h1>
+<a href="#seqgendiff-020" class="anchor"></a>seqgendiff 0.2.0</h1>
 <ul>
 <li>
 <code><a href="../reference/corassign.html">corassign()</a></code> lets you make group assignment that is correlated with hidden factors.</li>
@@ -171,11 +182,12 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#seqgendiff-1-0-0">1.0.0</a></li>
-        <li><a href="#seqgendiff-0-4-1">0.4.1</a></li>
-        <li><a href="#seqgendiff-0-4-0">0.4.0</a></li>
-        <li><a href="#seqgendiff-0-3-0">0.3.0</a></li>
-        <li><a href="#seqgendiff-0-2-0">0.2.0</a></li>
+        <li><a href="#seqgendiff-110">1.1.0</a></li>
+        <li><a href="#seqgendiff-100">1.0.0</a></li>
+        <li><a href="#seqgendiff-041">0.4.1</a></li>
+        <li><a href="#seqgendiff-040">0.4.0</a></li>
+        <li><a href="#seqgendiff-030">0.3.0</a></li>
+        <li><a href="#seqgendiff-020">0.2.0</a></li>
       </ul>
     </div>
   </div>

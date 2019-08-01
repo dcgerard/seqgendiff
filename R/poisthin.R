@@ -95,12 +95,7 @@ poisthin <- function(mat,
                      group_prop    = 0.5,
                      corvec        = NULL) {
 
-  if (getOption("poisthinwarning", TRUE)) {
-    message(paste0(
-      "poisthin() is now defunct. Please use thin_2group() instead.",
-      "\nThis message is displayed once per R session"))
-    options("poisthinwarning" = FALSE)
-  }
+  message_fun("poisthin")
 
   ## Check Input -------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
@@ -265,8 +260,8 @@ poisthin <- function(mat,
 #' @param mat A matrix of count data. The rows index the individuals and
 #'     the columns index the genes.
 #' @param nfac The number of latent factors. If \code{NULL}, then we will
-#'     use \code{\link{EigenDiff}} to choose the number of latent
-#'     factors.
+#'     use \code{\link[cate]{est.factor.num}} from the cate
+#'     package to choose the number of latent factors.
 #' @param corvec The vector of correlations. \code{corvec[i]} is the correlation
 #'     between latent factor \code{i} and the underlying group-assignment variable.
 #'     You can think of the correlations in \code{corvec} as a kind of "tetrachoric
@@ -293,6 +288,13 @@ poisthin <- function(mat,
 #'
 #'
 #' @author David Gerard
+#'
+#' @references
+#' \itemize{
+#'   \item{Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
+#'     Factor Analysis and Confounder Adjusted Testing and Estimation.
+#'     R package version 1.0.4. https://CRAN.R-project.org/package=cate}
+#' }
 #'
 #' @export
 corassign <- function(mat,
@@ -326,7 +328,9 @@ corassign <- function(mat,
 
   ## Find number of latent factors if not provided ----------------------------
   if (is.null(nfac)) {
-    nfac <- EigenDiff(resmat)
+    nfac <- cate::est.factor.num(resmat,
+                                 method = "bcv",
+                                 bcv.plot = FALSE)$r
 
     ## Pad or delete corvec where necessary.
     if (is.null(corvec)) {
@@ -422,55 +426,4 @@ uncorassign <- function(n,
     ret_vec$x <- ifelse(ret_vec$groupfac > 0, 1L, 0L)
   }
   return(ret_vec)
-}
-
-
-#' Copied code from `cate::EigenDiff` with minor changes.
-#'
-#' I fix an error where default `rmax` can sometimes be greater than dimension
-#' of `Y`. I also increase the performance by only calculating the
-#' singular values (not the singular vectors).
-#'
-#' The method estimates the number of factors by the Eigenvalue Difference
-#' Method of Onatski (2010).
-#'
-#' @param Y A matrix to estimate the rank.
-#' @param rmax The maximum rank.
-#' @param niter The maximum number of iterations.
-#'
-#' @references Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
-#'     Factor Analysis and Confounder Adjusted Testing and Estimation.
-#'     R package version 1.0.4. https://CRAN.R-project.org/package=cate
-#'
-#'     A. Onatski (2010), Determining the number of factors from empirical
-#'     distribution of eigenvalues. The Review of Economics and Statistics 92(4).
-#'
-#' @author David Gerard
-EigenDiff <- function (Y,
-                       rmax = min(3 * sqrt(nrow(Y)), nrow(Y), ncol(Y)),
-                       niter = 10)
-{
-  n <- nrow(Y)
-  p <- ncol(Y)
-  ev <- svd(Y, nu = 0, nv = 0)$d^2/n
-  n <- length(ev)
-  j <- rmax + 1
-  diffs <- ev - c(ev[-1], 0)
-  for (i in seq_len(niter)) {
-    y <- ev[j:(j + 4)]
-    x <- ((j - 1):(j + 3)) ^ (2/3)
-    lm.coef <- stats::lm(y ~ x)
-    delta <- 2 * abs(lm.coef$coef[2])
-    idx <- which(diffs[seq_len(rmax)] > delta)
-    if (length(idx) == 0) {
-      hatr <- 0
-    } else {
-      hatr <- max(idx)
-    }
-    newj <- hatr + 1
-    if (newj == j)
-      break
-    j <- newj
-  }
-  return(hatr)
 }

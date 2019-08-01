@@ -17,6 +17,9 @@ is.ThinData <- function(x) {
 #'
 #' @author David Gerard
 #'
+#' @return Returns nothing. Prints out some summary information on
+#'     \code{object}.
+#'
 #' @export
 summary.ThinData <- function(object, ...) {
 cat(
