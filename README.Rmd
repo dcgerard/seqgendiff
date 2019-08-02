@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Sequence Generation/Modification for Differential Expression Analysis and Beyond
+# RNA-Seq Generation/Modification for Simulation
 
 [![Travis-CI Build Status](https://travis-ci.org/dcgerard/seqgendiff.svg?branch=master)](https://travis-ci.org/dcgerard/seqgendiff)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dcgerard/seqgendiff?branch=master&svg=true)](https://ci.appveyor.com/project/dcgerard/seqgendiff)

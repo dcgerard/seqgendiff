@@ -254,6 +254,30 @@ Gerard and Stephens (2017).</p>
     on negative controls. arXiv preprint arXiv:1705.08393.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>## Simulate data from given matrix of counts</span>
+<span class='co'>## In practice, you would obtain Y from a real dataset, not simulate it.</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
+<span class='no'>nsamp</span> <span class='kw'>&lt;-</span> <span class='fl'>10</span>
+<span class='no'>ngene</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Poisson'>rpois</a></span>(<span class='no'>nsamp</span> * <span class='no'>ngene</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>50</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>ngene</span>)
+
+
+<span class='co'>## Apply thinning</span>
+<span class='no'>poisout</span> <span class='kw'>&lt;-</span> <span class='fu'>poisthin</span>(<span class='kw'>mat</span>           <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='no'>Y</span>),
+                    <span class='kw'>nsamp</span>         <span class='kw'>=</span> <span class='fl'>9</span>,
+                    <span class='kw'>ngene</span>         <span class='kw'>=</span> <span class='fl'>999</span>,
+                    <span class='kw'>signal_fun</span>    <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>,
+                    <span class='kw'>signal_params</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>),
+                    <span class='kw'>prop_null</span>     <span class='kw'>=</span> <span class='fl'>0.9</span>)</div><div class='output co'>#&gt; <span class='message'>poisthin() is now defunct.</span>
+#&gt; <span class='message'>Please use select_counts() and thin_2group() instead.</span>
+#&gt; <span class='message'>This message is displayed once per R session</span></div><div class='input'>
+<span class='co'>## Dimension of count matrix is smaller.</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/dim'>dim</a></span>(<span class='no'>poisout</span>$<span class='no'>Y</span>)</div><div class='output co'>#&gt; [1]   9 999</div><div class='input'>
+<span class='co'>## Can verify signal was added by estimating it with lm().</span>
+<span class='no'>betahat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/coef'>coef</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log2</a></span>(<span class='no'>poisout</span>$<span class='no'>Y</span> + <span class='fl'>1</span>) ~ <span class='no'>poisout</span>$<span class='no'>X</span>[, <span class='fl'>2</span>]))[<span class='fl'>2</span>, ]
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>poisout</span>$<span class='no'>beta</span>, <span class='no'>betahat</span>, <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Coefficients"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Estimates"</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='poisthin-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -265,7 +289,9 @@ Gerard and Stephens (2017).</p>
       <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>David Gerard</p>

@@ -74,6 +74,31 @@
 #'     Unifying and generalizing methods for removing unwanted variation based
 #'     on negative controls. arXiv preprint arXiv:1705.08393.
 #'
+#' @examples
+#' ## Simulate data from given matrix of counts
+#' ## In practice, you would obtain Y from a real dataset, not simulate it.
+#' set.seed(1)
+#' nsamp <- 10
+#' ngene <- 1000
+#' Y <- matrix(stats::rpois(nsamp * ngene, lambda = 50), nrow = ngene)
+#'
+#'
+#' ## Apply thinning
+#' poisout <- poisthin(mat           = t(Y),
+#'                     nsamp         = 9,
+#'                     ngene         = 999,
+#'                     signal_fun    = stats::rnorm,
+#'                     signal_params = list(mean = 0, sd = 1),
+#'                     prop_null     = 0.9)
+#'
+#' ## Dimension of count matrix is smaller.
+#' dim(poisout$Y)
+#'
+#' ## Can verify signal was added by estimating it with lm().
+#' betahat <- coef(lm(log2(poisout$Y + 1) ~ poisout$X[, 2]))[2, ]
+#' plot(poisout$beta, betahat, xlab = "Coefficients", ylab = "Estimates")
+#' abline(0, 1, col = 2, lty = 2)
+#'
 #' @export
 poisthin <- function(mat,
                      nsamp         = nrow(mat),
@@ -295,6 +320,32 @@ poisthin <- function(mat,
 #'     Factor Analysis and Confounder Adjusted Testing and Estimation.
 #'     R package version 1.0.4. https://CRAN.R-project.org/package=cate}
 #' }
+#'
+#' @examples
+#' ## Simulate data from given matrix of counts
+#' ## In practice, you would obtain Y from a real dataset, not simulate it.
+#' set.seed(1)
+#' nsamp <- 1000
+#' ngene <- 10
+#' Y <- matrix(stats::rpois(nsamp * ngene, lambda = 50), nrow = ngene)
+#'
+#' ## Set target correlation to be 0.9 and nfac to be 1
+#' corvec <- 0.9
+#' nfac   <- 1
+#'
+#' ## Group assignment
+#' cout <- corassign(mat    = t(Y),
+#'                   nfac   = nfac,
+#'                   corvec = corvec,
+#'                   return = "full")
+#'
+#' ## Correlation between facmat and groupfac should be about 0.9
+#' cor(cout$facmat, cout$groupfac)
+#'
+#' ## Correlation between facmat and x should be about 0.9 * sqrt(2 / pi)
+#' cor(cout$facmat, cout$x)
+#' corvec * sqrt(2 / pi)
+#'
 #'
 #' @export
 corassign <- function(mat,

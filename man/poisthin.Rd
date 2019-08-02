@@ -94,6 +94,32 @@ given this assignment, will Binomially sample counts with a sample size of the g
 counts and a probability that is a function of the effect size. For details, see
 Gerard and Stephens (2017).
 }
+\examples{
+## Simulate data from given matrix of counts
+## In practice, you would obtain Y from a real dataset, not simulate it.
+set.seed(1)
+nsamp <- 10
+ngene <- 1000
+Y <- matrix(stats::rpois(nsamp * ngene, lambda = 50), nrow = ngene)
+
+
+## Apply thinning
+poisout <- poisthin(mat           = t(Y),
+                    nsamp         = 9,
+                    ngene         = 999,
+                    signal_fun    = stats::rnorm,
+                    signal_params = list(mean = 0, sd = 1),
+                    prop_null     = 0.9)
+
+## Dimension of count matrix is smaller.
+dim(poisout$Y)
+
+## Can verify signal was added by estimating it with lm().
+betahat <- coef(lm(log2(poisout$Y + 1) ~ poisout$X[, 2]))[2, ]
+plot(poisout$beta, betahat, xlab = "Coefficients", ylab = "Estimates")
+abline(0, 1, col = 2, lty = 2)
+
+}
 \references{
 Gerard, D., & Stephens, M. (2017).
     Unifying and generalizing methods for removing unwanted variation based

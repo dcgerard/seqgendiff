@@ -21,6 +21,39 @@ A \code{\link[SummarizedExperiment]{SummarizedExperiment}} S4
 This only keeps the \code{mat}, \code{design_obs}, \code{designmat},
 and \code{coefmat} elements of the ThinData object.
 }
+\examples{
+\donttest{
+## Generate simulated data and modify using thin_diff().
+## In practice, you would use real data, not simulated.
+set.seed(1)
+n <- 10
+p <- 1000
+Z <- matrix(abs(rnorm(n, sd = 4)))
+alpha <- matrix(abs(rnorm(p, sd = 1)))
+mat <- round(2^(alpha \%*\% t(Z) + abs(matrix(rnorm(n * p, sd = 5),
+                                            nrow = p,
+                                            ncol = n))))
+design_perm <- cbind(rep(c(0, 1), length.out = n), runif(n))
+coef_perm   <- matrix(rnorm(p * ncol(design_perm), sd = 6), nrow = p)
+design_obs  <- matrix(rnorm(n), ncol = 1)
+target_cor <- matrix(c(0.9, 0))
+thout <- thin_diff(mat            = mat,
+                   design_perm    = design_perm,
+                   coef_perm      = coef_perm,
+                   target_cor     = target_cor,
+                   design_obs     = design_obs,
+                   permute_method = "hungarian")
+
+## Convert ThinData object to SummarizedExperiment object.
+seobj <- ThinDataToSummarizedExperiment(thout)
+class(seobj)
+
+## The "O1" variable in the colData corresponds to design_obs.
+## The "P1" and "P2" variables in colData correspond to design_perm.
+seobj
+}
+
+}
 \author{
 David Gerard
 }

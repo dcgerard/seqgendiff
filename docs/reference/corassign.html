@@ -200,6 +200,32 @@ defined correlations are assumed to have correlation 0.</p>
 </ul>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'>## Simulate data from given matrix of counts</span>
+<span class='co'>## In practice, you would obtain Y from a real dataset, not simulate it.</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
+<span class='no'>nsamp</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
+<span class='no'>ngene</span> <span class='kw'>&lt;-</span> <span class='fl'>10</span>
+<span class='no'>Y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Poisson'>rpois</a></span>(<span class='no'>nsamp</span> * <span class='no'>ngene</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>50</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>ngene</span>)
+
+<span class='co'>## Set target correlation to be 0.9 and nfac to be 1</span>
+<span class='no'>corvec</span> <span class='kw'>&lt;-</span> <span class='fl'>0.9</span>
+<span class='no'>nfac</span>   <span class='kw'>&lt;-</span> <span class='fl'>1</span>
+
+<span class='co'>## Group assignment</span>
+<span class='no'>cout</span> <span class='kw'>&lt;-</span> <span class='fu'>corassign</span>(<span class='kw'>mat</span>    <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='no'>Y</span>),
+                  <span class='kw'>nfac</span>   <span class='kw'>=</span> <span class='no'>nfac</span>,
+                  <span class='kw'>corvec</span> <span class='kw'>=</span> <span class='no'>corvec</span>,
+                  <span class='kw'>return</span> <span class='kw'>=</span> <span class='st'>"full"</span>)
+
+<span class='co'>## Correlation between facmat and groupfac should be about 0.9</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/cor'>cor</a></span>(<span class='no'>cout</span>$<span class='no'>facmat</span>, <span class='no'>cout</span>$<span class='no'>groupfac</span>)</div><div class='output co'>#&gt;           [,1]
+#&gt; [1,] 0.9064812</div><div class='input'>
+<span class='co'>## Correlation between facmat and x should be about 0.9 * sqrt(2 / pi)</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/cor'>cor</a></span>(<span class='no'>cout</span>$<span class='no'>facmat</span>, <span class='no'>cout</span>$<span class='no'>x</span>)</div><div class='output co'>#&gt;           [,1]
+#&gt; [1,] 0.7341039</div><div class='input'><span class='no'>corvec</span> * <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span>(<span class='fl'>2</span> / <span class='no'>pi</span>)</div><div class='output co'>#&gt; [1] 0.7180961</div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -211,7 +237,9 @@ defined correlations are assumed to have correlation 0.</p>
       <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
     <p>David Gerard</p>

@@ -55,6 +55,33 @@ smaller than the length of \code{corvec}. If \code{nfac} turns
 out to be larger than the length of \code{corvec}, then the factors without
 defined correlations are assumed to have correlation 0.
 }
+\examples{
+## Simulate data from given matrix of counts
+## In practice, you would obtain Y from a real dataset, not simulate it.
+set.seed(1)
+nsamp <- 1000
+ngene <- 10
+Y <- matrix(stats::rpois(nsamp * ngene, lambda = 50), nrow = ngene)
+
+## Set target correlation to be 0.9 and nfac to be 1
+corvec <- 0.9
+nfac   <- 1
+
+## Group assignment
+cout <- corassign(mat    = t(Y),
+                  nfac   = nfac,
+                  corvec = corvec,
+                  return = "full")
+
+## Correlation between facmat and groupfac should be about 0.9
+cor(cout$facmat, cout$groupfac)
+
+## Correlation between facmat and x should be about 0.9 * sqrt(2 / pi)
+cor(cout$facmat, cout$x)
+corvec * sqrt(2 / pi)
+
+
+}
 \references{
 \itemize{
   \item{Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional

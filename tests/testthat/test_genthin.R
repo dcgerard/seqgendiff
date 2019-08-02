@@ -83,10 +83,10 @@ test_that("conversion to DESeq2DataSet and SummarizedExperiment works", {
                        use_sva = TRUE)
 
     se <- ThinDataToSummarizedExperiment(obj = thout)
-    expect_true(class(se) == "SummarizedExperiment")
+    expect_true(methods::is(se, "SummarizedExperiment"))
 
     dds <- ThinDataToDESeqDataSet(obj = thout)
-    expect_true(class(dds) == "DESeqDataSet")
+    expect_true(methods::is(dds, "DESeqDataSet"))
   }
 })
 
