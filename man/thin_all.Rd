@@ -49,7 +49,8 @@ lowers the read-depth for the entire dataset. The thinning factor should
 be provided on the log2-scale. This is a specific application of the
 binomial thinning approach in \code{\link{thin_diff}}. Though this particular
 form of thinning was used by Robinson and Storey (2014) in the context
-of deriving read-depth suggestions.
+of deriving read-depth suggestions. It is also
+described in detail in Gerard (2019).
 }
 \examples{
 ## Generate count data and set thinning factor
@@ -71,6 +72,7 @@ mean(thout$mat) / lambda
 }
 \references{
 \itemize{
+  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
   \item{Robinson, David G., and John D. Storey. "subSeq: determining appropriate sequencing depth through efficient read subsampling." Bioinformatics 30, no. 23 (2014): 3424-3426.}
 }
 }

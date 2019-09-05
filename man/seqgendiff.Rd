@@ -15,7 +15,8 @@ your method behaves when the simulated data exhibit common
 (and annoying) features of real data. For example, in the real world
 data are not normally (or negative binomially) distributed and
 unobserved confounding is a major issue. This package will simulate
-data that exhibit these characteristics.
+data that exhibit these characteristics. The methods used in this
+package are described in detail in Gerard (2019).
 }
 \section{seqgendiff Functions}{
 
@@ -45,6 +46,11 @@ data that exhibit these characteristics.
 }
 }
 
+\references{
+\itemize{
+  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+}
+}
 \author{
 David Gerard
 }

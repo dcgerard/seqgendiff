@@ -9,7 +9,8 @@
 #' \code{thin_diff} will generate a new matrix of counts such that
 #' \eqn{log_2(E[Y]) = BX' + u1' + Q}, where \eqn{u} is some vector
 #' of intercept coefficients. This function is used by all other
-#' thinning functions.
+#' thinning functions. The method is
+#' described in detail in Gerard (2019).
 #'
 #' @inheritParams thin_diff
 #' @param designmat A design matrix. The rows index the samples and the columns
@@ -40,6 +41,11 @@
 #'
 #' @return A matrix of new RNA-seq read-counts. This matrix has the signal
 #'     added from \code{designmat} and \code{coefmat}.
+#'
+#' @references
+#' \itemize{
+#'   \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+#' }
 #'
 #' @examples
 #' ## Simulate data from given matrix of counts
@@ -98,7 +104,8 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #' be provided on the log2-scale. This is a specific application of the
 #' binomial thinning approach in \code{\link{thin_diff}}. Though this particular
 #' form of thinning was used by Robinson and Storey (2014) in the context
-#' of deriving read-depth suggestions.
+#' of deriving read-depth suggestions. It is also
+#' described in detail in Gerard (2019).
 #'
 #' @inheritParams thin_diff
 #' @param thinlog2 A numeric scalar. This is the amount to shrink each count
@@ -128,6 +135,7 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #'
 #' @references
 #' \itemize{
+#'   \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
 #'   \item{Robinson, David G., and John D. Storey. "subSeq: determining appropriate sequencing depth through efficient read subsampling." Bioinformatics 30, no. 23 (2014): 3424-3426.}
 #' }
 #'
@@ -166,7 +174,8 @@ thin_all <- function(mat, thinlog2) {
 #' separate, user-provided thinning factor to each sample. This uniformly
 #' lowers the counts for all genes in a sample. The thinning factor
 #' should be provided on the log2-scale. This is a specific application
-#' of the binomial thinning approach in \code{\link{thin_diff}}.
+#' of the binomial thinning approach in \code{\link{thin_diff}}. The method is
+#' described in detail in Gerard (2019).
 #'
 #' @inheritParams thin_diff
 #' @param thinlog2 A vector of numerics. Element i is the amount to thin
@@ -189,6 +198,11 @@ thin_all <- function(mat, thinlog2) {
 #'       ThinData object to a SummarizedExperiment object.}
 #'   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
 #'       ThinData object to a DESeqDataSet object.}
+#' }
+#'
+#' @references
+#' \itemize{
+#'   \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
 #' }
 #'
 #' @export
@@ -238,7 +252,8 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 #' separate, user-provided thinning factor to each gene. This uniformly
 #' lowers the counts for all samples in a gene. The thinning factor
 #' should be provided on the log2-scale. This is a specific application
-#' of the binomial thinning approach in \code{\link{thin_diff}}.
+#' of the binomial thinning approach in \code{\link{thin_diff}}. The method is
+#' described in detail in Gerard (2019).
 #'
 #'
 #' @inheritParams thin_diff
@@ -262,6 +277,11 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 #'       ThinData object to a SummarizedExperiment object.}
 #'   \item{\code{\link{ThinDataToDESeqDataSet}}}{For converting a
 #'       ThinData object to a DESeqDataSet object.}
+#' }
+#'
+#' @references
+#' \itemize{
+#'   \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
 #' }
 #'
 #' @export
@@ -318,6 +338,10 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #' and the signal function. This is a specific application of the
 #' general binomial thinning approach implemented in \code{\link{thin_diff}}.
 #'
+#' The specific application of binomial thinning to the two-group model was
+#' used in Gerard and Stephens (2017) and Gerard and Stephens (2018). This is
+#' a specific case of the general method described in Gerard (2019).
+#'
 #' @inheritParams thin_diff
 #' @param prop_null The proportion of genes that are null.
 #' @param signal_fun A function that returns the signal. This should take as
@@ -361,12 +385,15 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #'
 #' @references
 #' \itemize{
+#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
+#'   \item{Gerard, David and Matthew Stephens (2017). "Unifying and generalizing methods for removing unwanted variation based on negative controls." \emph{arXiv} preprint arXiv:1705.08393.}
+#'   \item{David Gerard and Matthew Stephens (2018). "Empirical Bayes shrinkage and false discovery rate estimation, allowing for unwanted variation." \emph{Biostatistics}, doi: \href{https://doi.org/10.1093/biostatistics/kxy029}{10.1093/biostatistics/kxy029}.}
+#'   \item{Gerard David (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+#'   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
+#'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
+#'   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
 #'   \item{Stephens, Matthew. "False discovery rates: a new deal." Biostatistics 18, no. 2 (2016): 275-294.}
 #'   \item{Wakefield, Jon. "Bayes factors for genome-wide association studies: comparison with P-values." Genetic epidemiology 33, no. 1 (2009): 79-86.}
-#'   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
-#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
-#'   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
-#'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
 #' }
 #'
 #' @examples
@@ -475,7 +502,8 @@ thin_2group <- function(mat,
 #' generalized linear model with a log (base 2) link. The user may
 #' specify any arbitrary design matrix and coefficient matrix. The user
 #' may also control for the amount of correlation between the observed
-#' covariates and any unobserved surrogate variables.
+#' covariates and any unobserved surrogate variables. The method is
+#' described in detail in Gerard (2019).
 #'
 #' @section Mathematical Formulation:
 #' Let
@@ -650,11 +678,12 @@ thin_2group <- function(mat,
 #'
 #' @references
 #' \itemize{
-#'   \item{Leek, Jeffrey T., and John D. Storey. "A general framework for multiple testing dependence." Proceedings of the National Academy of Sciences 105, no. 48 (2008): 18718-18723.}
-#'   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
 #'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
-#'   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
+#'   \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+#'   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
 #'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
+#'   \item{Leek, Jeffrey T., and John D. Storey. "A general framework for multiple testing dependence." Proceedings of the National Academy of Sciences 105, no. 48 (2008): 18718-18723.}
+#'   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
 #' }
 #'
 #'

@@ -30,7 +30,8 @@ a design matrix (\eqn{X}), and a matrix of coefficients (\eqn{B}),
 \code{thin_diff} will generate a new matrix of counts such that
 \eqn{log_2(E[Y]) = BX' + u1' + Q}, where \eqn{u} is some vector
 of intercept coefficients. This function is used by all other
-thinning functions.
+thinning functions. The method is
+described in detail in Gerard (2019).
 }
 \examples{
 ## Simulate data from given matrix of counts
@@ -48,6 +49,11 @@ Bhat <- coefficients(lm(t(log2(Ynew)) ~ X))["X", ]
 plot(B, Bhat, xlab = "Coefficients", ylab = "Coefficient Estimates")
 abline(0, 1, col = 2, lwd = 2)
 
+}
+\references{
+\itemize{
+  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+}
 }
 \seealso{
 \describe{

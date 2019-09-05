@@ -37,7 +37,8 @@ A matrix of correlations the same dimension as \code{target_cor}.
 }
 \description{
 Shrinks the target correlation using a uniform scaling factor so that
-the overall correlation matrix is positive semi-definite.
+the overall correlation matrix is positive semi-definite. The method
+is described in detail in Gerard (2019).
 }
 \details{
 Let \eqn{W} = \code{cor(design_perm)}. Let \eqn{R} = \code{target_cor}.
@@ -72,6 +73,11 @@ new_cor / target_cor
 ## the sum of squared correlations is less than or equal to one.
 sum(target_cor ^ 2)
 sum(new_cor ^ 2)
+}
+\references{
+\itemize{
+  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+}
 }
 \author{
 David Gerard

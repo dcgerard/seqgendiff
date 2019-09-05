@@ -51,7 +51,8 @@ Given a matrix of real RNA-seq counts, this function will apply a
 separate, user-provided thinning factor to each gene. This uniformly
 lowers the counts for all samples in a gene. The thinning factor
 should be provided on the log2-scale. This is a specific application
-of the binomial thinning approach in \code{\link{thin_diff}}.
+of the binomial thinning approach in \code{\link{thin_diff}}. The method is
+described in detail in Gerard (2019).
 }
 \examples{
 ## Generate count data and thinning factors
@@ -74,6 +75,11 @@ plot(empirical_propvec, specified_propvec,
      ylab = "Specified Thinning Proportion")
 abline(0, 1, col = 2, lwd = 2)
 
+}
+\references{
+\itemize{
+  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+}
 }
 \seealso{
 \describe{

@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Simulate RNA-seq Data from Real Data • seqgendiff</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Simulate RNA-seq Data from Real Data">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -30,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -38,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -67,7 +68,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/dcgerard/seqgendiff">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -80,6 +81,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -102,25 +104,25 @@
 <h1 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>Analysis</h1>
 <p>Set the seed for reproducibility:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>)</a></code></pre></div>
 <p>The airway data are available in the airway R package from Bioconductor. If you don’t have this package, you can install it with the BiocManager package:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
 <p>Now we can load these data into R.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(airway)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(airway)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"airway"</span>)</a></code></pre></div>
 <p>You can read about these data <a href="http://bioconductor.org/packages/release/data/experiment/vignettes/airway/inst/doc/airway.html">here</a>.</p>
 <p>These are the other packages that we’ll need for this vignette:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(seqgendiff)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(SummarizedExperiment)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(DESeq2)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(limma)</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sva)</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(qvalue)</a></code></pre></div>
-<p>The last five packages are all from Bioconductor, which you need to install using <code><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">BiocManager::install()</a></code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(seqgendiff)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(SummarizedExperiment)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(DESeq2)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(limma)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sva)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(qvalue)</a></code></pre></div>
+<p>The last five packages are all from Bioconductor, which you need to install using <code><a href="https://rdrr.io/pkg/BiocManager/man/install.html">BiocManager::install()</a></code>.</p>
 <p>The airway dataset comes with a few observed variables which affect gene expression. We’ll consider these “surrogate variables”. That is, we’ll add signal to the data and try to account for these surrogate variables.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">coldat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class">colData</a></span>(airway)[, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"cell"</span>, <span class="st">"dex"</span>)]</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">true_sv &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/model.matrix">model.matrix</a></span>(<span class="op">~</span>cell <span class="op">+</span><span class="st"> </span>dex, <span class="dt">data =</span> coldat)[, <span class="dv">-1</span>]</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">coldat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span>(airway)[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"cell"</span>, <span class="st">"dex"</span>)]</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">true_sv &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span>(<span class="op">~</span>cell <span class="op">+</span><span class="st"> </span>dex, <span class="dt">data =</span> coldat)[, <span class="dv">-1</span>]</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">true_sv</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt;            cellN061011 cellN080611 cellN61311 dexuntrt</span></a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; SRR1039508           0           0          1        1</span></a>
@@ -132,42 +134,42 @@
 <a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; SRR1039520           1           0          0        1</span></a>
 <a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; SRR1039521           1           0          0        0</span></a></code></pre></div>
 <p>Suppose we want to add a treatment effect to the RNA-seq data. We’ll first remove all genes with no counts:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">allzero &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colSums">rowSums</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class">assay</a></span>(airway)) <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">6</span></a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">allzero &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span>(airway)) <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">6</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">airway &lt;-<span class="st"> </span>airway[<span class="op">!</span>allzero, ]</a></code></pre></div>
 <p>Then we’ll use the convenient <code><a href="../reference/thin_2group.html">thin_2group()</a></code> function from the seqgendiff package to add a <span class="math inline">\(N(0, 0.8^2)\)</span> log2-effect size to 10% of the genes:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">thout &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thin_2group.html">thin_2group</a></span>(<span class="dt">mat =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class">assay</a></span>(airway), </a>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">thout &lt;-<span class="st"> </span><span class="kw"><a href="../reference/thin_2group.html">thin_2group</a></span>(<span class="dt">mat =</span> <span class="kw"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span>(airway), </a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">                     <span class="dt">prop_null =</span> <span class="fl">0.9</span>, </a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">                     <span class="dt">signal_fun =</span> stats<span class="op">::</span>rnorm,</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">                     <span class="dt">signal_params =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="fl">0.8</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb7-4" data-line-number="4">                     <span class="dt">signal_params =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="fl">0.8</span>))</a></code></pre></div>
 <p>Let’s see how well the sva-voom-limma-ebayes-qvalue pipeline does estimating these effects. First, we’ll fit this pipeline.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">X &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/limma/topics/cbind">cbind</a></span>(thout<span class="op">$</span>design_obs, thout<span class="op">$</span>designmat)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">Y &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Log">log2</a></span>(thout<span class="op">$</span>mat <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">n_sv &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/sva/topics/num.sv">num.sv</a></span>(<span class="dt">dat =</span> Y, <span class="dt">mod =</span> X)</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">svout &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/sva/topics/sva">sva</a></span>(<span class="dt">dat =</span> Y, <span class="dt">mod =</span> X, <span class="dt">n.sv =</span> n_sv)</a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">X &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/limma/man/cbind.html">cbind</a></span>(thout<span class="op">$</span>design_obs, thout<span class="op">$</span>designmat)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">Y &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(thout<span class="op">$</span>mat <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">n_sv &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/sva/man/num.sv.html">num.sv</a></span>(<span class="dt">dat =</span> Y, <span class="dt">mod =</span> X)</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">svout &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/sva/man/sva.html">sva</a></span>(<span class="dt">dat =</span> Y, <span class="dt">mod =</span> X, <span class="dt">n.sv =</span> n_sv)</a>
 <a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; Number of significant surrogate variables is:  2 </span></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Iteration (out of 5 ):1  2  3  4  5</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">vout &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/limma/topics/voom">voom</a></span>(<span class="dt">counts =</span> thout<span class="op">$</span>mat, <span class="dt">design =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/limma/topics/cbind">cbind</a></span>(X, svout<span class="op">$</span>sv))</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">lout &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/limma/topics/lmFit">lmFit</a></span>(vout)</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">eout &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/limma/topics/ebayes">eBayes</a></span>(lout)</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">qout &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/qvalue/topics/qvalue">qvalue</a></span>(<span class="dt">p =</span> eout<span class="op">$</span>p.value[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">vout &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/limma/man/voom.html">voom</a></span>(<span class="dt">counts =</span> thout<span class="op">$</span>mat, <span class="dt">design =</span> <span class="kw"><a href="https://rdrr.io/pkg/limma/man/cbind.html">cbind</a></span>(X, svout<span class="op">$</span>sv))</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">lout &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/limma/man/lmFit.html">lmFit</a></span>(vout)</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">eout &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/limma/man/ebayes.html">eBayes</a></span>(lout)</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">qout &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/qvalue/man/qvalue.html">qvalue</a></span>(<span class="dt">p =</span> eout<span class="op">$</span>p.value[, <span class="dv">2</span>])</a>
 <a class="sourceLine" id="cb8-11" data-line-number="11">bhat &lt;-<span class="st"> </span>eout<span class="op">$</span>coefficients[, <span class="dv">2</span>]</a></code></pre></div>
 <p>We plot the coefficient estimates against their true values.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(thout<span class="op">$</span>coefmat, </a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(thout<span class="op">$</span>coefmat, </a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">     bhat, </a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">     <span class="dt">xlab =</span> <span class="st">"True Coefficients"</span>, </a>
 <a class="sourceLine" id="cb9-4" data-line-number="4">     <span class="dt">ylab =</span> <span class="st">"Estimated Coefficients"</span>)</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/abline">abline</a></span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="simulate_rnaseq_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>We plot the q-values against the null status of each gene.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">is_null_gene &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/MathFun">abs</a></span>(thout<span class="op">$</span>coefmat) <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">6</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/boxplot">boxplot</a></span>(qout<span class="op">$</span>qvalues <span class="op">~</span><span class="st"> </span>is_null_gene,</a>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">is_null_gene &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(thout<span class="op">$</span>coefmat) <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span><span class="op">^-</span><span class="dv">6</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(qout<span class="op">$</span>qvalues <span class="op">~</span><span class="st"> </span>is_null_gene,</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">        <span class="dt">xlab =</span> <span class="st">"Null Gene"</span>,</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">        <span class="dt">ylab =</span> <span class="st">"q-value"</span>)</a></code></pre></div>
 <p><img src="simulate_rnaseq_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Does the sva-DESeq2 pipeline do any better? We’ll first use <code><a href="../reference/ThinDataToDESeqDataSet.html">seqgendiff::ThinDataToDESeqDataSet()</a></code> to convert the <code>ThinData</code> object <code>thout</code> into a <code>DESeqDataSet</code> object.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">thout<span class="op">$</span>design_obs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/limma/topics/cbind">cbind</a></span>(thout<span class="op">$</span>design_obs, svout<span class="op">$</span>sv)</a>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">thout<span class="op">$</span>design_obs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/limma/man/cbind.html">cbind</a></span>(thout<span class="op">$</span>design_obs, svout<span class="op">$</span>sv)</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2">dds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ThinDataToDESeqDataSet.html">ThinDataToDESeqDataSet</a></span>(<span class="dt">obj =</span> thout)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class">colData</a></span>(dds)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span>(dds)</a>
 <a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; DataFrame with 8 rows and 3 columns</span></a>
 <a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;                          V1                 V2        P1</span></a>
 <a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;                   &lt;numeric&gt;          &lt;numeric&gt; &lt;numeric&gt;</span></a>
@@ -179,55 +181,55 @@
 <a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; sample6   0.423941698880459  0.649114181594623         0</span></a>
 <a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; sample7 -0.0217765593195962 -0.416661414317353         1</span></a>
 <a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; sample8  -0.350195681016686  0.222308068280647         0</span></a>
-<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/design">design</a></span>(dds)</a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/design.html">design</a></span>(dds)</a>
 <a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; ~V1 + V2 + P1</span></a>
-<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; &lt;environment: 0x55ebb7384748&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; &lt;environment: 0x5612c2b158e8&gt;</span></a></code></pre></div>
 <p>Note that we added the estimated surrogate variables from sva to the <code>ThinData</code> object before converting to a <code>DESeqDataSet</code> object.</p>
 <p>Now we will fit DESeq2.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/DESeq2/topics/DESeq">DESeq</a></span>(<span class="dt">object =</span> dds)</a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">dds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/DESeq2/man/DESeq.html">DESeq</a></span>(<span class="dt">object =</span> dds)</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; estimating size factors</span></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; estimating dispersions</span></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; gene-wise dispersion estimates</span></a>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; mean-dispersion relationship</span></a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; final dispersion estimates</span></a>
 <a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; fitting model and testing</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8">pval_dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class">rowData</a></span>(dds)[, <span class="st">"WaldPvalue_P1"</span>]</a>
-<a class="sourceLine" id="cb12-9" data-line-number="9">qval_dds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/qvalue/topics/qvalue">qvalue</a></span>(<span class="dt">p =</span> pval_dds)</a></code></pre></div>
+<a class="sourceLine" id="cb12-8" data-line-number="8">pval_dds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">rowData</a></span>(dds)[, <span class="st">"WaldPvalue_P1"</span>]</a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">qval_dds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/qvalue/man/qvalue.html">qvalue</a></span>(<span class="dt">p =</span> pval_dds)</a></code></pre></div>
 <p>We plot the coefficient estimates against their true values.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">coefmat &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/SummarizedExperiment/topics/SummarizedExperiment-class">rowData</a></span>(dds)[, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"true_P1"</span>, <span class="st">"P1"</span>)]</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(coefmat<span class="op">$</span>true_P1, </a>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">coefmat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">rowData</a></span>(dds)[, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"true_P1"</span>, <span class="st">"P1"</span>)]</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(coefmat<span class="op">$</span>true_P1, </a>
 <a class="sourceLine" id="cb13-3" data-line-number="3">     coefmat<span class="op">$</span>P1,</a>
 <a class="sourceLine" id="cb13-4" data-line-number="4">     <span class="dt">xlab =</span> <span class="st">"True Coefficients"</span>, </a>
 <a class="sourceLine" id="cb13-5" data-line-number="5">     <span class="dt">ylab =</span> <span class="st">"Estimated Coefficients"</span>)</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/abline">abline</a></span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">col =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="simulate_rnaseq_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>We also plot the q-values against the null status of each gene.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/boxplot">boxplot</a></span>(qval_dds<span class="op">$</span>qvalues <span class="op">~</span><span class="st"> </span>is_null_gene,</a>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(qval_dds<span class="op">$</span>qvalues <span class="op">~</span><span class="st"> </span>is_null_gene,</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">        <span class="dt">xlab =</span> <span class="st">"Null Gene"</span>,</a>
 <a class="sourceLine" id="cb14-3" data-line-number="3">        <span class="dt">ylab =</span> <span class="st">"q-value"</span>)</a></code></pre></div>
 <p><img src="simulate_rnaseq_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>The MSE is worse for DESeq2.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">mse_limma &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>((bhat <span class="op">-</span><span class="st"> </span>thout<span class="op">$</span>coefmat) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">mse_deseq2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>((coefmat<span class="op">$</span>true_P1 <span class="op">-</span><span class="st"> </span>coefmat<span class="op">$</span>P1) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">mse_limma &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>((bhat <span class="op">-</span><span class="st"> </span>thout<span class="op">$</span>coefmat) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">mse_deseq2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>((coefmat<span class="op">$</span>true_P1 <span class="op">-</span><span class="st"> </span>coefmat<span class="op">$</span>P1) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb15-3" data-line-number="3">mse_deseq2</a>
 <a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; [1] 0.5362889</span></a>
 <a class="sourceLine" id="cb15-5" data-line-number="5">mse_limma</a>
 <a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt; [1] 0.235233</span></a></code></pre></div>
 <p>The FDP is about the same for the two pipelines. Both are OK, but conservative.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(is_null_gene[qval_dds<span class="op">$</span>qvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(is_null_gene[qval_dds<span class="op">$</span>qvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#&gt; [1] 0.01812191</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(is_null_gene[qout<span class="op">$</span>qvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(is_null_gene[qout<span class="op">$</span>qvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; [1] 0.03339518</span></a></code></pre></div>
 <p>DESeq2 has more discoveries</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(qval_dds<span class="op">$</span>qvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(qval_dds<span class="op">$</span>qvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">#&gt; [1] 607</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(qout<span class="op">$</span>qvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(qout<span class="op">$</span>qvalues <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#&gt; [1] 539</span></a></code></pre></div>
 <p>As a side-note, it seems that the second surrogate variable is getting at the dexamethasone variable.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/boxplot">boxplot</a></span>(svout<span class="op">$</span>sv[, <span class="dv">2</span>] <span class="op">~</span><span class="st"> </span>true_sv[, <span class="dv">4</span>], </a>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span>(svout<span class="op">$</span>sv[, <span class="dv">2</span>] <span class="op">~</span><span class="st"> </span>true_sv[, <span class="dv">4</span>], </a>
 <a class="sourceLine" id="cb18-2" data-line-number="2">        <span class="dt">xlab =</span> <span class="st">"Dexamethasone Treatment"</span>, </a>
 <a class="sourceLine" id="cb18-3" data-line-number="3">        <span class="dt">ylab =</span> <span class="st">"2nd Surrogate Variable"</span>)</a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/points">points</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/jitter">jitter</a></span>(true_sv[, <span class="dv">4</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span>), svout<span class="op">$</span>sv[, <span class="dv">2</span>])</a></code></pre></div>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/jitter.html">jitter</a></span>(true_sv[, <span class="dv">4</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span>), svout<span class="op">$</span>sv[, <span class="dv">2</span>])</a></code></pre></div>
 <p><img src="simulate_rnaseq_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="references" class="section level1">
@@ -240,6 +242,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -254,17 +257,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by David Gerard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
