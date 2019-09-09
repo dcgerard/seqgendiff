@@ -45,6 +45,7 @@
 #'
 #' @docType package
 #' @name seqgendiff
+#' @name seqgendiff-package
 #'
 #' @author David Gerard
 NULL

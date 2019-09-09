@@ -1,3 +1,8 @@
+# seqgendiff 1.1.1
+
+- Updates to the documentation. I included citations throughout the documentation to direct users to where they can get details on the method.
+- The citation file now indicates the preprint on bioRxiv.
+
 # seqgendiff 1.1.0
 
 Fixes a lot of things for CRAN resubmission.

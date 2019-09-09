@@ -27,6 +27,8 @@ pipeline. In practice, you would simulate many datasets and compare
 average performance. But playing with a single dataset can help
 you gain intuition with various methods.
 
+The methods used here are described in Gerard (2019).
+
 # Analysis
 
 Set the seed for reproducibility:
@@ -182,6 +184,7 @@ points(jitter(true_sv[, 4] + 1), svout$sv[, 2])
 
 # References
 
+- Gerard D (2019). “Data-based RNA-seq Simulations by Binomial Thinning.” *bioRxiv*. doi: [10.1101/758524](https://doi.org/10.1101/758524).
 - Himes, Blanca E., Xiaofeng Jiang, Peter Wagner, Ruoxi Hu, Qiyu Wang, 
   Barbara Klanderman, Reid M. Whitaker et al. "RNA-Seq transcriptome 
   profiling identifies CRISPLD2 as a glucocorticoid responsive gene that 

@@ -102,6 +102,7 @@
 <h1 class="hasAnchor">
 <a href="#abstract" class="anchor"></a>Abstract</h1>
 <p>We demonstrate how to apply the different thinning functions available in seqgendiff. The following contains guidelines for the workflow of a single repetition in a simulation study.</p>
+<p>The methods used here are described in Gerard (2019).</p>
 </div>
 <div id="generate-data" class="section level1">
 <h1 class="hasAnchor">
@@ -109,9 +110,9 @@
 <p>We will use simulated data for this vignette. Though in practice you would obtain the RNA-seq counts from a real dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">nsamp &lt;-<span class="st"> </span><span class="dv">100</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">ngene &lt;-<span class="st"> </span><span class="dv">10000</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">mat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(stats<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span>(<span class="dt">n =</span> nsamp <span class="op">*</span><span class="st"> </span>ngene, <span class="dt">lambda =</span> <span class="dv">100</span>), </a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">              <span class="dt">nrow =</span> ngene,</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">              <span class="dt">ncol =</span> nsamp)</a></code></pre></div>
+<a class="sourceLine" id="cb2-3" data-line-number="3">mat   &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(stats<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span>(<span class="dt">n =</span> nsamp <span class="op">*</span><span class="st"> </span>ngene, <span class="dt">lambda =</span> <span class="dv">100</span>), </a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">                <span class="dt">nrow =</span> ngene,</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">                <span class="dt">ncol =</span> nsamp)</a></code></pre></div>
 </div>
 <div id="subsetting" class="section level1">
 <h1 class="hasAnchor">
@@ -295,6 +296,13 @@
 <a class="sourceLine" id="cb20-13" data-line-number="13">       <span class="dt">lwd =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="different_thinners_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<ul>
+<li>Gerard D (2019). “Data-based RNA-seq Simulations by Binomial Thinning.” <em>bioRxiv</em>. doi: <a href="https://doi.org/10.1101/758524">10.1101/758524</a>.</li>
+</ul>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -312,6 +320,7 @@
       <li><a href="#correlation-with-surrogate-variables">Correlation with Surrogate Variables</a></li>
       <li><a href="#estimate-actual-correlation">Estimate Actual Correlation</a></li>
       <li><a href="#special-case-of-two-group-model">Special Case of Two-group Model</a></li>
+      <li><a href="#references">References</a></li>
       </ul>
 </div>
       </div>

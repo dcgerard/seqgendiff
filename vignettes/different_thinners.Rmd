@@ -26,6 +26,8 @@ We demonstrate how to apply the different thinning functions available in
 seqgendiff. The following contains guidelines for the workflow of a single
 repetition in a simulation study.
 
+The methods used here are described in Gerard (2019).
+
 # Generate Data
 
 We will use simulated data for this vignette. Though in practice you would
@@ -33,9 +35,9 @@ obtain the RNA-seq counts from a real dataset.
 ```{r}
 nsamp <- 100
 ngene <- 10000
-mat <- matrix(stats::rpois(n = nsamp * ngene, lambda = 100), 
-              nrow = ngene,
-              ncol = nsamp)
+mat   <- matrix(stats::rpois(n = nsamp * ngene, lambda = 100), 
+                nrow = ngene,
+                ncol = nsamp)
 ```
 
 # Subsetting
@@ -239,4 +241,8 @@ abline(a   = 0,
        col = 2,
        lwd = 2)
 ```
+
+# References
+
+- Gerard D (2019). “Data-based RNA-seq Simulations by Binomial Thinning.” *bioRxiv*. doi: [10.1101/758524](https://doi.org/10.1101/758524).
 
