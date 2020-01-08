@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Theoretical sequence simulation for differential expression analysis. — seqgen_diff • seqgendiff</title>
+<title>seqgendiff: Sequence Generation/Modification for Differential Expression Analysis and Beyond. — seqgendiff-package • seqgendiff</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,18 @@
 
 
 
-<meta property="og:title" content="Theoretical sequence simulation for differential expression analysis. — seqgen_diff" />
-<meta property="og:description" content="Generate a matrix of RNA-seq counts from a theoretical negative-binomial
-model." />
+<meta property="og:title" content="seqgendiff: Sequence Generation/Modification for Differential Expression Analysis and Beyond. — seqgendiff-package" />
+<meta property="og:description" content="This package is designed to take real RNA-seq data and alter it by
+adding a known amount of signal. You can then use this modified dataset
+in simulation studies for differential expression analysis, factor
+analysis, confounder adjustment, or library size adjustment. The
+advantage of this way of simulating data is that you can see how
+your method behaves when the simulated data exhibit common
+(and annoying) features of real data. For example, in the real world
+data are not normally (or negative binomially) distributed and
+unobserved confounding is a major issue. This package will simulate
+data that exhibit these characteristics. The methods used in this
+package are described in detail in Gerard (2019)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,7 +79,7 @@ model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -124,74 +133,62 @@ model." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Theoretical sequence simulation for differential expression analysis.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/R/theo.R'><code>R/theo.R</code></a></small>
-    <div class="hidden name"><code>seqgen_diff.Rd</code></div>
+    <h1>seqgendiff: Sequence Generation/Modification for Differential Expression Analysis and Beyond.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/R/seqgendiff.R'><code>R/seqgendiff.R</code></a></small>
+    <div class="hidden name"><code>seqgendiff-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generate a matrix of RNA-seq counts from a theoretical negative-binomial
-model.</p>
+    <p>This package is designed to take real RNA-seq data and alter it by
+adding a known amount of signal. You can then use this modified dataset
+in simulation studies for differential expression analysis, factor
+analysis, confounder adjustment, or library size adjustment. The
+advantage of this way of simulating data is that you can see how
+your method behaves when the simulated data exhibit common
+(and annoying) features of real data. For example, in the real world
+data are not normally (or negative binomially) distributed and
+unobserved confounding is a major issue. This package will simulate
+data that exhibit these characteristics. The methods used in this
+package are described in detail in Gerard (2019).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>seqgen_diff</span>(<span class='no'>designmat</span>, <span class='no'>coefmat</span>, <span class='no'>dispvec</span>, <span class='kw'>design_sv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>coef_sv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>designmat</th>
-      <td><p>A numeric design matrix. The rows index the samples
-and the columns index the variables.</p></td>
-    </tr>
-    <tr>
-      <th>coefmat</th>
-      <td><p>A numeric matrix of coefficients. The rows index the
-genes and the columns index the variables.</p></td>
-    </tr>
-    <tr>
-      <th>dispvec</th>
-      <td><p>A vector of negative binomial dispersion parameters.
-Element i is the dispersion for gene i.</p></td>
-    </tr>
-    <tr>
-      <th>design_sv</th>
-      <td><p>A numeric design matrix for the surrogate variables.
-The rows index the samples and the columns index the surrogate
-variables.</p></td>
-    </tr>
-    <tr>
-      <th>coef_sv</th>
-      <td><p>A numeric matrix of coefficients for the surrogate
-variables. The rows index the genes and the columns index the
-variables.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="seqgendiff-functions"><a class="anchor" href="#seqgendiff-functions"></a>seqgendiff Functions</h2>
 
-    <p>A list object with some or all of the following elements:</p><dl class='dl-horizontal'>
- <dt><code>mat</code></dt><dd><p>A matrix of RNA-seq counts. The rows index the genes and
-     the columns index the samples.</p></dd>
- <dt><code>designmat</code></dt><dd><p>The user-provided <code>designmat</code>.</p></dd>
- <dt><code>coefmat</code></dt><dd><p>The user-provided <code>coefmat</code>.</p></dd>
- <dt><code>sv</code></dt><dd><p>The user-provided <code>design_sv</code>.</p></dd>
- <dt><code>coef_sv</code></dt><dd><p>The user-provided <code>coef_sv</code>.</p></dd>
+    
+
+<dl class='dl-horizontal'>
+  <dt><code>select_counts</code></dt><dd><p>Subsample the columns and rows
+      of a real RNA-seq count matrix. You would then feed this sub-matrix
+      into one of the thinning functions below.</p></dd>
+  <dt><code>thin_diff</code></dt><dd><p>The function most users should
+      be using for general-purpose binomial thinning. For the special
+      applications of the two-group model or library/gene thinning, see
+      the functions listed below.</p></dd>
+  <dt><code>thin_2group</code></dt><dd><p>The specific application of
+      thinning in the two-group model.</p></dd>
+  <dt><code>thin_lib</code></dt><dd><p>The specific application of
+      library size thinning.</p></dd>
+  <dt><code>thin_gene</code></dt><dd><p>The specific application of
+      total gene expression thinning.</p></dd>
+  <dt><code>thin_all</code></dt><dd><p>The specific application of thinning
+      all counts.</p></dd>
+  <dt><code>effective_cor</code></dt><dd><p>Returns an estimate of the actual
+      correlation between surrogate variables and a user-specified
+      design matrix.</p></dd>
+  <dt><code>ThinDataToSummarizedExperiment</code></dt><dd><p>Converts a
+      ThinData object to a SummarizedExperiment object.</p></dd>
+  <dt><code>ThinDataToDESeqDataSet</code></dt><dd><p>Converts a
+      ThinData object to a DESeqDataSet object.</p></dd>
 
 </dl>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You should be using <code><a href='thin_diff.html'>thin_diff</a></code> instead of this. If you must
-simulate from the theoretical model, I would recommend trying out
-the powsimR package (<a href='https://github.com/bvieth/powsimR'>https://github.com/bvieth/powsimR</a>) from
-Vieth et al. (2017).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
 <ul>
-<li><p>Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.</p></li>
+<li><p>Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." <em>bioRxiv</em>. doi: <a href='https://doi.org/10.1101/758524'>10.1101/758524</a>.</p></li>
 </ul>
 
 
@@ -199,9 +196,7 @@ Vieth et al. (2017).</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
+      <li><a href="#seqgendiff-functions">seqgendiff Functions</a></li>
       <li><a href="#references">References</a></li>
     </ul>
 
@@ -217,7 +212,7 @@ Vieth et al. (2017).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

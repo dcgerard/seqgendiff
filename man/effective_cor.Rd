@@ -4,8 +4,14 @@
 \alias{effective_cor}
 \title{Estimates the effective correlation.}
 \usage{
-effective_cor(design_perm, sv, target_cor, calc_first = c("cor", "mean"),
-  method = c("optmatch", "hungarian", "marriage"), iternum = 1000)
+effective_cor(
+  design_perm,
+  sv,
+  target_cor,
+  calc_first = c("cor", "mean"),
+  method = c("optmatch", "hungarian", "marriage"),
+  iternum = 1000
+)
 }
 \arguments{
 \item{design_perm}{A numeric design matrix whose rows are to be permuted

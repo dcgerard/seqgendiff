@@ -73,7 +73,7 @@ do this for you." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -134,15 +134,21 @@ do this for you." />
 
     <div class="ref-description">
     <p>It is a good idea to subsample (each iteration) the genes and samples from
-a real RNA-seq dataset prior to applying <code><a href='thin_diff.html'>thin_diff</a></code>
+a real RNA-seq dataset prior to applying <code>thin_diff</code>
 (and related functions) so that your conclusions are not dependent on the
 specific structure of your dataset. This function is designed to efficiently
 do this for you.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>select_counts</span>(<span class='no'>mat</span>, <span class='kw'>nsamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>mat</span>), <span class='kw'>ngene</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>mat</span>),
-  <span class='kw'>gselect</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"random"</span>, <span class='st'>"max"</span>, <span class='st'>"mean_max"</span>, <span class='st'>"custom"</span>), <span class='kw'>gvec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>filter_first</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>nskip</span> <span class='kw'>=</span> <span class='fl'>0L</span>)</pre>
+    <pre class="usage"><span class='fu'>select_counts</span>(
+  <span class='no'>mat</span>,
+  <span class='kw'>nsamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>mat</span>),
+  <span class='kw'>ngene</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>mat</span>),
+  <span class='kw'>gselect</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"random"</span>, <span class='st'>"max"</span>, <span class='st'>"mean_max"</span>, <span class='st'>"custom"</span>),
+  <span class='kw'>gvec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>filter_first</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>nskip</span> <span class='kw'>=</span> <span class='fl'>0L</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -234,7 +240,7 @@ can install edgeR by following instructions here:
 
 <span class='co'>## Subsample the matrix, then feed it into a thinning function</span>
 <span class='no'>submat</span> <span class='kw'>&lt;-</span> <span class='fu'>select_counts</span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>mat</span>, <span class='kw'>nsamp</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>ngene</span> <span class='kw'>=</span> <span class='fl'>100</span>)
-<span class='no'>thout</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='thin_2group.html'>thin_2group</a></span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>submat</span>, <span class='kw'>prop_null</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
+<span class='no'>thout</span>  <span class='kw'>&lt;-</span> <span class='fu'>thin_2group</span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>submat</span>, <span class='kw'>prop_null</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
 
 <span class='co'>## The rownames and colnames (if NULL in mat) tell you which genes/samples</span>
 <span class='co'>## were selected.</span>
@@ -271,7 +277,7 @@ can install edgeR by following instructions here:
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

@@ -5,8 +5,12 @@
 \title{Permute the design matrix so that it is approximately correlated with
 the surrogate variables.}
 \usage{
-permute_design(design_perm, sv, target_cor, method = c("optmatch",
-  "hungarian", "marriage"))
+permute_design(
+  design_perm,
+  sv,
+  target_cor,
+  method = c("optmatch", "hungarian", "marriage")
+)
 }
 \arguments{
 \item{design_perm}{A numeric design matrix whose rows are to be permuted

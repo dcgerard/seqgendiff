@@ -71,7 +71,7 @@ described in detail in Gerard (2019)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -136,8 +136,14 @@ surrogate variables when you assign a target correlation. The method is
 described in detail in Gerard (2019).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>effective_cor</span>(<span class='no'>design_perm</span>, <span class='no'>sv</span>, <span class='no'>target_cor</span>, <span class='kw'>calc_first</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cor"</span>, <span class='st'>"mean"</span>),
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"optmatch"</span>, <span class='st'>"hungarian"</span>, <span class='st'>"marriage"</span>), <span class='kw'>iternum</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
+    <pre class="usage"><span class='fu'>effective_cor</span>(
+  <span class='no'>design_perm</span>,
+  <span class='no'>sv</span>,
+  <span class='no'>target_cor</span>,
+  <span class='kw'>calc_first</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cor"</span>, <span class='st'>"mean"</span>),
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"optmatch"</span>, <span class='st'>"hungarian"</span>, <span class='st'>"marriage"</span>),
+  <span class='kw'>iternum</span> <span class='kw'>=</span> <span class='fl'>1000</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,7 +217,7 @@ try out the <code>"hungarian"</code> method.</p></td>
 time calculating the Pearson correlation between the columns of
 <code>design_perm</code> and the columns of <code>sv</code>. It then returns the
 averages of these Pearson correlations. The permutation is done
-using <code><a href='permute_design.html'>permute_design</a></code>.</p>
+using <code>permute_design</code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -269,7 +275,7 @@ using <code><a href='permute_design.html'>permute_design</a></code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

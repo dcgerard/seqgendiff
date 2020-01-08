@@ -4,8 +4,7 @@
 \alias{corassign}
 \title{Group assignment that is correlated with latent factors.}
 \usage{
-corassign(mat, nfac = NULL, corvec = NULL, return = c("group",
-  "full"))
+corassign(mat, nfac = NULL, corvec = NULL, return = c("group", "full"))
 }
 \arguments{
 \item{mat}{A matrix of count data. The rows index the individuals and

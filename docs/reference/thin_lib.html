@@ -74,7 +74,7 @@ described in detail in Gerard (2019)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -138,11 +138,11 @@ described in detail in Gerard (2019)." />
 separate, user-provided thinning factor to each sample. This uniformly
 lowers the counts for all genes in a sample. The thinning factor
 should be provided on the log2-scale. This is a specific application
-of the binomial thinning approach in <code><a href='thin_diff.html'>thin_diff</a></code>. The method is
+of the binomial thinning approach in <code>thin_diff</code>. The method is
 described in detail in Gerard (2019).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>thin_lib</span>(<span class='no'>mat</span>, <span class='no'>thinlog2</span>, <span class='kw'>relative</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>thin_lib</span>(<span class='no'>mat</span>, <span class='no'>thinlog2</span>, <span class='kw'>relative</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"thin"</span>, <span class='st'>"mult"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,6 +166,12 @@ of 4, etc.</p></td>
 or absolute thinning (<code>FALSE</code>). Only experts should change
 the default.</p></td>
     </tr>
+    <tr>
+      <th>type</th>
+      <td><p>Should we apply binomial thinning (<code>type = "thin"</code>) or
+just naive multiplication of the counts (<code>type = "mult"</code>). 
+You should always have this set to <code>"thin"</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -187,7 +193,7 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
   <dt><code>cormat</code></dt><dd><p>A matrix of target correlations between the
       surrogate variables and the permuted variables in the design matrix.
       This might be different from the <code>target_cor</code> you input because
-      we pass it through <code><a href='fix_cor.html'>fix_cor</a></code> to ensure
+      we pass it through <code>fix_cor</code> to ensure
       positive semi-definiteness of the resulting covariance matrix.</p></dd>
   <dt><code>matching_var</code></dt><dd><p>A matrix of simulated variables used to
       permute <code>design_perm</code> if the <code>target_cor</code> is not
@@ -206,15 +212,15 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
 
     <div class='dont-index'>
 <dl class='dl-horizontal'>
-  <dt><code><a href='select_counts.html'>select_counts</a></code></dt><dd><p>For subsampling the rows and columns
+  <dt><code>select_counts</code></dt><dd><p>For subsampling the rows and columns
       of your real RNA-seq count matrix prior to applying binomial thinning.</p></dd>
-  <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>For the more general thinning approach.</p></dd>
-  <dt><code><a href='thin_gene.html'>thin_gene</a></code></dt><dd><p>For thinning gene-wise instead of
+  <dt><code>thin_diff</code></dt><dd><p>For the more general thinning approach.</p></dd>
+  <dt><code>thin_gene</code></dt><dd><p>For thinning gene-wise instead of
       sample-wise.</p></dd>
-  <dt><code><a href='thin_all.html'>thin_all</a></code></dt><dd><p>For thinning all counts uniformly.</p></dd>
-  <dt><code><a href='ThinDataToSummarizedExperiment.html'>ThinDataToSummarizedExperiment</a></code></dt><dd><p>For converting a
+  <dt><code>thin_all</code></dt><dd><p>For thinning all counts uniformly.</p></dd>
+  <dt><code>ThinDataToSummarizedExperiment</code></dt><dd><p>For converting a
       ThinData object to a SummarizedExperiment object.</p></dd>
-  <dt><code><a href='ThinDataToDESeqDataSet.html'>ThinDataToDESeqDataSet</a></code></dt><dd><p>For converting a
+  <dt><code>ThinDataToDESeqDataSet</code></dt><dd><p>For converting a
       ThinData object to a DESeqDataSet object.</p></dd>
 
 </dl>
@@ -263,7 +269,7 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>

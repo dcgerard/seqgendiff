@@ -4,10 +4,17 @@
 \alias{thin_2group}
 \title{Binomial thinning in the two-group model.}
 \usage{
-thin_2group(mat, prop_null = 1, signal_fun = stats::rnorm,
-  signal_params = list(mean = 0, sd = 1), group_prop = 0.5,
-  corvec = NULL, alpha = 0, permute_method = c("optmatch",
-  "hungarian", "marriage"))
+thin_2group(
+  mat,
+  prop_null = 1,
+  signal_fun = stats::rnorm,
+  signal_params = list(mean = 0, sd = 1),
+  group_prop = 0.5,
+  corvec = NULL,
+  alpha = 0,
+  permute_method = c("optmatch", "hungarian", "marriage"),
+  type = c("thin", "mult")
+)
 }
 \arguments{
 \item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes and
@@ -55,6 +62,10 @@ that the optmatch package uses a super strange license:
 license doesn't work for you (because you are not in academia, or
 because you don't believe in restrictive licenses), then
 try out the \code{"hungarian"} method.}
+
+\item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
+just naive multiplication of the counts (\code{type = "mult"}). 
+You should always have this set to \code{"thin"}.}
 }
 \value{
 A list-like S3 object of class \code{ThinData}.

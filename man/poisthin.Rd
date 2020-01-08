@@ -4,12 +4,21 @@
 \alias{poisthin}
 \title{Apply Poisson thinning to a matrix of count data.}
 \usage{
-poisthin(mat, nsamp = nrow(mat), ngene = ncol(mat),
+poisthin(
+  mat,
+  nsamp = nrow(mat),
+  ngene = ncol(mat),
   gselect = c("max", "random", "rand_max", "custom", "mean_max"),
-  gvec = NULL, skip_gene = 0L, signal_fun = stats::rnorm,
-  signal_params = list(mean = 0, sd = 1), prop_null = 1, alpha = 0,
-  group_assign = c("frac", "random", "cor"), group_prop = 0.5,
-  corvec = NULL)
+  gvec = NULL,
+  skip_gene = 0L,
+  signal_fun = stats::rnorm,
+  signal_params = list(mean = 0, sd = 1),
+  prop_null = 1,
+  alpha = 0,
+  group_assign = c("frac", "random", "cor"),
+  group_prop = 0.5,
+  corvec = NULL
+)
 }
 \arguments{
 \item{mat}{A matrix of count data. The rows index the individuals and

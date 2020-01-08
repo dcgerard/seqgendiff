@@ -4,7 +4,7 @@
 \alias{thin_base}
 \title{Base binomial thinning function.}
 \usage{
-thin_base(mat, designmat, coefmat, relative = TRUE)
+thin_base(mat, designmat, coefmat, relative = TRUE, type = c("thin", "mult"))
 }
 \arguments{
 \item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes and
@@ -19,6 +19,10 @@ columns index the samples.}
 \item{relative}{A logical. Should we apply relative thinning (\code{TRUE})
 or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
+
+\item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
+just naive multiplication of the counts (\code{type = "mult"}). 
+You should always have this set to \code{"thin"}.}
 }
 \value{
 A matrix of new RNA-seq read-counts. This matrix has the signal

@@ -21,6 +21,7 @@
 #' }
 #'
 #' @author David Gerard
+#' @noRd
 seqgen_base <- function(designmat,
                         coefmat,
                         dispvec) {
@@ -89,6 +90,7 @@ seqgen_base <- function(designmat,
 #' }
 #'
 #' @author David Gerard
+#' @noRd
 seqgen_diff <- function(designmat,
                         coefmat,
                         dispvec,
@@ -183,6 +185,7 @@ seqgen_diff <- function(designmat,
 #' @inherit seqgen_diff return
 #'
 #' @author David Gerard
+#' @noRd
 seqgen_2group  <- function(ngene,
                            nsamp,
                            dispvec          = rep(0.1, times = ngene),

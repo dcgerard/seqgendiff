@@ -4,9 +4,15 @@
 \alias{select_counts}
 \title{Subsample the rows and columns of a count matrix.}
 \usage{
-select_counts(mat, nsamp = ncol(mat), ngene = nrow(mat),
-  gselect = c("random", "max", "mean_max", "custom"), gvec = NULL,
-  filter_first = FALSE, nskip = 0L)
+select_counts(
+  mat,
+  nsamp = ncol(mat),
+  ngene = nrow(mat),
+  gselect = c("random", "max", "mean_max", "custom"),
+  gvec = NULL,
+  filter_first = FALSE,
+  nskip = 0L
+)
 }
 \arguments{
 \item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes

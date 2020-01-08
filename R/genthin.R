@@ -63,7 +63,11 @@
 #' plot(B, Bhat, xlab = "Coefficients", ylab = "Coefficient Estimates")
 #' abline(0, 1, col = 2, lwd = 2)
 #'
-thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
+thin_base <- function(mat,
+                      designmat, 
+                      coefmat, 
+                      relative = TRUE,
+                      type     = c("thin", "mult")) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.matrix(designmat))
@@ -77,6 +81,7 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
   assertthat::assert_that(is.logical(relative))
   assertthat::are_equal(1L, length(relative))
   stopifnot(mat >= 0)
+  type <- match.arg(type)
 
   ## Thin ---------------------------------------------------------------------
   meanmat <- tcrossprod(coefmat, designmat)
@@ -91,7 +96,11 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
   } else {
     qmat <- 2 ^ (meanmat - maxvec)
   }
-  newmat      <- stats::rbinom(n = prod(dim(mat)), size = mat, prob = qmat)
+  if (type == "thin") {
+    newmat <- stats::rbinom(n = prod(dim(mat)), size = mat, prob = qmat)
+  } else if (type == "mult") {
+    newmat <- round(qmat * mat)
+  }
   dim(newmat) <- dim(mat)
   return(newmat)
 }
@@ -156,15 +165,19 @@ thin_base <- function(mat, designmat, coefmat, relative = TRUE) {
 #' mean(thout$mat) / lambda
 #' 2 ^ -thinlog2
 #'
-thin_all <- function(mat, thinlog2) {
+thin_all <- function(mat, 
+                     thinlog2,
+                     type = c("thin", "mult")) {
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.numeric(mat))
   stopifnot(1 == length(thinlog2))
   assertthat::assert_that(thinlog2 > 0)
+  type <- match.arg(type)
 
   thout <- thin_lib(mat      = mat,
                     thinlog2 = rep(thinlog2, ncol(mat)),
-                    relative = FALSE)
+                    relative = FALSE,
+                    type     = type)
   return(thout)
 }
 
@@ -228,7 +241,10 @@ thin_all <- function(mat, thinlog2) {
 #' empirical_propvec
 #' specified_propvec
 #'
-thin_lib <- function(mat, thinlog2, relative = FALSE) {
+thin_lib <- function(mat, 
+                     thinlog2, 
+                     relative = FALSE, 
+                     type     = c("thin", "mult")) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.numeric(mat))
@@ -236,11 +252,13 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
   thinlog2 <- c(thinlog2)
   assertthat::assert_that(is.numeric(thinlog2))
   stopifnot(thinlog2 >= 0)
-
+  type <- match.arg(type)
+  
   thout <- thin_diff(mat          = mat,
                      design_fixed = matrix(-thinlog2, ncol = 1),
                      coef_fixed   = matrix(1, nrow = nrow(mat), ncol = 1),
-                     relative     = relative)
+                     relative     = relative,
+                     type         = type)
 
   return(thout)
 }
@@ -309,7 +327,10 @@ thin_lib <- function(mat, thinlog2, relative = FALSE) {
 #'      ylab = "Specified Thinning Proportion")
 #' abline(0, 1, col = 2, lwd = 2)
 #'
-thin_gene <- function(mat, thinlog2, relative = FALSE) {
+thin_gene <- function(mat, 
+                      thinlog2, 
+                      relative = FALSE, 
+                      type     = c("thin", "mult")) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.numeric(mat))
@@ -317,11 +338,13 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
   thinlog2 <- c(thinlog2)
   assertthat::assert_that(is.numeric(thinlog2))
   stopifnot(thinlog2 >= 0)
+  type <- match.arg(type)
 
   thout <- thin_diff(mat          = mat,
                      design_fixed = matrix(1, ncol = 1, nrow = ncol(mat)),
                      coef_fixed   = matrix(-thinlog2, ncol = 1),
-                     relative     = relative)
+                     relative     = relative,
+                     type         = type)
 
   return(thout)
 
@@ -422,13 +445,14 @@ thin_gene <- function(mat, thinlog2, relative = FALSE) {
 #' abline(0, 1, col = 2, lwd = 2)
 #'
 thin_2group <- function(mat,
-                        prop_null     = 1,
-                        signal_fun    = stats::rnorm,
-                        signal_params = list(mean = 0, sd = 1),
-                        group_prop    = 0.5,
-                        corvec        = NULL,
-                        alpha         = 0,
-                        permute_method  = c("optmatch", "hungarian", "marriage")) {
+                        prop_null       = 1,
+                        signal_fun      = stats::rnorm,
+                        signal_params   = list(mean = 0, sd = 1),
+                        group_prop      = 0.5,
+                        corvec          = NULL,
+                        alpha           = 0,
+                        permute_method  = c("optmatch", "hungarian", "marriage"),
+                        type            = c("thin", "mult")) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
   assertthat::are_equal(1L, length(prop_null))
@@ -443,6 +467,7 @@ thin_2group <- function(mat,
   assertthat::assert_that(is.list(signal_params))
   assertthat::assert_that(is.null(signal_params$n))
   assertthat::assert_that(is.numeric(alpha))
+  type <- match.arg(type)
 
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
@@ -484,12 +509,13 @@ thin_2group <- function(mat,
   }
 
   ## Thin ---------------------------------------------------------------------
-  thout <- thin_diff(mat         = mat,
-                     design_perm = design_perm,
-                     coef_perm   = coef_perm,
-                     target_cor  = target_cor,
-                     relative    = TRUE,
-                     permute_method = permute_method)
+  thout <- thin_diff(mat            = mat,
+                     design_perm    = design_perm,
+                     coef_perm      = coef_perm,
+                     target_cor     = target_cor,
+                     relative       = TRUE,
+                     permute_method = permute_method,
+                     type           = type)
 
   return(thout)
 }
@@ -624,6 +650,9 @@ thin_2group <- function(mat,
 #'     license doesn't work for you (because you are not in academia, or
 #'     because you don't believe in restrictive licenses), then
 #'     try out the \code{"hungarian"} method.
+#' @param type Should we apply binomial thinning (\code{type = "thin"}) or
+#'     just naive multiplication of the counts (\code{type = "mult"}). 
+#'     You should always have this set to \code{"thin"}.
 #'
 #' @return A list-like S3 object of class \code{ThinData}.
 #' Components include some or all of the following:
@@ -776,7 +805,8 @@ thin_diff <- function(mat,
                       design_obs      = NULL,
                       relative        = TRUE,
                       change_colnames = TRUE,
-                      permute_method  = c("optmatch", "hungarian", "marriage")) {
+                      permute_method  = c("optmatch", "hungarian", "marriage"),
+                      type            = c("thin", "mult")) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
   assertthat::assert_that(is.numeric(mat))
@@ -787,6 +817,7 @@ thin_diff <- function(mat,
   assertthat::are_equal(1L, length(relative))
   assertthat::are_equal(1L, length(change_colnames))
   stopifnot(mat >= 0)
+  type <- match.arg(type)
 
   ngene <- nrow(mat)
   nsamp <- ncol(mat)
@@ -825,7 +856,8 @@ thin_diff <- function(mat,
 
   permute_method <- match.arg(permute_method)
   if (!is.null(target_cor) & permute_method == "optmatch" & !requireNamespace("optmatch", quietly = TRUE)) {
-    stop(paste0("\nPackage optmatch must be installed to use `permute_method = \"optmatch\"`\n",
+    stop(paste0("\nPackage optmatch must be installed to use",
+                "`permute_method = \"optmatch\"`\n",
                 "You can install it with\n\n",
                 "install.packages(\"optmatch\")\n\n",
                 "Note that optmatch uses a strange non-standard license:\n",
@@ -888,7 +920,8 @@ thin_diff <- function(mat,
   newmat <- thin_base(mat       = mat,
                       designmat = designmat,
                       coefmat   = coefmat,
-                      relative  = relative)
+                      relative  = relative,
+                      type      = type)
 
   retval <- list(mat          = newmat,
                  designmat    = cbind(designmat),

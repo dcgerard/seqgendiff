@@ -4,11 +4,20 @@
 \alias{thin_diff}
 \title{Binomial thinning for differential expression analysis.}
 \usage{
-thin_diff(mat, design_fixed = NULL, coef_fixed = NULL,
-  design_perm = NULL, coef_perm = NULL, target_cor = NULL,
-  use_sva = FALSE, design_obs = NULL, relative = TRUE,
-  change_colnames = TRUE, permute_method = c("optmatch", "hungarian",
-  "marriage"))
+thin_diff(
+  mat,
+  design_fixed = NULL,
+  coef_fixed = NULL,
+  design_perm = NULL,
+  coef_perm = NULL,
+  target_cor = NULL,
+  use_sva = FALSE,
+  design_obs = NULL,
+  relative = TRUE,
+  change_colnames = TRUE,
+  permute_method = c("optmatch", "hungarian", "marriage"),
+  type = c("thin", "mult")
+)
 }
 \arguments{
 \item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes and
@@ -89,6 +98,10 @@ that the optmatch package uses a super strange license:
 license doesn't work for you (because you are not in academia, or
 because you don't believe in restrictive licenses), then
 try out the \code{"hungarian"} method.}
+
+\item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
+just naive multiplication of the counts (\code{type = "mult"}). 
+You should always have this set to \code{"thin"}.}
 }
 \value{
 A list-like S3 object of class \code{ThinData}.

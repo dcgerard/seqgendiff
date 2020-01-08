@@ -4,7 +4,7 @@
 \alias{thin_all}
 \title{Binomial thinning for altering read-depth.}
 \usage{
-thin_all(mat, thinlog2)
+thin_all(mat, thinlog2, type = c("thin", "mult"))
 }
 \arguments{
 \item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes and
@@ -15,6 +15,10 @@ in \code{mat} (on the log2-scale).  For
 example, a value of 0 means that we do not thin, a value of 1 means
 that we thin by a factor of 2, a value of 2 means we thin by a factor
 of 4, etc.}
+
+\item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
+just naive multiplication of the counts (\code{type = "mult"}). 
+You should always have this set to \code{"thin"}.}
 }
 \value{
 A list-like S3 object of class \code{ThinData}.

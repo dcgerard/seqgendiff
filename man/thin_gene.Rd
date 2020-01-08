@@ -4,7 +4,7 @@
 \alias{thin_gene}
 \title{Binomial thinning for altering total gene expression levels}
 \usage{
-thin_gene(mat, thinlog2, relative = FALSE)
+thin_gene(mat, thinlog2, relative = FALSE, type = c("thin", "mult"))
 }
 \arguments{
 \item{mat}{A numeric matrix of RNA-seq counts. The rows index the genes and
@@ -19,6 +19,10 @@ of 4, etc.}
 \item{relative}{A logical. Should we apply relative thinning (\code{TRUE})
 or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
+
+\item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
+just naive multiplication of the counts (\code{type = "mult"}). 
+You should always have this set to \code{"thin"}.}
 }
 \value{
 A list-like S3 object of class \code{ThinData}.

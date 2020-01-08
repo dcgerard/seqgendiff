@@ -70,7 +70,7 @@ thin_2group." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -130,16 +130,25 @@ thin_2group." />
     </div>
 
     <div class="ref-description">
-    <p>This is now defunct. Please try out <code><a href='select_counts.html'>select_counts</a></code> and
-<code><a href='thin_2group.html'>thin_2group</a></code>.</p>
+    <p>This is now defunct. Please try out <code>select_counts</code> and
+<code>thin_2group</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>poisthin</span>(<span class='no'>mat</span>, <span class='kw'>nsamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>mat</span>), <span class='kw'>ngene</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>mat</span>),
+    <pre class="usage"><span class='fu'>poisthin</span>(
+  <span class='no'>mat</span>,
+  <span class='kw'>nsamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>mat</span>),
+  <span class='kw'>ngene</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>mat</span>),
   <span class='kw'>gselect</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"max"</span>, <span class='st'>"random"</span>, <span class='st'>"rand_max"</span>, <span class='st'>"custom"</span>, <span class='st'>"mean_max"</span>),
-  <span class='kw'>gvec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>skip_gene</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>signal_fun</span> <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>,
-  <span class='kw'>signal_params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>prop_null</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>group_assign</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"frac"</span>, <span class='st'>"random"</span>, <span class='st'>"cor"</span>), <span class='kw'>group_prop</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>corvec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>gvec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>skip_gene</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>signal_fun</span> <span class='kw'>=</span> <span class='kw pkg'>stats</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>,
+  <span class='kw'>signal_params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1</span>),
+  <span class='kw'>prop_null</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>group_assign</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"frac"</span>, <span class='st'>"random"</span>, <span class='st'>"cor"</span>),
+  <span class='kw'>group_prop</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+  <span class='kw'>corvec</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -235,7 +244,7 @@ latent group-assignment vector) will be <code>corvec * sqrt(2 / pi)</code>.</p><
 <li><p><code>X</code>: A design matrix. The first column contains a vector ones (for an
        intercept term) and the second column contains an indicator for group membership.</p></li>
 <li><p><code>beta</code>: The approximately true effect sizes of \(log(Y) ~ X\beta\).</p></li>
-<li><p><code>corassign</code>: The output from the call to <code><a href='corassign.html'>corassign</a></code>.
+<li><p><code>corassign</code>: The output from the call to <code>corassign</code>.
        Only returned if <code>group_assign = "cor"</code>.</p></li>
 </ul>
 
@@ -302,7 +311,7 @@ Gerard and Stephens (2017).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>
