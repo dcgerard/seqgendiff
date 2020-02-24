@@ -1,5 +1,6 @@
 ---
 title: "Applying Different Thinning Functions"
+author: "David Gerard"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Applying Different Thinning Functions}

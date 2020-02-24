@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -143,7 +143,7 @@
 <li>Adds more information on return values.</li>
 <li>Changes title to less than 65 characters.</li>
 <li>Uses local environments rather than global environment to assess messages.</li>
-<li>Removes <code>seqgendiff::EigenDiff()</code>. Replaces its usage with <code><a href="https://rdrr.io/pkg/cate/man/est.confounder.num.html">cate::est.factor.num()</a></code>. This is fine since it was only used in the now defunct <code>seqgendiff::poisthin()</code>.</li>
+<li>Removes <code>seqgendiff::EigenDiff()</code>. Replaces its usage with <code><a href="https://rdrr.io/pkg/cate/man/est.confounder.num.html">cate::est.factor.num()</a></code>. This is fine since it was only used in the now defunct <code><a href="../reference/poisthin.html">seqgendiff::poisthin()</a></code>.</li>
 </ul>
 </div>
     <div id="seqgendiff-1-0-0" class="section level1">
@@ -161,7 +161,7 @@
 <a href="#seqgendiff-0-4-1" class="anchor"></a>seqgendiff 0.4.1<small> Unreleased </small>
 </h1>
 <ul>
-<li>I added <code>select_counts()</code>, a function that will subsample the rows (genes) and columns (samples) of a RNA-seq count matrix. It is generally recommended that you do this subsampling each iteration of a simulation study so that your results do not depend on the specific structure of your data. The samples are just selected randomly. There are four different criteria for selecting the genes.</li>
+<li>I added <code><a href="../reference/select_counts.html">select_counts()</a></code>, a function that will subsample the rows (genes) and columns (samples) of a RNA-seq count matrix. It is generally recommended that you do this subsampling each iteration of a simulation study so that your results do not depend on the specific structure of your data. The samples are just selected randomly. There are four different criteria for selecting the genes.</li>
 <li>I also added citation information. This will be updated after I submit the manuscript to bioRxiv.</li>
 </ul>
 </div>
@@ -171,7 +171,7 @@
 </h1>
 <ul>
 <li>This version mostly updates the documentation.</li>
-<li>Beyond this major documentation update, we also added <code>thin_all()</code>, a function that uniformly thins all counts.</li>
+<li>Beyond this major documentation update, we also added <code><a href="../reference/thin_all.html">thin_all()</a></code>, a function that uniformly thins all counts.</li>
 </ul>
 </div>
     <div id="seqgendiff-0-3-0" class="section level1">
@@ -181,11 +181,11 @@
 <p>This has been a massive rewrite of the seqgendiff package.</p>
 <ul>
 <li>
-<code>poisthin()</code> is now defunct. The two-group model is now implemented in the <code>thin_2group()</code> function. I’ll keep it around since some of my old simulation code depends on it.</li>
-<li>The main functions for thinning are now <code>thin_diff()</code>, <code>thin_2group()</code>, <code>thin_lib()</code>, and <code>thin_gene()</code>.</li>
-<li>Note that these functions, unlike <code>poisthin()</code>, do not have functionality to subset count matrices. This is on purpose. I wanted the functionality of these thinning functions to be simpler.</li>
-<li>Unlike <code>poisthin()</code>, which can only handle the two-group model, <code>thin_diff()</code> can handle generically any design, while still controlling the level of correlation between the design variables and the surrogate variables.</li>
-<li>Functions now exist to convert the simulation output to common Bioconductor S4 classes. See <code>ThinDataToSummarizedExperiment()</code> and <code>ThinDataToDESeqDataSet()</code>.</li>
+<code><a href="../reference/poisthin.html">poisthin()</a></code> is now defunct. The two-group model is now implemented in the <code><a href="../reference/thin_2group.html">thin_2group()</a></code> function. I’ll keep it around since some of my old simulation code depends on it.</li>
+<li>The main functions for thinning are now <code><a href="../reference/thin_diff.html">thin_diff()</a></code>, <code><a href="../reference/thin_2group.html">thin_2group()</a></code>, <code><a href="../reference/thin_lib.html">thin_lib()</a></code>, and <code><a href="../reference/thin_gene.html">thin_gene()</a></code>.</li>
+<li>Note that these functions, unlike <code><a href="../reference/poisthin.html">poisthin()</a></code>, do not have functionality to subset count matrices. This is on purpose. I wanted the functionality of these thinning functions to be simpler.</li>
+<li>Unlike <code><a href="../reference/poisthin.html">poisthin()</a></code>, which can only handle the two-group model, <code><a href="../reference/thin_diff.html">thin_diff()</a></code> can handle generically any design, while still controlling the level of correlation between the design variables and the surrogate variables.</li>
+<li>Functions now exist to convert the simulation output to common Bioconductor S4 classes. See <code><a href="../reference/ThinDataToSummarizedExperiment.html">ThinDataToSummarizedExperiment()</a></code> and <code><a href="../reference/ThinDataToDESeqDataSet.html">ThinDataToDESeqDataSet()</a></code>.</li>
 </ul>
 </div>
     <div id="seqgendiff-0-2-0" class="section level1">
@@ -194,8 +194,8 @@
 </h1>
 <ul>
 <li>
-<code>corassign()</code> lets you make group assignment that is correlated with hidden factors.</li>
-<li>In <code>poisthin()</code>, the <code>group_assign = "cor"</code> option uses <code>corassign()</code> to make group assignments.</li>
+<code><a href="../reference/corassign.html">corassign()</a></code> lets you make group assignment that is correlated with hidden factors.</li>
+<li>In <code><a href="../reference/poisthin.html">poisthin()</a></code>, the <code>group_assign = "cor"</code> option uses <code><a href="../reference/corassign.html">corassign()</a></code> to make group assignments.</li>
 </ul>
 </div>
   </div>

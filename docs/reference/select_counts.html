@@ -73,7 +73,7 @@ do this for you." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -134,7 +134,7 @@ do this for you." />
 
     <div class="ref-description">
     <p>It is a good idea to subsample (each iteration) the genes and samples from
-a real RNA-seq dataset prior to applying <code>thin_diff</code>
+a real RNA-seq dataset prior to applying <code><a href='thin_diff.html'>thin_diff</a></code>
 (and related functions) so that your conclusions are not dependent on the
 specific structure of your dataset. This function is designed to efficiently
 do this for you.</p>
@@ -240,7 +240,7 @@ can install edgeR by following instructions here:
 
 <span class='co'>## Subsample the matrix, then feed it into a thinning function</span>
 <span class='no'>submat</span> <span class='kw'>&lt;-</span> <span class='fu'>select_counts</span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>mat</span>, <span class='kw'>nsamp</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>ngene</span> <span class='kw'>=</span> <span class='fl'>100</span>)
-<span class='no'>thout</span>  <span class='kw'>&lt;-</span> <span class='fu'>thin_2group</span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>submat</span>, <span class='kw'>prop_null</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
+<span class='no'>thout</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='thin_2group.html'>thin_2group</a></span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>submat</span>, <span class='kw'>prop_null</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)
 
 <span class='co'>## The rownames and colnames (if NULL in mat) tell you which genes/samples</span>
 <span class='co'>## were selected.</span>

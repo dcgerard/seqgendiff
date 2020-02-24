@@ -70,7 +70,7 @@ and coefmat elements of the ThinData object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -142,9 +142,9 @@ and <code>coefmat</code> elements of the ThinData object.</p>
     <tr>
       <th>obj</th>
       <td><p>A ThinData S3 object. This is generally output by either
-<code>thin_diff</code>, <code>thin_2group</code>,
-<code>thin_lib</code>, <code>thin_gene</code>, or
-<code>thin_all</code>.</p></td>
+<code><a href='thin_diff.html'>thin_diff</a></code>, <code><a href='thin_2group.html'>thin_2group</a></code>,
+<code><a href='thin_lib.html'>thin_lib</a></code>, <code><a href='thin_gene.html'>thin_gene</a></code>, or
+<code><a href='thin_all.html'>thin_all</a></code>.</p></td>
     </tr>
     </table>
 
@@ -170,7 +170,7 @@ and <code>coefmat</code> elements of the ThinData object.</p>
 <span class='no'>coef_perm</span>   <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>p</span> * <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>design_perm</span>), <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>6</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='no'>p</span>)
 <span class='no'>design_obs</span>  <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='no'>n</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>target_cor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.9</span>, <span class='fl'>0</span>))
-<span class='no'>thout</span> <span class='kw'>&lt;-</span> <span class='fu'>thin_diff</span>(<span class='kw'>mat</span>            <span class='kw'>=</span> <span class='no'>mat</span>,
+<span class='no'>thout</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='thin_diff.html'>thin_diff</a></span>(<span class='kw'>mat</span>            <span class='kw'>=</span> <span class='no'>mat</span>,
                    <span class='kw'>design_perm</span>    <span class='kw'>=</span> <span class='no'>design_perm</span>,
                    <span class='kw'>coef_perm</span>      <span class='kw'>=</span> <span class='no'>coef_perm</span>,
                    <span class='kw'>target_cor</span>     <span class='kw'>=</span> <span class='no'>target_cor</span>,

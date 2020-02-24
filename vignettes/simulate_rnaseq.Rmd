@@ -1,5 +1,6 @@
 ---
 title: "Simulate RNA-seq Data from Real Data"
+author: "David Gerard"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Simulate RNA-seq Data from Real Data}
@@ -10,6 +11,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  echo = requireNamespace("airway", quietly = TRUE),
+  eval = requireNamespace("airway", quietly = TRUE),
   comment = "#>",
   fig.align = "center",
   fig.height = 7,
@@ -17,8 +20,26 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Abstract 
+```{block, eval = FALSE, echo = !requireNamespace("airway", quietly = TRUE)}
+This vignette was not fully built because the airway package was missing: <https://bioconductor.org/packages/airway/>
 
+To install the airway package, run:
+```
+```{r, eval = FALSE, echo = !requireNamespace("airway", quietly = TRUE)}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("airway")
+```
+```{block, eval = FALSE, echo = !requireNamespace("airway", quietly = TRUE)}
+You can find this vignette online at: <https://dcgerard.github.io/seqgendiff/articles/simulate_rnaseq.html>
+```
+
+```{block, eval = FALSE}
+# Abstract 
+```
+
+```{block, eval = FALSE}
 We demonstrate how one may use seqgendiff in differential expression 
 simulation studies using the airway data from Himes et al (2014). We 
 use seqgendiff to simulate one dataset which we then analyze with two
@@ -26,31 +47,49 @@ pipelines: the sva-voom-limma-eBayes-qvalue pipeline, and the sva-DESeq2-qvalue
 pipeline. In practice, you would simulate many datasets and compare
 average performance. But playing with a single dataset can help
 you gain intuition with various methods.
+```
 
+```{block, eval = FALSE}
 The methods used here are described in Gerard (2019).
+```
 
+```{block, eval = FALSE}
 # Analysis
+```
 
+```{block, eval = FALSE}
 Set the seed for reproducibility:
+```
 ```{r}
 set.seed(1)
 ```
 
+```{block, eval = FALSE}
 The airway data are available in the airway R package from Bioconductor. If
 you don't have this package, you can install it with the BiocManager package:
+```
 ```{r, eval = FALSE}
-install.packages("BiocManager")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
 BiocManager::install("airway")
 ```
 
+```{block, eval = FALSE}
 Now we can load these data into R.
+````
 ```{r, message=FALSE, warning=FALSE}
 library(airway)
 data("airway")
 ```
-You can read about these data [here](http://bioconductor.org/packages/release/data/experiment/vignettes/airway/inst/doc/airway.html).
 
+```{block, eval = FALSE}
+You can read about these data [here](https://bioconductor.org/packages/airway/).
+```
+
+```{block, eval = FALSE}
 These are the other packages that we'll need for this vignette:
+```
 ```{r setup, message=FALSE, warning=FALSE}
 library(seqgendiff)
 library(SummarizedExperiment)
@@ -59,26 +98,34 @@ library(limma)
 library(sva)
 library(qvalue)
 ```
+```{block, eval = FALSE}
 The last five packages are all from Bioconductor, which you need to install
 using `BiocManager::install()`.
+```
 
+```{block, eval = FALSE}
 The airway dataset comes with a few observed variables which affect gene
 expression. We'll consider these "surrogate variables". That is, we'll
 add signal to the data and try to account for these surrogate variables.
+```
 ```{r}
 coldat <- colData(airway)[, c("cell", "dex")]
 true_sv <- model.matrix(~cell + dex, data = coldat)[, -1]
 true_sv
 ```
 
+```{block, eval = FALSE}
 Suppose we want to add a treatment effect to the RNA-seq data. We'll first
 remove all genes with no counts:
+```
 ```{r}
 allzero <- rowSums(assay(airway)) < 10^-6
 airway <- airway[!allzero, ]
 ```
+```{block, eval = FALSE}
 Then we'll use the convenient `thin_2group()` function from the seqgendiff
 package to add a $N(0, 0.8^2)$ log2-effect size to 10% of the genes:
+```
 ```{r}
 thout <- thin_2group(mat = assay(airway), 
                      prop_null = 0.9, 
@@ -86,8 +133,10 @@ thout <- thin_2group(mat = assay(airway),
                      signal_params = list(mean = 0, sd = 0.8))
 ```
 
+```{block, eval = FALSE}
 Let's see how well the sva-voom-limma-ebayes-qvalue pipeline does 
 estimating these effects. First, we'll fit this pipeline.
+```
 ```{r}
 X <- cbind(thout$design_obs, thout$designmat)
 Y <- log2(thout$mat + 0.5)
@@ -100,7 +149,9 @@ qout <- qvalue(p = eout$p.value[, 2])
 bhat <- eout$coefficients[, 2]
 ```
 
+```{block, eval = FALSE}
 We plot the coefficient estimates against their true values.
+```
 ```{r}
 plot(thout$coefmat, 
      bhat, 
@@ -109,7 +160,9 @@ plot(thout$coefmat,
 abline(0, 1, col = 2, lwd = 2)
 ```
 
+```{block, eval = FALSE}
 We plot the q-values against the null status of each gene.
+```
 ```{r}
 is_null_gene <- abs(thout$coefmat) < 10^-6
 boxplot(qout$qvalues ~ is_null_gene,
@@ -117,26 +170,34 @@ boxplot(qout$qvalues ~ is_null_gene,
         ylab = "q-value")
 ```
 
+```{block, eval = FALSE}
 Does the sva-DESeq2 pipeline do any better? We'll first use
 `seqgendiff::ThinDataToDESeqDataSet()` to convert the `ThinData` object `thout`
 into a `DESeqDataSet` object.
+```
 ```{r, message=FALSE}
 thout$design_obs <- cbind(thout$design_obs, svout$sv)
 dds <- ThinDataToDESeqDataSet(obj = thout)
 colData(dds)
 design(dds)
 ```
+```{block, eval = FALSE}
 Note that we added the estimated surrogate variables from sva to the
 `ThinData` object before converting to a `DESeqDataSet` object. 
+```
 
+```{block, eval = FALSE}
 Now we will fit DESeq2.
+```
 ```{r}
 dds <- DESeq(object = dds)
 pval_dds <- rowData(dds)[, "WaldPvalue_P1"]
 qval_dds <- qvalue(p = pval_dds)
 ```
 
+```{block, eval = FALSE}
 We plot the coefficient estimates against their true values.
+```
 ```{r}
 coefmat <- rowData(dds)[, c("true_P1", "P1")]
 plot(coefmat$true_P1, 
@@ -146,14 +207,18 @@ plot(coefmat$true_P1,
 abline(0, 1, col = 2, lwd = 2)
 ```
 
+```{block, eval = FALSE}
 We also plot the q-values against the null status of each gene.
+```
 ```{r}
 boxplot(qval_dds$qvalues ~ is_null_gene,
         xlab = "Null Gene",
         ylab = "q-value")
 ```
 
+```{block, eval = FALSE}
 The MSE is worse for DESeq2.
+```
 ```{r}
 mse_limma <- mean((bhat - thout$coefmat) ^ 2)
 mse_deseq2 <- mean((coefmat$true_P1 - coefmat$P1) ^ 2, na.rm = TRUE)
@@ -161,20 +226,26 @@ mse_deseq2
 mse_limma
 ```
 
+```{block, eval = FALSE}
 The FDP is about the same for the two pipelines. Both are OK, but conservative.
+```
 ```{r}
 mean(is_null_gene[qval_dds$qvalues < 0.1], na.rm = TRUE)
 mean(is_null_gene[qout$qvalues < 0.1], na.rm = TRUE)
 ```
 
+```{block, eval = FALSE}
 DESeq2 has more discoveries
+```
 ```{r}
 sum(qval_dds$qvalues < 0.1, na.rm = TRUE)
 sum(qout$qvalues < 0.1, na.rm = TRUE)
 ```
 
+```{block, eval = FALSE}
 As a side-note, it seems that the second surrogate variable is getting 
 at the dexamethasone variable.
+```
 ```{r}
 boxplot(svout$sv[, 2] ~ true_sv[, 4], 
         xlab = "Dexamethasone Treatment", 
@@ -182,11 +253,15 @@ boxplot(svout$sv[, 2] ~ true_sv[, 4],
 points(jitter(true_sv[, 4] + 1), svout$sv[, 2])
 ```
 
+```{block, eval = FALSE}
 # References
+```
 
+```{block, eval = FALSE}
 - Gerard D (2019). “Data-based RNA-seq Simulations by Binomial Thinning.” *bioRxiv*. doi: [10.1101/758524](https://doi.org/10.1101/758524).
 - Himes, Blanca E., Xiaofeng Jiang, Peter Wagner, Ruoxi Hu, Qiyu Wang, 
   Barbara Klanderman, Reid M. Whitaker et al. "RNA-Seq transcriptome 
   profiling identifies CRISPLD2 as a glucocorticoid responsive gene that 
   modulates cytokine function in airway smooth muscle cells." 
   *PloS one* 9, no. 6 (2014): e99625.
+```

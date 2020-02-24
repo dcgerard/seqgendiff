@@ -74,7 +74,7 @@ described in detail in Gerard (2019)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -138,7 +138,7 @@ described in detail in Gerard (2019)." />
 separate, user-provided thinning factor to each gene. This uniformly
 lowers the counts for all samples in a gene. The thinning factor
 should be provided on the log2-scale. This is a specific application
-of the binomial thinning approach in <code>thin_diff</code>. The method is
+of the binomial thinning approach in <code><a href='thin_diff.html'>thin_diff</a></code>. The method is
 described in detail in Gerard (2019).</p>
     </div>
 
@@ -193,7 +193,7 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
   <dt><code>cormat</code></dt><dd><p>A matrix of target correlations between the
       surrogate variables and the permuted variables in the design matrix.
       This might be different from the <code>target_cor</code> you input because
-      we pass it through <code>fix_cor</code> to ensure
+      we pass it through <code><a href='fix_cor.html'>fix_cor</a></code> to ensure
       positive semi-definiteness of the resulting covariance matrix.</p></dd>
   <dt><code>matching_var</code></dt><dd><p>A matrix of simulated variables used to
       permute <code>design_perm</code> if the <code>target_cor</code> is not
@@ -212,15 +212,15 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
 
     <div class='dont-index'>
 <dl class='dl-horizontal'>
-  <dt><code>select_counts</code></dt><dd><p>For subsampling the rows and columns
+  <dt><code><a href='select_counts.html'>select_counts</a></code></dt><dd><p>For subsampling the rows and columns
       of your real RNA-seq count matrix prior to applying binomial thinning.</p></dd>
-  <dt><code>thin_diff</code></dt><dd><p>For the more general thinning approach.</p></dd>
-  <dt><code>thin_lib</code></dt><dd><p>For thinning sample-wise instead of
+  <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>For the more general thinning approach.</p></dd>
+  <dt><code><a href='thin_lib.html'>thin_lib</a></code></dt><dd><p>For thinning sample-wise instead of
       gene-wise.</p></dd>
-  <dt><code>thin_all</code></dt><dd><p>For thinning all counts uniformly.</p></dd>
-  <dt><code>ThinDataToSummarizedExperiment</code></dt><dd><p>For converting a
+  <dt><code><a href='thin_all.html'>thin_all</a></code></dt><dd><p>For thinning all counts uniformly.</p></dd>
+  <dt><code><a href='ThinDataToSummarizedExperiment.html'>ThinDataToSummarizedExperiment</a></code></dt><dd><p>For converting a
       ThinData object to a SummarizedExperiment object.</p></dd>
-  <dt><code>ThinDataToDESeqDataSet</code></dt><dd><p>For converting a
+  <dt><code><a href='ThinDataToDESeqDataSet.html'>ThinDataToDESeqDataSet</a></code></dt><dd><p>For converting a
       ThinData object to a DESeqDataSet object.</p></dd>
 
 </dl>
