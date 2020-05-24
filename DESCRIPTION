@@ -1,6 +1,6 @@
 Package: seqgendiff
 Type: Package
-Title: RNA-seq Generation/Modification for Simulation
+Title: RNA-Seq Generation/Modification for Simulation
 Version: 1.2.2
 Authors@R: person("David", "Gerard", email = "gerard.1787@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9450-5023"))
 Description: Generates/modifies RNA-seq data for use in simulations. We provide
