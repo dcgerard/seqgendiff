@@ -66,7 +66,7 @@ A matrix of correlations. The rows index the observed covariates
 \description{
 Will return the estimated correlation between the design matrix and the
 surrogate variables when you assign a target correlation. The method is
-described in detail in Gerard (2019).
+described in detail in Gerard (2020).
 }
 \details{
 This function permutes the rows of \code{design_perm} many times, each
@@ -94,7 +94,7 @@ effective_cor(design_perm = design_perm,
 \references{
 \itemize{
   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
-  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}

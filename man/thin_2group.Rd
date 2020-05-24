@@ -64,7 +64,7 @@ because you don't believe in restrictive licenses), then
 try out the \code{"hungarian"} method.}
 
 \item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
-just naive multiplication of the counts (\code{type = "mult"}). 
+just naive multiplication of the counts (\code{type = "mult"}).
 You should always have this set to \code{"thin"}.}
 }
 \value{
@@ -106,7 +106,7 @@ general binomial thinning approach implemented in \code{\link{thin_diff}}.
 \details{
 The specific application of binomial thinning to the two-group model was
 used in Gerard and Stephens (2017) and Gerard and Stephens (2018). This is
-a specific case of the general method described in Gerard (2019).
+a specific case of the general method described in Gerard (2020).
 }
 \examples{
 ## Simulate data from given matrix of counts
@@ -139,7 +139,7 @@ abline(0, 1, col = 2, lwd = 2)
   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
   \item{Gerard, David and Matthew Stephens (2017). "Unifying and generalizing methods for removing unwanted variation based on negative controls." \emph{arXiv} preprint arXiv:1705.08393.}
   \item{David Gerard and Matthew Stephens (2018). "Empirical Bayes shrinkage and false discovery rate estimation, allowing for unwanted variation." \emph{Biostatistics}, doi: \href{https://doi.org/10.1093/biostatistics/kxy029}{10.1093/biostatistics/kxy029}.}
-  \item{Gerard David (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}

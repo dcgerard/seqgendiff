@@ -21,7 +21,7 @@ or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
 
 \item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
-just naive multiplication of the counts (\code{type = "mult"}). 
+just naive multiplication of the counts (\code{type = "mult"}).
 You should always have this set to \code{"thin"}.}
 }
 \value{
@@ -35,7 +35,7 @@ a design matrix (\eqn{X}), and a matrix of coefficients (\eqn{B}),
 \eqn{log_2(E[Y]) = BX' + u1' + Q}, where \eqn{u} is some vector
 of intercept coefficients. This function is used by all other
 thinning functions. The method is
-described in detail in Gerard (2019).
+described in detail in Gerard (2020).
 }
 \examples{
 ## Simulate data from given matrix of counts
@@ -56,7 +56,7 @@ abline(0, 1, col = 2, lwd = 2)
 }
 \references{
 \itemize{
-  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
 }
 }
 \seealso{

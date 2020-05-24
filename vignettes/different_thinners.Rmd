@@ -27,7 +27,7 @@ We demonstrate how to apply the different thinning functions available in
 seqgendiff. The following contains guidelines for the workflow of a single
 repetition in a simulation study.
 
-The methods used here are described in Gerard (2019).
+The methods used here are described in Gerard (2020).
 
 # Generate Data
 
@@ -245,5 +245,5 @@ abline(a   = 0,
 
 # References
 
-- Gerard D (2019). “Data-based RNA-seq Simulations by Binomial Thinning.” *bioRxiv*. doi: [10.1101/758524](https://doi.org/10.1101/758524).
+- Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." _BMC Bioinformatics_. 21(1), 206. doi: [10.1186/s12859-020-3450-9](https://doi.org/10.1186/s12859-020-3450-9).
 

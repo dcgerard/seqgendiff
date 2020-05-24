@@ -1,3 +1,7 @@
+# seqgendiff 1.2.2
+
+- Updates all citations to BMC Bioinformatics published manuscript.
+
 # seqgendiff 1.1.1
 
 - Updates to the documentation. I included citations throughout the documentation to direct users to where they can get details on the method.

@@ -50,7 +50,7 @@ you gain intuition with various methods.
 ```
 
 ```{block, eval = FALSE}
-The methods used here are described in Gerard (2019).
+The methods used here are described in Gerard (2020).
 ```
 
 ```{block, eval = FALSE}
@@ -258,7 +258,7 @@ points(jitter(true_sv[, 4] + 1), svout$sv[, 2])
 ```
 
 ```{block, eval = FALSE}
-- Gerard D (2019). “Data-based RNA-seq Simulations by Binomial Thinning.” *bioRxiv*. doi: [10.1101/758524](https://doi.org/10.1101/758524).
+- Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." _BMC Bioinformatics_. 21(1), 206. doi: [10.1186/s12859-020-3450-9](https://doi.org/10.1186/s12859-020-3450-9).
 - Himes, Blanca E., Xiaofeng Jiang, Peter Wagner, Ruoxi Hu, Qiyu Wang, 
   Barbara Klanderman, Reid M. Whitaker et al. "RNA-Seq transcriptome 
   profiling identifies CRISPLD2 as a glucocorticoid responsive gene that 

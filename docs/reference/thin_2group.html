@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -44,7 +48,6 @@ the proportion of samples in each group, the proportion of null genes
 (where the log2-fold change is 0),
 and the signal function. This is a specific application of the
 general binomial thinning approach implemented in thin_diff." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -62,7 +65,7 @@ general binomial thinning approach implemented in thin_diff." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -76,7 +79,7 @@ general binomial thinning approach implemented in thin_diff." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -112,7 +115,7 @@ general binomial thinning approach implemented in thin_diff." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/dcgerard/seqgendiff">
+  <a href="http://github.com/dcgerard/seqgendiff/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -131,7 +134,7 @@ general binomial thinning approach implemented in thin_diff." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Binomial thinning in the two-group model.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/dcgerard/seqgendiff/blob/master/R/genthin.R'><code>R/genthin.R</code></a></small>
+    <small class="dont-index">Source: <a href='http://github.com/dcgerard/seqgendiff/blob/master/R/genthin.R'><code>R/genthin.R</code></a></small>
     <div class="hidden name"><code>thin_2group.Rd</code></div>
     </div>
 
@@ -226,7 +229,7 @@ try out the <code>"hungarian"</code> method.</p></td>
     <tr>
       <th>type</th>
       <td><p>Should we apply binomial thinning (<code>type = "thin"</code>) or
-just naive multiplication of the counts (<code>type = "mult"</code>). 
+just naive multiplication of the counts (<code>type = "mult"</code>).
 You should always have this set to <code>"thin"</code>.</p></td>
     </tr>
     </table>
@@ -234,7 +237,7 @@ You should always have this set to <code>"thin"</code>.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list-like S3 object of class <code>ThinData</code>.
-Components include some or all of the following:</p><dl class='dl-horizontal'>
+Components include some or all of the following:</p><dl'>
   <dt><code>mat</code></dt><dd><p>The modified matrix of counts.</p></dd>
   <dt><code>designmat</code></dt><dd><p>The design matrix of variables used to simulate
       signal. This is made by column-binding <code>design_fixed</code> and the
@@ -262,7 +265,7 @@ Components include some or all of the following:</p><dl class='dl-horizontal'>
 
     <p>The specific application of binomial thinning to the two-group model was
 used in Gerard and Stephens (2017) and Gerard and Stephens (2018). This is
-a specific case of the general method described in Gerard (2019).</p>
+a specific case of the general method described in Gerard (2020).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -270,7 +273,7 @@ a specific case of the general method described in Gerard (2019).</p>
 <li><p>Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.</p></li>
 <li><p>Gerard, David and Matthew Stephens (2017). "Unifying and generalizing methods for removing unwanted variation based on negative controls." <em>arXiv</em> preprint arXiv:1705.08393.</p></li>
 <li><p>David Gerard and Matthew Stephens (2018). "Empirical Bayes shrinkage and false discovery rate estimation, allowing for unwanted variation." <em>Biostatistics</em>, doi: <a href='https://doi.org/10.1093/biostatistics/kxy029'>10.1093/biostatistics/kxy029</a>.</p></li>
-<li><p>Gerard David (2019). "Data-based RNA-seq Simulations by Binomial Thinning." <em>bioRxiv</em>. doi: <a href='https://doi.org/10.1101/758524'>10.1101/758524</a>.</p></li>
+<li><p>Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." <em>BMC Bioinformatics</em>. 21(1), 206. doi: <a href='https://doi.org/10.1186/s12859-020-3450-9'>10.1186/s12859-020-3450-9</a>.</p></li>
 <li><p>Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.</p></li>
 <li><p>Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12</p></li>
 <li><p>C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.</p></li>
@@ -281,7 +284,7 @@ a specific case of the general method described in Gerard (2019).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'>
-<dl class='dl-horizontal'>
+<dl'>
   <dt><code><a href='select_counts.html'>select_counts</a></code></dt><dd><p>For subsampling the rows and columns
       of your real RNA-seq count matrix prior to applying binomial thinning.</p></dd>
   <dt><code><a href='thin_diff.html'>thin_diff</a></code></dt><dd><p>For the more general thinning approach.</p></dd>
@@ -311,25 +314,16 @@ a specific case of the general method described in Gerard (2019).</p>
 <span class='no'>Ynew</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log2</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>thinout</span>$<span class='no'>mat</span> + <span class='fl'>0.5</span>))
 <span class='no'>X</span>    <span class='kw'>&lt;-</span> <span class='no'>thinout</span>$<span class='no'>designmat</span>
 <span class='no'>Bhat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Ynew</span> ~ <span class='no'>X</span>))[<span class='st'>"X"</span>, ]
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>thinout</span>$<span class='no'>coefmat</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>thinout</span>$<span class='no'>coefmat</span>,
      <span class='no'>Bhat</span>,
      <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"log2-fold change"</span>,
      <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Estimated log2-fold change"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='thin_2group-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>David Gerard</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -340,7 +334,7 @@ a specific case of the general method described in Gerard (2019).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

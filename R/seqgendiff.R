@@ -40,12 +40,12 @@
 #'
 #' @references
 #' \itemize{
-#'   \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+#'   \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
 #' }
 #'
 #' @docType package
 #' @name seqgendiff-package
 #' @aliases seqgendiff
-#' 
+#'
 #' @author David Gerard
 NULL

@@ -17,7 +17,7 @@ that we thin by a factor of 2, a value of 2 means we thin by a factor
 of 4, etc.}
 
 \item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
-just naive multiplication of the counts (\code{type = "mult"}). 
+just naive multiplication of the counts (\code{type = "mult"}).
 You should always have this set to \code{"thin"}.}
 }
 \value{
@@ -54,7 +54,7 @@ be provided on the log2-scale. This is a specific application of the
 binomial thinning approach in \code{\link{thin_diff}}. Though this particular
 form of thinning was used by Robinson and Storey (2014) in the context
 of deriving read-depth suggestions. It is also
-described in detail in Gerard (2019).
+described in detail in Gerard (2020).
 }
 \examples{
 ## Generate count data and set thinning factor
@@ -76,7 +76,7 @@ mean(thout$mat) / lambda
 }
 \references{
 \itemize{
-  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
   \item{Robinson, David G., and John D. Storey. "subSeq: determining appropriate sequencing depth through efficient read subsampling." Bioinformatics 30, no. 23 (2014): 3424-3426.}
 }
 }

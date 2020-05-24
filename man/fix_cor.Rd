@@ -38,7 +38,7 @@ A matrix of correlations the same dimension as \code{target_cor}.
 \description{
 Shrinks the target correlation using a uniform scaling factor so that
 the overall correlation matrix is positive semi-definite. The method
-is described in detail in Gerard (2019).
+is described in detail in Gerard (2020).
 }
 \details{
 Let \eqn{W} = \code{cor(design_perm)}. Let \eqn{R} = \code{target_cor}.
@@ -76,7 +76,7 @@ sum(new_cor ^ 2)
 }
 \references{
 \itemize{
-  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
 }
 }
 \author{

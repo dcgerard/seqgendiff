@@ -21,7 +21,7 @@ or absolute thinning (\code{FALSE}). Only experts should change
 the default.}
 
 \item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
-just naive multiplication of the counts (\code{type = "mult"}). 
+just naive multiplication of the counts (\code{type = "mult"}).
 You should always have this set to \code{"thin"}.}
 }
 \value{
@@ -56,7 +56,7 @@ separate, user-provided thinning factor to each gene. This uniformly
 lowers the counts for all samples in a gene. The thinning factor
 should be provided on the log2-scale. This is a specific application
 of the binomial thinning approach in \code{\link{thin_diff}}. The method is
-described in detail in Gerard (2019).
+described in detail in Gerard (2020).
 }
 \examples{
 ## Generate count data and thinning factors
@@ -82,7 +82,7 @@ abline(0, 1, col = 2, lwd = 2)
 }
 \references{
 \itemize{
-  \item{Gerard D (2019). "Data-based RNA-seq Simulations by Binomial Thinning." \emph{bioRxiv}. doi: \href{https://doi.org/10.1101/758524}{10.1101/758524}.}
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
 }
 }
 \seealso{

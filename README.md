@@ -84,21 +84,23 @@ Or you can check out the vignettes I post online:
 
 If you use this package, please cite:
 
-> Gerard D (2019). “Data-based RNA-seq Simulations by Binomial
-> Thinning.” *bioRxiv*. doi:
-> [10.1101/758524](https://doi.org/10.1101/758524).
+> Gerard D (2020). “Data-based RNA-seq simulations by binomial
+> thinning.” *BMC Bioinformatics*. 21(1), 206. doi:
+> [10.1186/s12859-020-3450-9](https://doi.org/10.1186/s12859-020-3450-9).
 
 A BibTeX entry for LaTeX users is
 
 ``` tex
-@article{,
+@article{gerard2020data,
     author = {Gerard, David},
-    title = {Data-based {RNA}-seq Simulations by Binomial Thinning},
-    elocation-id = {758524},
-    year = {2019},
-    doi = {10.1101/758524},
-    publisher = {Cold Spring Harbor Laboratory},
-    journal = {bioRxiv}
+    title = {Data-based {RNA}-seq simulations by binomial thinning},
+    year = {2020},
+    volume={21},
+    number={1},
+    pages={206},
+    doi = {10.1186/s12859-020-3450-9},
+    publisher = {BioMed Central Ltd},
+    journal = {BMC Bioinformatics}
 }
 ```
 
