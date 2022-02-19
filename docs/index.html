@@ -27,6 +27,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -39,18 +41,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -75,8 +71,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="http://github.com/dcgerard/seqgendiff/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="http://github.com/dcgerard/seqgendiff/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -93,9 +89,9 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="rna-seq-generationmodification-for-simulation" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#rna-seq-generationmodification-for-simulation" class="anchor"></a>RNA-Seq Generation/Modification for Simulation</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="rna-seq-generationmodification-for-simulation">RNA-Seq Generation/Modification for Simulation<a class="anchor" aria-label="anchor" href="#rna-seq-generationmodification-for-simulation"></a>
+</h1></div>
 
 <p>This package will take real RNA-seq data (either single-cell or bulk) and alter it by adding signal to it. This signal is in the form of a generalized linear model with a log (base-2) link function under a Poisson / negative binomial / mixture of negative binomials distribution. The advantage of this way of simulating data is that you can see how your method behaves when the simulated data exhibit common (and annoying) features of real data. This is without you having to specify these features <em>a priori</em>. We call the way we add signal “binomial thinning”.</p>
 <p>The main functions are:</p>
@@ -119,110 +115,117 @@
 <li>
 <code>ThinDataToDESeqDataSet</code>: Converts a <code>ThinData</code> object to a <code>DESeqDataSet</code> object.</li>
 </ul>
-<p>If you find a bug or want a new feature, please submit an <a href="http://github.com/dcgerard/seqgendiff/issues">issue</a>.</p>
+<p>If you find a bug or want a new feature, please submit an <a href="http://github.com/dcgerard/seqgendiff/issues" class="external-link">issue</a>.</p>
 <p>Check out <a href="NEWS.html">NEWS</a> for updates.</p>
 </div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
 <p>To install from CRAN, run the following code in R:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"seqgendiff"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"seqgendiff"</span><span class="op">)</span></code></pre></div>
 <p>To install the latest version of seqgendiff, run the following code in R:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"dcgerard/seqgendiff"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"dcgerard/seqgendiff"</span><span class="op">)</span></code></pre></div>
 <p>To get started, check out the vignettes by running the following in R:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">seqgendiff</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span>(<span class="kw">package</span> <span class="kw">=</span> <span class="st">"seqgendiff"</span>)</pre></div>
-<p>Or you can check out the vignettes I post online: <a href="https://dcgerard.github.io/seqgendiff/" class="uri">https://dcgerard.github.io/seqgendiff/</a>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/seqgendiff" class="external-link">seqgendiff</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"seqgendiff"</span><span class="op">)</span></code></pre></div>
+<p>Or you can check out the vignettes I post online: <a href="https://dcgerard.github.io/seqgendiff/" class="external-link uri">https://dcgerard.github.io/seqgendiff/</a>.</p>
 </div>
-<div id="citation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h1>
+<div class="section level1">
+<h1 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h1>
 <p>If you use this package, please cite:</p>
 <blockquote>
-<p>Gerard D (2020). “Data-based RNA-seq simulations by binomial thinning.” <em>BMC Bioinformatics</em>. 21(1), 206. doi: <a href="https://doi.org/10.1186/s12859-020-3450-9">10.1186/s12859-020-3450-9</a>.</p>
+<p>Gerard D (2020). “Data-based RNA-seq simulations by binomial thinning.” <em>BMC Bioinformatics</em>. 21(1), 206. doi: <a href="https://doi.org/10.1186/s12859-020-3450-9" class="external-link">10.1186/s12859-020-3450-9</a>.</p>
 </blockquote>
 <p>A BibTeX entry for LaTeX users is</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode tex"><code class="sourceCode latex"><a class="sourceLine" id="cb4-1" title="1">@article{gerard2020data,</a>
-<a class="sourceLine" id="cb4-2" title="2">    author = {Gerard, David},</a>
-<a class="sourceLine" id="cb4-3" title="3">    title = {Data-based {RNA}-seq simulations by binomial thinning},</a>
-<a class="sourceLine" id="cb4-4" title="4">    year = {2020},</a>
-<a class="sourceLine" id="cb4-5" title="5">    volume={21},</a>
-<a class="sourceLine" id="cb4-6" title="6">    number={1},</a>
-<a class="sourceLine" id="cb4-7" title="7">    pages={206},</a>
-<a class="sourceLine" id="cb4-8" title="8">    doi = {10.1186/s12859-020-3450-9},</a>
-<a class="sourceLine" id="cb4-9" title="9">    publisher = {BioMed Central Ltd},</a>
-<a class="sourceLine" id="cb4-10" title="10">    journal = {BMC Bioinformatics}</a>
-<a class="sourceLine" id="cb4-11" title="11">}</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>@article{gerard2020data,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    author = {Gerard, David},</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    title = {Data-based {RNA}-seq simulations by binomial thinning},</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    year = {2020},</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    volume={21},</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    number={1},</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    pages={206},</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    doi = {10.1186/s12859-020-3450-9},</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    publisher = {BioMed Central Ltd},</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    journal = {BMC Bioinformatics}</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="code-of-conduct" class="section level1">
-<h1 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h1>
-<p>Please note that the ‘seqgendiff’ project is released with a <a href="https://github.com/dcgerard/seqgendiff/blob/master/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<div class="section level1">
+<h1 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h1>
+<p>Please note that the ‘seqgendiff’ project is released with a <a href="https://github.com/dcgerard/seqgendiff/blob/master/CODE_OF_CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=seqgendiff">https://​cloud.r-project.org/​package=seqgendiff</a>
-</li>
-<li>Browse source code at <br><a href="http://github.com/dcgerard/seqgendiff/">http://​github.com/​dcgerard/​seqgendiff/​</a>
-</li>
-<li>Report a bug at <br><a href="http://github.com/dcgerard/seqgendiff/issues">http://​github.com/​dcgerard/​seqgendiff/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=seqgendiff" class="external-link">View on CRAN</a></li>
+<li><a href="http://github.com/dcgerard/seqgendiff/" class="external-link">Browse source code</a></li>
+<li><a href="http://github.com/dcgerard/seqgendiff/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing seqgendiff</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>David Gerard <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9450-5023" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html#citation">Citing seqgendiff</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/dcgerard/seqgendiff"><img src="https://travis-ci.org/dcgerard/seqgendiff.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/dcgerard/seqgendiff"><img src="https://ci.appveyor.com/api/projects/status/github/dcgerard/seqgendiff?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://codecov.io/github/dcgerard/seqgendiff?branch=master"><img src="https://img.shields.io/codecov/c/github/dcgerard/seqgendiff/master.svg" alt="Coverage Status"></a></li>
-<li><a href="http://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>
-<li><a href="https://www.tidyverse.org/lifecycle/#stable"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
-<li><a href="https://cran.r-project.org/package=seqgendiff"><img src="https://www.r-pkg.org/badges/version/seqgendiff" alt="CRAN status"></a></li>
-<li><a href="https://cran.r-project.org/package=seqgendiff"><img src="http://cranlogs.r-pkg.org/badges/grand-total/seqgendiff"></a></li>
+<li>David Gerard <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9450-5023" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://travis-ci.org/dcgerard/seqgendiff" class="external-link"><img src="https://travis-ci.org/dcgerard/seqgendiff.svg?branch=master" alt="Travis-CI Build Status"></a></li>
+<li><a href="https://ci.appveyor.com/project/dcgerard/seqgendiff" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/dcgerard/seqgendiff?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://codecov.io/github/dcgerard/seqgendiff?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/dcgerard/seqgendiff/master.svg" alt="Coverage Status"></a></li>
+<li><a href="http://www.gnu.org/licenses/gpl-3.0" class="external-link"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
+<li><a href="https://cran.r-project.org/package=seqgendiff" class="external-link"><img src="https://www.r-pkg.org/badges/version/seqgendiff" alt="CRAN status"></a></li>
+<li><a href="https://cran.r-project.org/package=seqgendiff" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/seqgendiff"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by David Gerard.</p>
+  <p></p>
+<p>Developed by David Gerard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -230,6 +233,8 @@
 
   
 
+
+  
 
   </body>
 </html>
