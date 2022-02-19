@@ -14,22 +14,16 @@ knitr::opts_chunk$set(
 
 # RNA-Seq Generation/Modification for Simulation
 
-[![Travis-CI Build Status](https://travis-ci.org/dcgerard/seqgendiff.svg?branch=master)](https://travis-ci.org/dcgerard/seqgendiff)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dcgerard/seqgendiff?branch=master&svg=true)](https://ci.appveyor.com/project/dcgerard/seqgendiff)
-[![Coverage Status](https://img.shields.io/codecov/c/github/dcgerard/seqgendiff/master.svg)](https://codecov.io/github/dcgerard/seqgendiff?branch=master)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/dcgerard/seqgendiff/workflows/R-CMD-check/badge.svg)](https://github.com/dcgerard/seqgendiff/actions)
+[![Codecov test coverage](https://codecov.io/gh/dcgerard/seqgendiff/branch/master/graph/badge.svg)](https://app.codecov.io/gh/dcgerard/seqgendiff?branch=master)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/seqgendiff)](https://cran.r-project.org/package=seqgendiff)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/seqgendiff)](https://cran.r-project.org/package=seqgendiff)
+<!-- badges: end -->
 
-This package will take real RNA-seq data (either single-cell or bulk) and alter
-it by adding signal to it. This signal is in the form of a generalized linear 
-model with a log (base-2) link function under a Poisson / negative binomial / 
-mixture of negative binomials distribution. The advantage of this way of
-simulating data is that you can see how your method behaves when the simulated
-data exhibit common (and annoying) features of real data. This is without you
-having to specify these features *a priori*. We call the way we add signal
-"binomial thinning".
+This package will take real RNA-seq data (either single-cell or bulk) and alter it by adding signal to it. This signal is in the form of a generalized linear model with a log (base-2) link function under a Poisson / negative binomial / mixture of negative binomials distribution. The advantage of this way of simulating data is that you can see how your method behaves when the simulated data exhibit common (and annoying) features of real data. This is without you having to specify these features *a priori*. We call the way we add signal "binomial thinning".
 
 The main functions are:
 
