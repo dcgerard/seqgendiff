@@ -71,7 +71,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="http://github.com/dcgerard/seqgendiff/" class="external-link">
+  <a href="https://github.com/dcgerard/seqgendiff/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,30 +92,31 @@
 <div class="section level1">
 <div class="page-header"><h1 id="rna-seq-generationmodification-for-simulation">RNA-Seq Generation/Modification for Simulation<a class="anchor" aria-label="anchor" href="#rna-seq-generationmodification-for-simulation"></a>
 </h1></div>
+<!-- badges: start -->
 
 <p>This package will take real RNA-seq data (either single-cell or bulk) and alter it by adding signal to it. This signal is in the form of a generalized linear model with a log (base-2) link function under a Poisson / negative binomial / mixture of negative binomials distribution. The advantage of this way of simulating data is that you can see how your method behaves when the simulated data exhibit common (and annoying) features of real data. This is without you having to specify these features <em>a priori</em>. We call the way we add signal “binomial thinning”.</p>
 <p>The main functions are:</p>
 <ul>
 <li>
-<code>select_counts</code>: Subsample the columns and rows of a real RNA-seq count matrix. You would then feed this sub-matrix into one of the thinning functions below.</li>
+<code><a href="reference/select_counts.html">select_counts()</a></code>: Subsample the columns and rows of a real RNA-seq count matrix. You would then feed this sub-matrix into one of the thinning functions below.</li>
 <li>
-<code>thin_diff</code>: The function most users should be using for general-purpose binomial thinning. For the special applications of the two-group model or library/gene thinning, see the functions listed below.</li>
+<code><a href="reference/thin_diff.html">thin_diff()</a></code>: The function most users should be using for general-purpose binomial thinning. For the special applications of the two-group model or library/gene thinning, see the functions listed below.</li>
 <li>
-<code>thin_2group</code>: The specific application of thinning in the two-group model.</li>
+<code><a href="reference/thin_2group.html">thin_2group()</a></code>: The specific application of thinning in the two-group model.</li>
 <li>
-<code>thin_lib</code>: The specific application of library size thinning.</li>
+<code><a href="reference/thin_lib.html">thin_lib()</a></code>: The specific application of library size thinning.</li>
 <li>
-<code>thin_gene</code>: The specific application of total gene expression thinning.</li>
+<code><a href="reference/thin_gene.html">thin_gene()</a></code>: The specific application of total gene expression thinning.</li>
 <li>
-<code>thin_all</code>: The specific application of thinning all counts.</li>
+<code><a href="reference/thin_all.html">thin_all()</a></code>: The specific application of thinning all counts.</li>
 <li>
-<code>effective_cor</code>: Returns an estimate of the actual correlation between the surrogate variables and a user-specified design matrix.</li>
+<code><a href="reference/effective_cor.html">effective_cor()</a></code>: Returns an estimate of the actual correlation between the surrogate variables and a user-specified design matrix.</li>
 <li>
-<code>ThinDataToSummarizedExperiment</code>: Converts a <code>ThinData</code> object to a <code>SummarizedExperiment</code> object.</li>
+<code><a href="reference/ThinDataToSummarizedExperiment.html">ThinDataToSummarizedExperiment()</a></code>: Converts a <code>ThinData</code> object to a <code>SummarizedExperiment()</code> object.</li>
 <li>
-<code>ThinDataToDESeqDataSet</code>: Converts a <code>ThinData</code> object to a <code>DESeqDataSet</code> object.</li>
+<code><a href="reference/ThinDataToDESeqDataSet.html">ThinDataToDESeqDataSet()</a></code>: Converts a <code>ThinData</code> object to a <code>DESeqDataSet</code> object.</li>
 </ul>
-<p>If you find a bug or want a new feature, please submit an <a href="http://github.com/dcgerard/seqgendiff/issues" class="external-link">issue</a>.</p>
+<p>If you find a bug or want a new feature, please submit an <a href="https://github.com/dcgerard/seqgendiff/issues" class="external-link">issue</a>.</p>
 <p>Check out <a href="NEWS.html">NEWS</a> for updates.</p>
 </div>
 <div class="section level1">
@@ -139,7 +140,7 @@
 </h1>
 <p>If you use this package, please cite:</p>
 <blockquote>
-<p>Gerard D (2020). “Data-based RNA-seq simulations by binomial thinning.” <em>BMC Bioinformatics</em>. 21(1), 206. doi: <a href="https://doi.org/10.1186/s12859-020-3450-9" class="external-link">10.1186/s12859-020-3450-9</a>.</p>
+<p>Gerard, D (2020). “Data-based RNA-seq simulations by binomial thinning.” <em>BMC Bioinformatics</em>. 21(1), 206. doi: <a href="https://doi.org/10.1186/s12859-020-3450-9" class="external-link">10.1186/s12859-020-3450-9</a>.</p>
 </blockquote>
 <p>A BibTeX entry for LaTeX users is</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode tex"><code class="sourceCode latex"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>@article{gerard2020data,</span>
@@ -167,8 +168,8 @@
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=seqgendiff" class="external-link">View on CRAN</a></li>
-<li><a href="http://github.com/dcgerard/seqgendiff/" class="external-link">Browse source code</a></li>
-<li><a href="http://github.com/dcgerard/seqgendiff/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/dcgerard/seqgendiff/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/dcgerard/seqgendiff/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -204,13 +205,12 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/dcgerard/seqgendiff" class="external-link"><img src="https://travis-ci.org/dcgerard/seqgendiff.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/dcgerard/seqgendiff" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/dcgerard/seqgendiff?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://codecov.io/github/dcgerard/seqgendiff?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/dcgerard/seqgendiff/master.svg" alt="Coverage Status"></a></li>
-<li><a href="http://www.gnu.org/licenses/gpl-3.0" class="external-link"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>
-<li><a href="https://www.tidyverse.org/lifecycle/#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
+<li><a href="https://github.com/dcgerard/seqgendiff/actions" class="external-link"><img src="https://github.com/dcgerard/seqgendiff/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/dcgerard/seqgendiff?branch=master" class="external-link"><img src="https://codecov.io/gh/dcgerard/seqgendiff/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://www.gnu.org/licenses/gpl-3.0" class="external-link"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://cran.r-project.org/package=seqgendiff" class="external-link"><img src="https://www.r-pkg.org/badges/version/seqgendiff" alt="CRAN status"></a></li>
-<li><a href="https://cran.r-project.org/package=seqgendiff" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/seqgendiff"></a></li>
+<li><a href="https://cran.r-project.org/package=seqgendiff" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/seqgendiff"></a></li>
 </ul>
 </div>
 

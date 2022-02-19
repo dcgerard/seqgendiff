@@ -72,7 +72,7 @@
 #'
 #' @references
 #' \itemize{
-#'   \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. \doi{10.1186/s12859-020-3450-9}.}
+#'   \item{Gerard, D., and Stephens, M. (2021). "Unifying and Generalizing Methods for Removing Unwanted Variation Based on Negative Controls." \emph{Statistica Sinica}, 31(3), 1145-1166 \doi{10.5705/ss.202018.0345}.}
 #' }
 #'
 #' @examples
