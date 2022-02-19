@@ -12,7 +12,7 @@
 #' The Poisson thinning approach first randomly assigns samples to be in one of two groups. Then,
 #' given this assignment, will Binomially sample counts with a sample size of the gene expression
 #' counts and a probability that is a function of the effect size. For details, see
-#' Gerard and Stephens (2017).
+#' Gerard and Stephens (2021).
 #'
 #' @param mat A matrix of count data. The rows index the individuals and
 #'     the columns index the genes.
@@ -70,9 +70,10 @@
 #'
 #' @author David Gerard
 #'
-#' @references Gerard, D., & Stephens, M. (2017).
-#'     Unifying and generalizing methods for removing unwanted variation based
-#'     on negative controls. arXiv preprint arXiv:1705.08393.
+#' @references
+#' \itemize{
+#'   \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. \doi{10.1186/s12859-020-3450-9}.}
+#' }
 #'
 #' @examples
 #' ## Simulate data from given matrix of counts
@@ -318,7 +319,7 @@ poisthin <- function(mat,
 #' \itemize{
 #'   \item{Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
 #'     Factor Analysis and Confounder Adjusted Testing and Estimation.
-#'     R package version 1.0.4. https://CRAN.R-project.org/package=cate}
+#'     R package version 1.0.4. \url{https://cran.r-project.org/package=cate}}
 #' }
 #'
 #' @examples

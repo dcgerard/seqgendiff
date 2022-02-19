@@ -76,8 +76,8 @@ mean(thout$mat) / lambda
 }
 \references{
 \itemize{
-  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
-  \item{Robinson, David G., and John D. Storey. "subSeq: determining appropriate sequencing depth through efficient read subsampling." Bioinformatics 30, no. 23 (2014): 3424-3426.}
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. \doi{10.1186/s12859-020-3450-9}.}
+  \item{Robinson, David G., and John D. Storey. "subSeq: determining appropriate sequencing depth through efficient read subsampling." \emph{Bioinformatics} 30, no. 23 (2014): 3424-3426. \doi{10.1093/bioinformatics/btu552}.}
 }
 }
 \seealso{

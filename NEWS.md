@@ -26,15 +26,14 @@ Fixes a lot of things for CRAN resubmission.
 
 # seqgendiff 1.0.0
 
-- The biggest change here is that the optmatch package is now only
-  suggested rather than imported. This is because the optmatch package
-  is under a super weird license that I didn't previously know about
-  <https://cran.r-project.org/package=optmatch/LICENSE>.
+- The biggest change here is that the `{optmatch}` package is now only
+  suggested rather than imported. This is because the `{optmatch}` package
+  is under a super weird license that I didn't previously know about.
 - The user may also now specify the permutation method in the thinner
   functions.
-- The Hungarian algorithm, implemented in the clue package, seems to
-  work just as well as optmatch, and so I added it as an
-  option. However, since I used optmatch in the simulations for the
+- The Hungarian algorithm, implemented in the `{clue}` package, seems to
+  work just as well as `{optmatch}`, and so I added it as an
+  option. However, since I used `{optmatch}` in the simulations for the
   paper, I have kept `permute_method = "optmatch"` as the default
   option.
 
@@ -76,5 +75,5 @@ This has been a massive rewrite of the `{seqgendiff}` package.
 
 # seqgendiff 0.2.0
 
-* `corassign()` lets you make group assignment that is correlated with hidden factors.
-* In `poisthin()`, the `group_assign = "cor"` option uses `corassign()` to make group assignments.
+- `corassign()` lets you make group assignment that is correlated with hidden factors.
+- In `poisthin()`, the `group_assign = "cor"` option uses `corassign()` to make group assignments.

@@ -101,7 +101,7 @@ The user may specify the distribution of the effects.
 The Poisson thinning approach first randomly assigns samples to be in one of two groups. Then,
 given this assignment, will Binomially sample counts with a sample size of the gene expression
 counts and a probability that is a function of the effect size. For details, see
-Gerard and Stephens (2017).
+Gerard and Stephens (2021).
 }
 \examples{
 ## Simulate data from given matrix of counts
@@ -130,9 +130,9 @@ abline(0, 1, col = 2, lty = 2)
 
 }
 \references{
-Gerard, D., & Stephens, M. (2017).
-    Unifying and generalizing methods for removing unwanted variation based
-    on negative controls. arXiv preprint arXiv:1705.08393.
+\itemize{
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. \doi{10.1186/s12859-020-3450-9}.}
+}
 }
 \author{
 David Gerard

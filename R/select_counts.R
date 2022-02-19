@@ -21,8 +21,8 @@
 #' This filtering scheme is described in Chen et al. (2016).
 #' If you want more control over this filtering, you should use
 #' the \code{\link[edgeR]{filterByExpr}} function from edgeR directly. You
-#' can install edgeR by following instructions here:
-#' \url{https://doi.org/doi:10.18129/B9.bioc.edgeR}.
+#' can install edgeR by following instructions at
+#' \doi{10.18129/B9.bioc.edgeR}.
 #'
 #' @param mat A numeric matrix of RNA-seq counts. The rows index the genes
 #'     and the columns index the samples.
@@ -58,7 +58,7 @@
 #'
 #' @references
 #' \itemize{
-#'   \item{Chen, Yunshun, Aaron TL Lun, and Gordon K. Smyth. "From reads to genes to pathways: differential expression analysis of RNA-Seq experiments using Rsubread and the edgeR quasi-likelihood pipeline." F1000Research 5 (2016).}
+#'   \item{Chen, Yunshun, Aaron TL Lun, and Gordon K. Smyth. "From reads to genes to pathways: differential expression analysis of RNA-Seq experiments using Rsubread and the edgeR quasi-likelihood pipeline." \emph{F1000Research} 5 (2016). \doi{10.12688/f1000research.8987.2}.}
 #' }
 #'
 #' @author David Gerard

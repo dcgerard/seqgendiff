@@ -17,7 +17,7 @@
 #'
 #' @references
 #' \itemize{
-#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.}
+#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." \emph{Bioinformatics} 33, no. 21 (2017): 3486-3488. \doi{10.1093/bioinformatics/btx435}.}
 #' }
 #'
 #' @author David Gerard
@@ -76,7 +76,7 @@ seqgen_base <- function(designmat,
 #'
 #' @references
 #' \itemize{
-#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.}
+#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." \emph{Bioinformatics} 33, no. 21 (2017): 3486-3488. \doi{10.1093/bioinformatics/btx435}.}
 #' }
 #'
 #' @return A list object with some or all of the following elements:
@@ -171,7 +171,7 @@ seqgen_diff <- function(designmat,
 #'
 #' @references
 #' \itemize{
-#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." Bioinformatics 33, no. 21 (2017): 3486-3488.}
+#'   \item{Vieth, Beate, Christoph Ziegenhain, Swati Parekh, Wolfgang Enard, and Ines Hellmann. "powsimR: power analysis for bulk and single cell RNA-seq experiments." \emph{Bioinformatics} 33, no. 21 (2017): 3486-3488. \doi{10.1093/bioinformatics/btx435}.}
 #' }
 #'
 #' @seealso

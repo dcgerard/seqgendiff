@@ -97,7 +97,7 @@ general binomial thinning approach implemented in \code{\link{thin_diff}}.
 }
 \details{
 The specific application of binomial thinning to the two-group model was
-used in Gerard and Stephens (2017) and Gerard and Stephens (2018). This is
+used in Gerard and Stephens (2018) and Gerard and Stephens (2021). This is
 a specific case of the general method described in Gerard (2020).
 }
 \examples{
@@ -128,15 +128,14 @@ abline(0, 1, col = 2, lwd = 2)
 }
 \references{
 \itemize{
-  \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
-  \item{Gerard, David and Matthew Stephens (2017). "Unifying and generalizing methods for removing unwanted variation based on negative controls." \emph{arXiv} preprint arXiv:1705.08393.}
-  \item{David Gerard and Matthew Stephens (2018). "Empirical Bayes shrinkage and false discovery rate estimation, allowing for unwanted variation." \emph{Biostatistics}, doi: \href{https://doi.org/10.1093/biostatistics/kxy029}{10.1093/biostatistics/kxy029}.}
-  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
-  \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
-  \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
+  \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." \emph{The American Mathematical Monthly} 69, no. 1 (1962): 9-15. \doi{10.1080/00029890.1962.11989827}.}
+  \item{Gerard, D., and Stephens, M. (2021). "Unifying and Generalizing Methods for Removing Unwanted Variation Based on Negative Controls." \emph{Statistica Sinica}, 31(3), 1145-1166 \doi{10.5705/ss.202018.0345}.}
+  \item{David Gerard and Matthew Stephens (2018). "Empirical Bayes shrinkage and false discovery rate estimation, allowing for unwanted variation." \emph{Biostatistics}, \doi{10.1093/biostatistics/kxy029}.}
+  \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. \doi{10.1186/s12859-020-3450-9}.}
+  \item{Hornik K (2005). "A CLUE for CLUster Ensembles." \emph{Journal of Statistical Software}, 14(12). \doi{10.18637/jss.v014.i12}. \doi{10.18637/jss.v014.i12}.}
   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
-  \item{Stephens, Matthew. "False discovery rates: a new deal." Biostatistics 18, no. 2 (2016): 275-294.}
-  \item{Wakefield, Jon. "Bayes factors for genome-wide association studies: comparison with P-values." Genetic epidemiology 33, no. 1 (2009): 79-86.}
+  \item{Stephens, Matthew. "False discovery rates: a new deal." \emph{Biostatistics} 18, no. 2 (2016): 275-294. \doi{10.1093/biostatistics/kxw041}.}
+  \item{Wakefield, Jon. "Bayes factors for genome-wide association studies: comparison with P-values." \emph{Genetic epidemiology} 33, no. 1 (2009): 79-86. \doi{10.1002/gepi.20359}.}
 }
 }
 \seealso{

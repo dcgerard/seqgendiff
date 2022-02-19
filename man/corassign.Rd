@@ -85,7 +85,7 @@ corvec * sqrt(2 / pi)
 \itemize{
   \item{Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
     Factor Analysis and Confounder Adjusted Testing and Estimation.
-    R package version 1.0.4. https://CRAN.R-project.org/package=cate}
+    R package version 1.0.4. \url{https://cran.r-project.org/package=cate}}
 }
 }
 \author{

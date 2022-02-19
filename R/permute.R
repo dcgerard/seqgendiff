@@ -50,10 +50,9 @@ est_sv <- function(mat, n_sv, design_obs, use_sva = FALSE) {
 #'
 #' @references
 #' \itemize{
-#'   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
-#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
+#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." \emph{The American Mathematical Monthly} 69, no. 1 (1962): 9-15. \doi{10.1080/00029890.1962.11989827}.}
 #'   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
-#'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
+#'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." \emph{Journal of Statistical Software}, 14(12). \doi{10.18637/jss.v014.i12}. \doi{10.18637/jss.v014.i12}.}
 #' }
 #'
 #' @return A list with two elements:
@@ -122,10 +121,9 @@ permute_design <- function(design_perm, sv, target_cor, method = c("hungarian", 
 #'
 #' @references
 #' \itemize{
-#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." The American Mathematical Monthly 69, no. 1 (1962): 9-15.}
-#'   \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
-#'   \item{Hansen, Ben B., and Stephanie Olsen Klopfer. "Optimal full matching and related designs via network flows." Journal of computational and Graphical Statistics 15, no. 3 (2006): 609-627.}
-#'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." Journal of Statistical Software, 14(12). doi: 10.18637/jss.v014.i12}
+#'   \item{Gale, David, and Lloyd S. Shapley. "College admissions and the stability of marriage." \emph{The American Mathematical Monthly} 69, no. 1 (1962): 9-15. \doi{10.1080/00029890.1962.11989827}.}
+#'   \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. \doi{10.1186/s12859-020-3450-9}.}
+#'   \item{Hornik K (2005). "A CLUE for CLUster Ensembles." \emph{Journal of Statistical Software}, 14(12). \doi{10.18637/jss.v014.i12}. \doi{10.18637/jss.v014.i12}.}
 #'   \item{C. Papadimitriou and K. Steiglitz (1982), Combinatorial Optimization: Algorithms and Complexity. Englewood Cliffs: Prentice Hall.}
 #' }
 #'
@@ -244,7 +242,7 @@ effective_cor <- function(design_perm,
 #'
 #' @references
 #' \itemize{
-#'   \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. doi: \href{https://doi.org/10.1186/s12859-020-3450-9}{10.1186/s12859-020-3450-9}.}
+#'   \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. \doi{10.1186/s12859-020-3450-9}.}
 #' }
 #'
 #' @export

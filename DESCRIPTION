@@ -15,7 +15,7 @@ Description: Generates/modifies RNA-seq data for use in simulations. We provide
 License: GPL-3
 Encoding: UTF-8
 URL: https://github.com/dcgerard/seqgendiff
-BugReports: http://github.com/dcgerard/seqgendiff/issues
+BugReports: https://github.com/dcgerard/seqgendiff/issues
 RoxygenNote: 7.1.2
 Suggests: 
     covr,
