@@ -12,7 +12,7 @@ thin_2group(
   group_prop = 0.5,
   corvec = NULL,
   alpha = 0,
-  permute_method = c("optmatch", "hungarian", "marriage"),
+  permute_method = c("hungarian", "marriage"),
   type = c("thin", "mult")
 )
 }
@@ -48,20 +48,12 @@ this to \code{1} corresponds to the p-value prior of
 Wakefield (2009). You would rarely set this to anything but \code{0}
 or \code{1}.}
 
-\item{permute_method}{Should we use the optimal matching technique from Hansen and
-Klopfer (2006) (\code{"optmatch"}), the Gale-Shapley algorithm
+\item{permute_method}{Should we use the Gale-Shapley algorithm
 for stable marriages (\code{"marriage"}) (Gale and Shapley, 1962)
 as implemented in the matchingR package, or the Hungarian algorithm
 (Papadimitriou and Steiglitz, 1982) (\code{"hungarian"})
-as implemented in the clue package (Hornik, 2005)?
-The \code{"optmatch"} method works really well
-but does take a lot more computational time if you have, say, 1000
-samples. If you use the \code{"optmatch"} option, you should note
-that the optmatch package uses a super strange license:
-\url{https://cran.r-project.org/package=optmatch/LICENSE}. If this
-license doesn't work for you (because you are not in academia, or
-because you don't believe in restrictive licenses), then
-try out the \code{"hungarian"} method.}
+as implemented in the clue package (Hornik, 2005)? The
+Hungarian method almost always works better, so is the default.}
 
 \item{type}{Should we apply binomial thinning (\code{type = "thin"}) or
 just naive multiplication of the counts (\code{type = "mult"}).

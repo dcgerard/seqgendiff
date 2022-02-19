@@ -82,7 +82,7 @@ test_that("poisthin input works with many zeros", {
                signal_params = list(mean = 0, sd = 1),
                prop_null = 1)
 
-  pout <- do.call(what = poisthin, args = args)
+  expect_error(pout <- do.call(what = poisthin, args = args), NA)
 
 }
 )

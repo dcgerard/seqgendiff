@@ -451,7 +451,7 @@ thin_2group <- function(mat,
                         group_prop      = 0.5,
                         corvec          = NULL,
                         alpha           = 0,
-                        permute_method  = c("optmatch", "hungarian", "marriage"),
+                        permute_method  = c("hungarian", "marriage"),
                         type            = c("thin", "mult")) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
@@ -636,20 +636,12 @@ thin_2group <- function(mat,
 #'     or \code{design_fixed}. Setting this to \code{TRUE}
 #'     also changes the column-names of the corresponding coefficient matrices.
 #'     Defaults to \code{TRUE}.
-#' @param permute_method Should we use the optimal matching technique from Hansen and
-#'     Klopfer (2006) (\code{"optmatch"}), the Gale-Shapley algorithm
+#' @param permute_method Should we use the Gale-Shapley algorithm
 #'     for stable marriages (\code{"marriage"}) (Gale and Shapley, 1962)
 #'     as implemented in the matchingR package, or the Hungarian algorithm
 #'     (Papadimitriou and Steiglitz, 1982) (\code{"hungarian"})
-#'     as implemented in the clue package (Hornik, 2005)?
-#'     The \code{"optmatch"} method works really well
-#'     but does take a lot more computational time if you have, say, 1000
-#'     samples. If you use the \code{"optmatch"} option, you should note
-#'     that the optmatch package uses a super strange license:
-#'     \url{https://cran.r-project.org/package=optmatch/LICENSE}. If this
-#'     license doesn't work for you (because you are not in academia, or
-#'     because you don't believe in restrictive licenses), then
-#'     try out the \code{"hungarian"} method.
+#'     as implemented in the clue package (Hornik, 2005)? The
+#'     Hungarian method almost always works better, so is the default.
 #' @param type Should we apply binomial thinning (\code{type = "thin"}) or
 #'     just naive multiplication of the counts (\code{type = "mult"}).
 #'     You should always have this set to \code{"thin"}.
@@ -805,7 +797,7 @@ thin_diff <- function(mat,
                       design_obs      = NULL,
                       relative        = TRUE,
                       change_colnames = TRUE,
-                      permute_method  = c("optmatch", "hungarian", "marriage"),
+                      permute_method  = c("hungarian", "marriage"),
                       type            = c("thin", "mult")) {
   ## Check input --------------------------------------------------------------
   assertthat::assert_that(is.matrix(mat))
@@ -855,16 +847,6 @@ thin_diff <- function(mat,
   assertthat::are_equal(ncol(design_perm), ncol(coef_perm))
 
   permute_method <- match.arg(permute_method)
-  if (!is.null(target_cor) & permute_method == "optmatch" & !requireNamespace("optmatch", quietly = TRUE)) {
-    stop(paste0("\nPackage optmatch must be installed to use",
-                "`permute_method = \"optmatch\"`\n",
-                "You can install it with\n\n",
-                "install.packages(\"optmatch\")\n\n",
-                "Note that optmatch uses a strange non-standard license:\n",
-                "https://cran.r-project.org/package=optmatch/LICENSE\n"))
-  } else if (!is.null(target_cor) & permute_method == "optmatch") {
-    message_fun("optmatch")
-  }
 
   ## Permute ------------------------------------------------------------------
   if (is.null(target_cor) | ncol(design_perm) == 0) {

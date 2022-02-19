@@ -41,20 +41,12 @@ est_sv <- function(mat, n_sv, design_obs, use_sva = FALSE) {
 #'
 #' @inheritParams thin_diff
 #' @param sv A matrix of surrogate variables
-#' @param method Should we use the optimal matching technique from Hansen and
-#'     Klopfer (2006) (\code{"optmatch"}), the Gale-Shapley algorithm
+#' @param method Should we use the Gale-Shapley algorithm
 #'     for stable marriages (\code{"marriage"}) (Gale and Shapley, 1962)
 #'     as implemented in the matchingR package, or the Hungarian algorithm
 #'     (Papadimitriou and Steiglitz, 1982) (\code{"hungarian"})
-#'     as implemented in the clue package (Hornik, 2005)?
-#'     The \code{"optmatch"} method works really well
-#'     but does take a lot more computational time if you have, say, 1000
-#'     samples. If you use the \code{"optmatch"} option, you should note
-#'     that the optmatch package uses a super strange license:
-#'     \url{https://cran.r-project.org/package=optmatch/LICENSE}. If this
-#'     license doesn't work for you (because you are not in academia, or
-#'     because you don't believe in restrictive licenses), then
-#'     try out the \code{"hungarian"} method.
+#'     as implemented in the clue package (Hornik, 2005)? The
+#'     Hungarian method almost always works better, so is the default.
 #'
 #' @references
 #' \itemize{
@@ -73,7 +65,7 @@ est_sv <- function(mat, n_sv, design_obs, use_sva = FALSE) {
 #' }
 #'
 #' @author David Gerard
-permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "hungarian", "marriage")) {
+permute_design <- function(design_perm, sv, target_cor, method = c("hungarian", "marriage")) {
   ## Check input --------------------------------------------------------------
   assertthat::are_equal(nrow(design_perm), nrow(sv))
   assertthat::are_equal(ncol(design_perm), nrow(target_cor))
@@ -83,15 +75,6 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
   sv <- scale(sv)
 
   method <- match.arg(method)
-  if (method == "optmatch" & !requireNamespace("optmatch", quietly = TRUE)) {
-    stop(paste0("\nPackage optmatch must be installed to use `method = \"optmatch\"`\n",
-                "You can install it with\n\n",
-                "install.packages(\"optmatch\")\n\n",
-                "Note that optmatch uses a strange non-standard license:\n",
-                "https://cran.r-project.org/package=optmatch/LICENSE\n"))
-  } else if (method == "optmatch") {
-    message_fun("optmatch")
-  }
 
   ## Generate latent factors --------------------------------------------------
   sigma11 <- stats::cor(design_perm)
@@ -102,13 +85,7 @@ permute_design <- function(design_perm, sv, target_cor, method = c("optmatch", "
 
   ## Get permutations ---------------------------------------------------------
   distmat <- as.matrix(pdist::pdist(X = scale(design_perm), Y = scale(latent_var)))
-  if (method == "optmatch") {
-    dimnames(distmat) <- list(treated = paste0("O", seq_len(nsamp)), control = paste0("L", seq_len(nsamp)))
-    suppressWarnings(matchout <- optmatch::pairmatch(distmat))
-    ogroup <- matchout[attributes(matchout)$contrast.group]
-    lgroup <- matchout[!attributes(matchout)$contrast.group]
-    design_perm <- design_perm[match(lgroup, ogroup), , drop = FALSE]
-  } else if (method == "marriage") {
+  if (method == "marriage") {
     matchout <- matchingR::galeShapley.marriageMarket(proposerUtils = -1 * distmat, reviewerUtils = -1 * t(distmat))
     design_perm <- design_perm[matchout$proposals, , drop = FALSE]
   } else if (method == "hungarian") {
@@ -176,7 +153,7 @@ effective_cor <- function(design_perm,
                           sv,
                           target_cor,
                           calc_first = c("cor", "mean"),
-                          method = c("optmatch", "hungarian", "marriage"),
+                          method = c("hungarian", "marriage"),
                           iternum = 1000) {
   ## Check input -------------------------------------------------------------
   calc_first <- match.arg(calc_first)
@@ -192,15 +169,6 @@ effective_cor <- function(design_perm,
   assertthat::is.count(iternum)
 
   method <- match.arg(method)
-  if (method == "optmatch" & !requireNamespace("optmatch", quietly = TRUE)) {
-    stop(paste0("\nPackage optmatch must be installed to use `method = \"optmatch\"`\n",
-                "You can install it with\n\n",
-                "install.packages(\"optmatch\")\n\n",
-                "Note that optmatch uses a strange non-standard license:\n",
-                "https://cran.r-project.org/package=optmatch/LICENSE\n"))
-  } else if (method == "optmatch") {
-    message_fun("optmatch")
-  }
 
   ## Get estimated correlation
   target_cor <- fix_cor(design_perm = design_perm, target_cor = target_cor)

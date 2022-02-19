@@ -77,7 +77,8 @@ BiocManager::install("airway")
 
 ```{block, eval = FALSE}
 Now we can load these data into R.
-````
+```
+
 ```{r, message=FALSE, warning=FALSE}
 library(airway)
 data("airway")

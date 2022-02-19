@@ -1,3 +1,8 @@
+# seqgendiff 1.2.3
+
+- Removes `{optmatch}` as a suggested package since it is no longer on CRAN.
+- Removes `LazyData: true` from DESCRIPTION since there is no 'data' directory.
+
 # seqgendiff 1.2.2
 
 - Updates all citations to BMC Bioinformatics published manuscript.
@@ -52,7 +57,7 @@ Fixes a lot of things for CRAN resubmission.
 
 # seqgendiff 0.3.0
 
-This has been a massive rewrite of the seqgendiff package.
+This has been a massive rewrite of the `{seqgendiff}` package.
 
 - `poisthin()` is now defunct. The two-group model is now implemented in
   the `thin_2group()` function. I'll keep it around since some of my old
