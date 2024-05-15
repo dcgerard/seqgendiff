@@ -48,4 +48,4 @@
 #' @aliases seqgendiff
 #'
 #' @author David Gerard
-NULL
+"_PACKAGE"

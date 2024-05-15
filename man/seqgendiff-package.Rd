@@ -51,6 +51,14 @@ package are described in detail in Gerard (2020).
   \item{Gerard, D (2020). "Data-based RNA-seq simulations by binomial thinning." \emph{BMC Bioinformatics}. 21(1), 206. \doi{10.1186/s12859-020-3450-9}.}
 }
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/dcgerard/seqgendiff}
+  \item Report bugs at \url{https://github.com/dcgerard/seqgendiff/issues}
+}
+
+}
 \author{
 David Gerard
 }

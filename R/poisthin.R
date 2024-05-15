@@ -58,13 +58,13 @@
 #'     latent group-assignment vector) will be \code{corvec * sqrt(2 / pi)}.
 #'
 #' @return A list with the following elements:
-#' \itemize{
-#'  \item{\code{Y}: }{A matrix of altered counts with \code{nsamp} rows
+#' \describe{
+#'  \item{\code{Y}}{A matrix of altered counts with \code{nsamp} rows
 #'        and \code{ngene} columns.}
-#'  \item{\code{X}: }{A design matrix. The first column contains a vector ones (for an
+#'  \item{\code{X}}{A design matrix. The first column contains a vector ones (for an
 #'        intercept term) and the second column contains an indicator for group membership.}
-#'  \item{\code{beta}: }{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
-#'  \item{\code{corassign}: }{The output from the call to \code{\link{corassign}}.
+#'  \item{\code{beta}}{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
+#'  \item{\code{corassign}}{The output from the call to \code{\link{corassign}}.
 #'        Only returned if \code{group_assign = "cor"}.}
 #' }
 #'
@@ -286,8 +286,7 @@ poisthin <- function(mat,
 #' @param mat A matrix of count data. The rows index the individuals and
 #'     the columns index the genes.
 #' @param nfac The number of latent factors. If \code{NULL}, then we will
-#'     use \code{\link[cate]{est.factor.num}} from the cate
-#'     package to choose the number of latent factors.
+#'     use the method of Onatski (2010) to choose the number of latent factors.
 #' @param corvec The vector of correlations. \code{corvec[i]} is the correlation
 #'     between latent factor \code{i} and the underlying group-assignment variable.
 #'     You can think of the correlations in \code{corvec} as a kind of "tetrachoric
@@ -317,9 +316,7 @@ poisthin <- function(mat,
 #'
 #' @references
 #' \itemize{
-#'   \item{Jingshu Wang and Qingyuan Zhao (2015). cate: High Dimensional
-#'     Factor Analysis and Confounder Adjusted Testing and Estimation.
-#'     R package version 1.0.4. \url{https://cran.r-project.org/package=cate}}
+#'   \item {A. Onatski (2010), Determining the number of factors from empirical distribution of eigenvalues. The Review of Economics and Statistics 92(4).}
 #' }
 #'
 #' @examples
@@ -380,9 +377,7 @@ corassign <- function(mat,
 
   ## Find number of latent factors if not provided ----------------------------
   if (is.null(nfac)) {
-    nfac <- cate::est.factor.num(resmat,
-                                 method = "bcv",
-                                 bcv.plot = FALSE)$r
+    nfac <- EigenDiff(resmat)
 
     ## Pad or delete corvec where necessary.
     if (is.null(corvec)) {
@@ -478,4 +473,63 @@ uncorassign <- function(n,
     ret_vec$x <- ifelse(ret_vec$groupfac > 0, 1L, 0L)
   }
   return(ret_vec)
+}
+
+
+#' Estimate number of factors
+#'
+#' This is modifed code from Wang et al (2017) since their package ("cate")
+#' is no longer on CRAN. I fix an error where default `rmax` can
+#' sometimes be greater than dimension of `Y`. I also increase the
+#' performance by only calculating the singular values (not the singular
+#' vectors).
+#'
+#' The method estimates the number of factors by the Eigenvalue Difference
+#' Method of Onatski (2010).
+#'
+#' @param Y A matrix to estimate the rank.
+#' @param rmax The maximum rank.
+#' @param niter The maximum number of iterations.
+#'
+#' @references
+#' \itemize{
+#'  \item {A. Onatski (2010), Determining the number of factors from empirical distribution of eigenvalues. The Review of Economics and Statistics 92(4).}
+#'  \item{Wang, J., Zhao, Q., Hastie, T., & Owen, A. B. (2017). Confounder adjustment in multiple hypothesis testing. Annals of statistics, 45(5), 1863.}
+#' }
+#'
+#' @examples
+#' set.seed(1)
+#' n <- 10
+#' A <- cbind(1:n, n:1)
+#' B <- A %*% t(A) + matrix(stats::rnorm(n^2), nrow = n)
+#' EigenDiff(B)
+#'
+#' @noRd
+EigenDiff <- function (Y,
+                       rmax = min(3 * sqrt(nrow(Y)), nrow(Y), ncol(Y)),
+                       niter = 10)
+{
+  n <- nrow(Y)
+  p <- ncol(Y)
+  ev <- svd(Y, nu = 0, nv = 0)$d^2/n
+  n <- length(ev)
+  j <- rmax + 1
+  diffs <- ev - c(ev[-1], 0)
+  for (i in 1:niter) {
+    y <- ev[j:(j + 4)]
+    x <- ((j - 1):(j + 3))^(2/3)
+    lm.coef <- stats::lm(y ~ x)
+    delta <- 2 * abs(lm.coef$coef[2])
+    idx <- which(diffs[1:rmax] > delta)
+    if (length(idx) == 0) {
+      hatr <- 0
+    } else {
+      hatr <- max(idx)
+    }
+    newj = hatr + 1
+    if (newj == j)
+      break
+    j = newj
+  }
+  return(hatr)
 }

@@ -78,13 +78,13 @@ latent group-assignment vector) will be \code{corvec * sqrt(2 / pi)}.}
 }
 \value{
 A list with the following elements:
-\itemize{
- \item{\code{Y}: }{A matrix of altered counts with \code{nsamp} rows
+\describe{
+ \item{\code{Y}}{A matrix of altered counts with \code{nsamp} rows
        and \code{ngene} columns.}
- \item{\code{X}: }{A design matrix. The first column contains a vector ones (for an
+ \item{\code{X}}{A design matrix. The first column contains a vector ones (for an
        intercept term) and the second column contains an indicator for group membership.}
- \item{\code{beta}: }{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
- \item{\code{corassign}: }{The output from the call to \code{\link{corassign}}.
+ \item{\code{beta}}{The approximately true effect sizes of \eqn{log(Y) ~ X\beta}.}
+ \item{\code{corassign}}{The output from the call to \code{\link{corassign}}.
        Only returned if \code{group_assign = "cor"}.}
 }
 }

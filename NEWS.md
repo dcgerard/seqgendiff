@@ -1,3 +1,8 @@
+# seqgendiff 1.2.4
+
+- Adds back `seqgendiff::EigenDiff()` since cate is no longer on CRAN.
+- Removes `cate` as imports because it is not longer on CRAN.
+
 # seqgendiff 1.2.3
 
 - Removes `{optmatch}` as a suggested package since it is no longer on CRAN.
