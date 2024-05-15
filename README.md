@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/dcgerard/seqgendiff/workflows/R-CMD-check/badge.svg)](https://github.com/dcgerard/seqgendiff/actions)
+[![R-CMD-check](https://github.com/dcgerard/seqgendiff/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dcgerard/seqgendiff/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/dcgerard/seqgendiff/branch/master/graph/badge.svg)](https://app.codecov.io/gh/dcgerard/seqgendiff?branch=master)
 [![License: GPL
@@ -29,25 +29,25 @@ specify these features *a priori*. We call the way we add signal
 
 The main functions are:
 
--   `select_counts()`: Subsample the columns and rows of a real RNA-seq
-    count matrix. You would then feed this sub-matrix into one of the
-    thinning functions below.
--   `thin_diff()`: The function most users should be using for
-    general-purpose binomial thinning. For the special applications of
-    the two-group model or library/gene thinning, see the functions
-    listed below.
--   `thin_2group()`: The specific application of thinning in the
-    two-group model.
--   `thin_lib()`: The specific application of library size thinning.
--   `thin_gene()`: The specific application of total gene expression
-    thinning.
--   `thin_all()`: The specific application of thinning all counts.
--   `effective_cor()`: Returns an estimate of the actual correlation
-    between the surrogate variables and a user-specified design matrix.
--   `ThinDataToSummarizedExperiment()`: Converts a `ThinData` object to
-    a `SummarizedExperiment()` object.
--   `ThinDataToDESeqDataSet()`: Converts a `ThinData` object to a
-    `DESeqDataSet` object.
+- `select_counts()`: Subsample the columns and rows of a real RNA-seq
+  count matrix. You would then feed this sub-matrix into one of the
+  thinning functions below.
+- `thin_diff()`: The function most users should be using for
+  general-purpose binomial thinning. For the special applications of the
+  two-group model or library/gene thinning, see the functions listed
+  below.
+- `thin_2group()`: The specific application of thinning in the two-group
+  model.
+- `thin_lib()`: The specific application of library size thinning.
+- `thin_gene()`: The specific application of total gene expression
+  thinning.
+- `thin_all()`: The specific application of thinning all counts.
+- `effective_cor()`: Returns an estimate of the actual correlation
+  between the surrogate variables and a user-specified design matrix.
+- `ThinDataToSummarizedExperiment()`: Converts a `ThinData` object to a
+  `SummarizedExperiment()` object.
+- `ThinDataToDESeqDataSet()`: Converts a `ThinData` object to a
+  `DESeqDataSet` object.
 
 If you find a bug or want a new feature, please submit an
 [issue](https://github.com/dcgerard/seqgendiff/issues).

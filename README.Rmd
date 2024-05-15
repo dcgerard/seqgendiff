@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 # RNA-Seq Generation/Modification for Simulation
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/dcgerard/seqgendiff/workflows/R-CMD-check/badge.svg)](https://github.com/dcgerard/seqgendiff/actions)
+[![R-CMD-check](https://github.com/dcgerard/seqgendiff/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dcgerard/seqgendiff/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/dcgerard/seqgendiff/branch/master/graph/badge.svg)](https://app.codecov.io/gh/dcgerard/seqgendiff?branch=master)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
