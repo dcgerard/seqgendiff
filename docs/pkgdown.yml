@@ -1,8 +1,8 @@
-pandoc: 2.14.0.3
-pkgdown: 2.0.2
+pandoc: 3.1.11
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   different_thinners: different_thinners.html
   simulate_rnaseq: simulate_rnaseq.html
-last_built: 2022-02-19T15:43Z
+last_built: 2024-05-15T09:42Z
 

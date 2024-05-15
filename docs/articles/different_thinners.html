@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Applying Different Thinning Functions • seqgendiff</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">seqgendiff</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.4</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -82,7 +82,8 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Applying Different Thinning Functions</h1>
-                        <h4 data-toc-skip class="author">David Gerard</h4>
+                        <h4 data-toc-skip class="author">David
+Gerard</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/dcgerard/seqgendiff/blob/HEAD/vignettes/different_thinners.Rmd" class="external-link"><code>vignettes/different_thinners.Rmd</code></a></small>
@@ -93,225 +94,273 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/seqgendiff" class="external-link">seqgendiff</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioinf.wehi.edu.au/limma" class="external-link">limma</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span> <span class="co">## for reproducibility</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcgerard/seqgendiff" class="external-link">seqgendiff</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioinf.wehi.edu.au/limma/" class="external-link">limma</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">31</span><span class="op">)</span> <span class="co">## for reproducibility</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="abstract">Abstract<a class="anchor" aria-label="anchor" href="#abstract"></a>
 </h2>
-<p>We demonstrate how to apply the different thinning functions available in seqgendiff. The following contains guidelines for the workflow of a single repetition in a simulation study.</p>
+<p>We demonstrate how to apply the different thinning functions
+available in seqgendiff. The following contains guidelines for the
+workflow of a single repetition in a simulation study.</p>
 <p>The methods used here are described in Gerard (2020).</p>
 </div>
 <div class="section level2">
 <h2 id="generate-data">Generate Data<a class="anchor" aria-label="anchor" href="#generate-data"></a>
 </h2>
-<p>We will use simulated data for this vignette. Though in practice you would obtain the RNA-seq counts from a real dataset.</p>
+<p>We will use simulated data for this vignette. Though in practice you
+would obtain the RNA-seq counts from a real dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nsamp</span> <span class="op">&lt;-</span> <span class="fl">100</span>
-<span class="va">ngene</span> <span class="op">&lt;-</span> <span class="fl">10000</span>
-<span class="va">mat</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">nsamp</span> <span class="op">*</span> <span class="va">ngene</span>, lambda <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, 
-                nrow <span class="op">=</span> <span class="va">ngene</span>,
-                ncol <span class="op">=</span> <span class="va">nsamp</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nsamp</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">ngene</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
+<span><span class="va">mat</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">nsamp</span> <span class="op">*</span> <span class="va">ngene</span>, lambda <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, </span>
+<span>                nrow <span class="op">=</span> <span class="va">ngene</span>,</span>
+<span>                ncol <span class="op">=</span> <span class="va">nsamp</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="subsetting">Subsetting<a class="anchor" aria-label="anchor" href="#subsetting"></a>
 </h2>
-<p>Each repetition of a simulation study, you should randomly subset your RNA-seq data so that your results are not dependent on the quirks of a few individuals/genes. The function to do this is <code><a href="../reference/select_counts.html">select_counts()</a></code>.</p>
+<p>Each repetition of a simulation study, you should randomly subset
+your RNA-seq data so that your results are not dependent on the quirks
+of a few individuals/genes. The function to do this is
+<code><a href="../reference/select_counts.html">select_counts()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">submat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_counts.html">select_counts</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">mat</span>, nsamp <span class="op">=</span> <span class="fl">6</span>, ngene <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></code></pre></div>
-<p>The default is to randomly select the samples and genes. Though there are many options available on how to select the genes using the <code>gselect</code> argument.</p>
-<p>If the row and column names of the original matrix are <code>NULL</code>, then the row and column names of the returned submatrix contain the indices of the selected rows and columns of the original matrix.</p>
+<code class="sourceCode R"><span><span class="va">submat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_counts.html">select_counts</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">mat</span>, nsamp <span class="op">=</span> <span class="fl">6</span>, ngene <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<p>The default is to randomly select the samples and genes. Though there
+are many options available on how to select the genes using the
+<code>gselect</code> argument.</p>
+<p>If the row and column names of the original matrix are
+<code>NULL</code>, then the row and column names of the returned
+submatrix contain the indices of the selected rows and columns of the
+original matrix.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] "23"  "25"  "38"  "39"  "68"  "107"</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] "18" "44" "62" "69" "92" "99"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "23"  "25"  "38"  "39"  "68"  "107"</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "18" "44" "62" "69" "92" "99"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="thinning-library-size">Thinning Library Size<a class="anchor" aria-label="anchor" href="#thinning-library-size"></a>
 </h2>
-<p>If you are exploring the effects of heterogeneous library sizes, use <code><a href="../reference/thin_lib.html">thin_lib()</a></code>. You specify the thinning factor on the log-2 scale, so a value of 0 means no thinning, a value of 1 means thin by half, a value of 2 means thin by 1/4, etc. You need to specify this scaling factor for all samples.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">scaling_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span>
-<span class="va">scaling_factor</span>
-<span class="co">#&gt; [1] 1 2 3 4 5 6</span>
-<span class="va">thout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_lib.html">thin_lib</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">submat</span>, thinlog2 <span class="op">=</span> <span class="va">scaling_factor</span><span class="op">)</span></code></pre></div>
-<p>We can verify that thinning was performed correctly by looking at the empirical thinning amount.</p>
+<p>If you are exploring the effects of heterogeneous library sizes, use
+<code><a href="../reference/thin_lib.html">thin_lib()</a></code>. You specify the thinning factor on the log-2
+scale, so a value of 0 means no thinning, a value of 1 means thin by
+half, a value of 2 means thin by 1/4, etc. You need to specify this
+scaling factor for all samples.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Empirical thinning</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">thout</span><span class="op">$</span><span class="va">mat</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span>
-<span class="co">#&gt;         18         44         62         69         92         99 </span>
-<span class="co">#&gt; 0.49887721 0.24906136 0.12624313 0.06288817 0.03108922 0.01598802</span>
-
-<span class="co">## Specified thinning</span>
-<span class="fl">2</span> <span class="op">^</span> <span class="op">-</span><span class="va">scaling_factor</span>
-<span class="co">#&gt; [1] 0.500000 0.250000 0.125000 0.062500 0.031250 0.015625</span></code></pre></div>
-<p>A similar function exists to thin gene-wise rather than sample-wise: <code><a href="../reference/thin_gene.html">thin_gene()</a></code>.</p>
+<code class="sourceCode R"><span><span class="va">scaling_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">scaling_factor</span></span>
+<span><span class="co">#&gt; [1] 1 2 3 4 5 6</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">thout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_lib.html">thin_lib</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">submat</span>, thinlog2 <span class="op">=</span> <span class="va">scaling_factor</span><span class="op">)</span></span></code></pre></div>
+<p>We can verify that thinning was performed correctly by looking at the
+empirical thinning amount.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Empirical thinning</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">thout</span><span class="op">$</span><span class="va">mat</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         18         44         62         69         92         99 </span></span>
+<span><span class="co">#&gt; 0.49887721 0.24906136 0.12624313 0.06288817 0.03108922 0.01598802</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">## Specified thinning</span></span>
+<span><span class="fl">2</span> <span class="op">^</span> <span class="op">-</span><span class="va">scaling_factor</span></span>
+<span><span class="co">#&gt; [1] 0.500000 0.250000 0.125000 0.062500 0.031250 0.015625</span></span></code></pre></div>
+<p>A similar function exists to thin gene-wise rather than sample-wise:
+<code><a href="../reference/thin_gene.html">thin_gene()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="total-thinning">Total Thinning<a class="anchor" aria-label="anchor" href="#total-thinning"></a>
 </h2>
-<p>To uniformly thin all counts, use <code><a href="../reference/thin_all.html">thin_all()</a></code>. This might be useful for determining read-depth suggestions. It takes as input a single universal scaling factor on the log-2 scale.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">thout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_all.html">thin_all</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">submat</span>, thinlog2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p>To uniformly thin all counts, use <code><a href="../reference/thin_all.html">thin_all()</a></code>. This might
+be useful for determining read-depth suggestions. It takes as input a
+single universal scaling factor on the log-2 scale.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">thout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_all.html">thin_all</a></span><span class="op">(</span>mat <span class="op">=</span> <span class="va">submat</span>, thinlog2 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>We can verify that we approximately halved all counts:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">thout</span><span class="op">$</span><span class="va">mat</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.4998192</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">thout</span><span class="op">$</span><span class="va">mat</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.4998192</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="general-thinning">General Thinning<a class="anchor" aria-label="anchor" href="#general-thinning"></a>
 </h2>
-<p>Use <code><a href="../reference/thin_diff.html">thin_diff()</a></code> for general thinning. For this function, you need to specify both the coefficient matrix and the design matrix.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">designmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>, 
-                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">designmat</span>
-<span class="co">#&gt;      [,1] [,2]</span>
-<span class="co">#&gt; [1,]    0    0</span>
-<span class="co">#&gt; [2,]    0    1</span>
-<span class="co">#&gt; [3,]    0    0</span>
-<span class="co">#&gt; [4,]    1    1</span>
-<span class="co">#&gt; [5,]    1    0</span>
-<span class="co">#&gt; [6,]    1    1</span>
-
-<span class="va">coefmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">designmat</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span>,
-                  ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">designmat</span><span class="op">)</span>,
-                  nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">coefmat</span><span class="op">)</span>
-<span class="co">#&gt;            [,1]       [,2]</span>
-<span class="co">#&gt; [1,]  0.2554242 -1.3119342</span>
-<span class="co">#&gt; [2,]  0.6377614  0.5336341</span>
-<span class="co">#&gt; [3,]  1.3052848  0.6763963</span>
-<span class="co">#&gt; [4,]  0.1383671 -0.9041101</span>
-<span class="co">#&gt; [5,] -0.1251100  1.3601036</span>
-<span class="co">#&gt; [6,] -0.8867430 -0.5249070</span></code></pre></div>
-<p>Once we have the coefficient and design matrices, we can thin.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">thout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_diff.html">thin_diff</a></span><span class="op">(</span>mat          <span class="op">=</span> <span class="va">submat</span>, 
-                   design_fixed <span class="op">=</span> <span class="va">designmat</span>, 
-                   coef_fixed   <span class="op">=</span> <span class="va">coefmat</span><span class="op">)</span></code></pre></div>
-<p>We can verify that we thinned correctly using the voom-limma pipeline.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">new_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">thout</span><span class="op">$</span><span class="va">design_obs</span>, <span class="va">thout</span><span class="op">$</span><span class="va">designmat</span><span class="op">)</span>
-<span class="va">vout</span> <span class="op">&lt;-</span> <span class="fu">limma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">voom</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">thout</span><span class="op">$</span><span class="va">mat</span>, design <span class="op">=</span> <span class="va">new_design</span><span class="op">)</span>
-<span class="va">lout</span> <span class="op">&lt;-</span> <span class="fu">limma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">lmFit</a></span><span class="op">(</span><span class="va">vout</span><span class="op">)</span>
-<span class="va">coefhat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">lout</span><span class="op">)</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></code></pre></div>
-<p>We’ll plot the true coefficients against their estimates.</p>
+<p>Use <code><a href="../reference/thin_diff.html">thin_diff()</a></code> for general thinning. For this function,
+you need to specify both the coefficient matrix and the design
+matrix.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">oldpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>,
-              mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x    <span class="op">=</span> <span class="va">coefmat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, 
-     y    <span class="op">=</span> <span class="va">coefhat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, 
-     xlab <span class="op">=</span> <span class="st">"True Coefficient"</span>, 
-     ylab <span class="op">=</span> <span class="st">"Estimated Coefficient"</span>,
-     main <span class="op">=</span> <span class="st">"First Variable"</span>,
-     pch  <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a   <span class="op">=</span> <span class="fl">0</span>,
-       b   <span class="op">=</span> <span class="fl">1</span>,
-       lty <span class="op">=</span> <span class="fl">2</span>, 
-       col <span class="op">=</span> <span class="fl">2</span>,
-       lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<p><img src="different_thinners_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="va">designmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, each <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>, </span>
+<span>                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">designmat</span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    0    0</span></span>
+<span><span class="co">#&gt; [2,]    0    1</span></span>
+<span><span class="co">#&gt; [3,]    0    0</span></span>
+<span><span class="co">#&gt; [4,]    1    1</span></span>
+<span><span class="co">#&gt; [5,]    1    0</span></span>
+<span><span class="co">#&gt; [6,]    1    1</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x    <span class="op">=</span> <span class="va">coefmat</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, 
-     y    <span class="op">=</span> <span class="va">coefhat</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, 
-     xlab <span class="op">=</span> <span class="st">"True Coefficient"</span>, 
-     ylab <span class="op">=</span> <span class="st">"Estimated Coefficient"</span>,
-     main <span class="op">=</span> <span class="st">"Second Variable"</span>,
-     pch  <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a   <span class="op">=</span> <span class="fl">0</span>,
-       b   <span class="op">=</span> <span class="fl">1</span>,
-       lty <span class="op">=</span> <span class="fl">2</span>, 
-       col <span class="op">=</span> <span class="fl">2</span>,
-       lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<p><img src="different_thinners_files/figure-html/unnamed-chunk-12-2.png" width="700"></p>
+<code class="sourceCode R"><span></span>
+<span><span class="va">coefmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">designmat</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                  ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">designmat</span><span class="op">)</span>,</span>
+<span>                  nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">submat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">coefmat</span><span class="op">)</span></span>
+<span><span class="co">#&gt;            [,1]       [,2]</span></span>
+<span><span class="co">#&gt; [1,]  0.2554242 -1.3119342</span></span>
+<span><span class="co">#&gt; [2,]  0.6377614  0.5336341</span></span>
+<span><span class="co">#&gt; [3,]  1.3052848  0.6763963</span></span>
+<span><span class="co">#&gt; [4,]  0.1383671 -0.9041101</span></span>
+<span><span class="co">#&gt; [5,] -0.1251100  1.3601036</span></span>
+<span><span class="co">#&gt; [6,] -0.8867430 -0.5249070</span></span></code></pre></div>
+<p>Once we have the coefficient and design matrices, we can thin.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">oldpar</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">thout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_diff.html">thin_diff</a></span><span class="op">(</span>mat          <span class="op">=</span> <span class="va">submat</span>, </span>
+<span>                   design_fixed <span class="op">=</span> <span class="va">designmat</span>, </span>
+<span>                   coef_fixed   <span class="op">=</span> <span class="va">coefmat</span><span class="op">)</span></span></code></pre></div>
+<p>We can verify that we thinned correctly using the voom-limma
+pipeline.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">new_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">thout</span><span class="op">$</span><span class="va">design_obs</span>, <span class="va">thout</span><span class="op">$</span><span class="va">designmat</span><span class="op">)</span></span>
+<span><span class="va">vout</span> <span class="op">&lt;-</span> <span class="fu">limma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">voom</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">thout</span><span class="op">$</span><span class="va">mat</span>, design <span class="op">=</span> <span class="va">new_design</span><span class="op">)</span></span>
+<span><span class="va">lout</span> <span class="op">&lt;-</span> <span class="fu">limma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">lmFit</a></span><span class="op">(</span><span class="va">vout</span><span class="op">)</span></span>
+<span><span class="va">coefhat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">lout</span><span class="op">)</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></code></pre></div>
+<p>We’ll plot the true coefficients against their estimates.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">oldpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>,</span>
+<span>              mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x    <span class="op">=</span> <span class="va">coefmat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, </span>
+<span>     y    <span class="op">=</span> <span class="va">coefhat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"True Coefficient"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"Estimated Coefficient"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"First Variable"</span>,</span>
+<span>     pch  <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a   <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>       b   <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>       lty <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>       col <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>       lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="different_thinners_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x    <span class="op">=</span> <span class="va">coefmat</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, </span>
+<span>     y    <span class="op">=</span> <span class="va">coefhat</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"True Coefficient"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"Estimated Coefficient"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Second Variable"</span>,</span>
+<span>     pch  <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a   <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>       b   <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>       lty <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>       col <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>       lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="different_thinners_files/figure-html/unnamed-chunk-12-2.png" width="700"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">oldpar</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="correlation-with-surrogate-variables">Correlation with Surrogate Variables<a class="anchor" aria-label="anchor" href="#correlation-with-surrogate-variables"></a>
 </h2>
-<p>The difference between the <code>design_fixed</code> and <code>design_perm</code> arguments is that the rows in <code>design_perm</code> are permuted before applying thinning. Without any other arguments, this makes the design variables independent of any surrogate variables. With the additional specification of the <code>target_cor</code> argument, we try to control the amount of correlation between the design variables in <code>design_perm</code> and any surrogate variables.</p>
-<p>Let’s target for a correlation of 0.9 between the first surrogate variable and the first design variable, and a correlation of 0 between the first surrogate variable and the second design variable.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">target_cor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="va">target_cor</span>
-<span class="co">#&gt;      [,1]</span>
-<span class="co">#&gt; [1,]  0.9</span>
-<span class="co">#&gt; [2,]  0.0</span>
-<span class="va">thout_cor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_diff.html">thin_diff</a></span><span class="op">(</span>mat         <span class="op">=</span> <span class="va">submat</span>,
-                       design_perm <span class="op">=</span> <span class="va">designmat</span>, 
-                       coef_perm   <span class="op">=</span> <span class="va">coefmat</span>, 
-                       target_cor  <span class="op">=</span> <span class="va">target_cor</span><span class="op">)</span></code></pre></div>
-<p>The first variable is indeed more strongly correlated with the estimated surrogate variable:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">thout_cor</span><span class="op">$</span><span class="va">designmat</span>, <span class="va">thout_cor</span><span class="op">$</span><span class="va">sv</span><span class="op">)</span>
-<span class="co">#&gt;         [,1]</span>
-<span class="co">#&gt; P1 0.7473094</span>
-<span class="co">#&gt; P2 0.2976213</span></code></pre></div>
+<p>The difference between the <code>design_fixed</code> and
+<code>design_perm</code> arguments is that the rows in
+<code>design_perm</code> are permuted before applying thinning. Without
+any other arguments, this makes the design variables independent of any
+surrogate variables. With the additional specification of the
+<code>target_cor</code> argument, we try to control the amount of
+correlation between the design variables in <code>design_perm</code> and
+any surrogate variables.</p>
+<p>Let’s target for a correlation of 0.9 between the first surrogate
+variable and the first design variable, and a correlation of 0 between
+the first surrogate variable and the second design variable.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">target_cor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">target_cor</span></span>
+<span><span class="co">#&gt;      [,1]</span></span>
+<span><span class="co">#&gt; [1,]  0.9</span></span>
+<span><span class="co">#&gt; [2,]  0.0</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">thout_cor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_diff.html">thin_diff</a></span><span class="op">(</span>mat         <span class="op">=</span> <span class="va">submat</span>,</span>
+<span>                       design_perm <span class="op">=</span> <span class="va">designmat</span>, </span>
+<span>                       coef_perm   <span class="op">=</span> <span class="va">coefmat</span>, </span>
+<span>                       target_cor  <span class="op">=</span> <span class="va">target_cor</span><span class="op">)</span></span></code></pre></div>
+<p>The first variable is indeed more strongly correlated with the
+estimated surrogate variable:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">thout_cor</span><span class="op">$</span><span class="va">designmat</span>, <span class="va">thout_cor</span><span class="op">$</span><span class="va">sv</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         [,1]</span></span>
+<span><span class="co">#&gt; P1 0.7473094</span></span>
+<span><span class="co">#&gt; P2 0.2976213</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="estimate-actual-correlation">Estimate Actual Correlation<a class="anchor" aria-label="anchor" href="#estimate-actual-correlation"></a>
 </h2>
-<p>The actual correlation between the permuted design matrix and the surrogate variables will not be the target correlation. But we can estimate what the actual correlation is using the function <code><a href="../reference/effective_cor.html">effective_cor()</a></code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">eout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/effective_cor.html">effective_cor</a></span><span class="op">(</span>design_perm <span class="op">=</span> <span class="va">designmat</span>, 
-                      sv          <span class="op">=</span> <span class="va">thout_cor</span><span class="op">$</span><span class="va">sv</span>, 
-                      target_cor  <span class="op">=</span> <span class="va">target_cor</span>, 
-                      iternum     <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-<span class="va">eout</span>
-<span class="co">#&gt;           [,1]</span>
-<span class="co">#&gt; [1,] 0.7113003</span>
-<span class="co">#&gt; [2,] 0.1399246</span></code></pre></div>
-<p>I am only using 50 iterations here for speed reasons, but you should stick to the defaults for <code>iternum</code>.</p>
+<p>The actual correlation between the permuted design matrix and the
+surrogate variables will not be the target correlation. But we can
+estimate what the actual correlation is using the function
+<code><a href="../reference/effective_cor.html">effective_cor()</a></code>.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/effective_cor.html">effective_cor</a></span><span class="op">(</span>design_perm <span class="op">=</span> <span class="va">designmat</span>, </span>
+<span>                      sv          <span class="op">=</span> <span class="va">thout_cor</span><span class="op">$</span><span class="va">sv</span>, </span>
+<span>                      target_cor  <span class="op">=</span> <span class="va">target_cor</span>, </span>
+<span>                      iternum     <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+<span><span class="va">eout</span></span>
+<span><span class="co">#&gt;           [,1]</span></span>
+<span><span class="co">#&gt; [1,] 0.7113003</span></span>
+<span><span class="co">#&gt; [2,] 0.1399246</span></span></code></pre></div>
+<p>I am only using 50 iterations here for speed reasons, but you should
+stick to the defaults for <code>iternum</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="special-case-of-two-group-model">Special Case of Two-group Model<a class="anchor" aria-label="anchor" href="#special-case-of-two-group-model"></a>
 </h2>
-<p>For the special case when your design matrix is just a group indicator (that is, you have two groups of individuals), you can use the function <code><a href="../reference/thin_2group.html">thin_2group()</a></code>. Let’s generate data from the two-group model where 90% of genes are null and the non-null effects are gamma-distributed.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">thout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_2group.html">thin_2group</a></span><span class="op">(</span>mat           <span class="op">=</span> <span class="va">submat</span>, 
-                     prop_null     <span class="op">=</span> <span class="fl">0.9</span>, 
-                     signal_fun    <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span>,
-                     signal_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">1</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>We can again verify that we thinned appropriately using the voom-limma pipeline:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">new_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">thout</span><span class="op">$</span><span class="va">design_obs</span>, <span class="va">thout</span><span class="op">$</span><span class="va">designmat</span><span class="op">)</span>
-<span class="va">new_design</span>
-<span class="co">#&gt;      (Intercept) P1</span>
-<span class="co">#&gt; [1,]           1  0</span>
-<span class="co">#&gt; [2,]           1  0</span>
-<span class="co">#&gt; [3,]           1  0</span>
-<span class="co">#&gt; [4,]           1  1</span>
-<span class="co">#&gt; [5,]           1  1</span>
-<span class="co">#&gt; [6,]           1  1</span>
-<span class="va">vout</span> <span class="op">&lt;-</span> <span class="fu">limma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">voom</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">thout</span><span class="op">$</span><span class="va">mat</span>, design <span class="op">=</span> <span class="va">new_design</span><span class="op">)</span>
-<span class="va">lout</span> <span class="op">&lt;-</span> <span class="fu">limma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">lmFit</a></span><span class="op">(</span><span class="va">vout</span><span class="op">)</span>
-<span class="va">coefhat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">lout</span><span class="op">)</span><span class="op">[</span>, <span class="fl">2</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></code></pre></div>
+<p>For the special case when your design matrix is just a group
+indicator (that is, you have two groups of individuals), you can use the
+function <code><a href="../reference/thin_2group.html">thin_2group()</a></code>. Let’s generate data from the
+two-group model where 90% of genes are null and the non-null effects are
+gamma-distributed.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">thout</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_2group.html">thin_2group</a></span><span class="op">(</span>mat           <span class="op">=</span> <span class="va">submat</span>, </span>
+<span>                     prop_null     <span class="op">=</span> <span class="fl">0.9</span>, </span>
+<span>                     signal_fun    <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/GammaDist.html" class="external-link">rgamma</a></span>,</span>
+<span>                     signal_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">1</span>, rate <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>We can again verify that we thinned appropriately using the
+voom-limma pipeline:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">new_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">thout</span><span class="op">$</span><span class="va">design_obs</span>, <span class="va">thout</span><span class="op">$</span><span class="va">designmat</span><span class="op">)</span></span>
+<span><span class="va">new_design</span></span>
+<span><span class="co">#&gt;      (Intercept) P1</span></span>
+<span><span class="co">#&gt; [1,]           1  0</span></span>
+<span><span class="co">#&gt; [2,]           1  0</span></span>
+<span><span class="co">#&gt; [3,]           1  0</span></span>
+<span><span class="co">#&gt; [4,]           1  1</span></span>
+<span><span class="co">#&gt; [5,]           1  1</span></span>
+<span><span class="co">#&gt; [6,]           1  1</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vout</span> <span class="op">&lt;-</span> <span class="fu">limma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/voom.html" class="external-link">voom</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="va">thout</span><span class="op">$</span><span class="va">mat</span>, design <span class="op">=</span> <span class="va">new_design</span><span class="op">)</span></span>
+<span><span class="va">lout</span> <span class="op">&lt;-</span> <span class="fu">limma</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/limma/man/lmFit.html" class="external-link">lmFit</a></span><span class="op">(</span><span class="va">vout</span><span class="op">)</span></span>
+<span><span class="va">coefhat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">lout</span><span class="op">)</span><span class="op">[</span>, <span class="fl">2</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></code></pre></div>
 <p>And we can plot the results</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">oldpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>,
-              mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x    <span class="op">=</span> <span class="va">thout</span><span class="op">$</span><span class="va">coefmat</span>, 
-     y    <span class="op">=</span> <span class="va">coefhat</span>, 
-     xlab <span class="op">=</span> <span class="st">"True Coefficient"</span>, 
-     ylab <span class="op">=</span> <span class="st">"Estimated Coefficient"</span>,
-     main <span class="op">=</span> <span class="st">"First Variable"</span>,
-     pch  <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a   <span class="op">=</span> <span class="fl">0</span>,
-       b   <span class="op">=</span> <span class="fl">1</span>,
-       lty <span class="op">=</span> <span class="fl">2</span>, 
-       col <span class="op">=</span> <span class="fl">2</span>,
-       lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">oldpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span>,</span>
+<span>              mgp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x    <span class="op">=</span> <span class="va">thout</span><span class="op">$</span><span class="va">coefmat</span>, </span>
+<span>     y    <span class="op">=</span> <span class="va">coefhat</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"True Coefficient"</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"Estimated Coefficient"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"First Variable"</span>,</span>
+<span>     pch  <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a   <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>       b   <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>       lty <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>       col <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>       lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="different_thinners_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>
-<li>Gerard, D (2020). “Data-based RNA-seq simulations by binomial thinning.” <em>BMC Bioinformatics</em>. 21(1), 206. doi: <a href="https://doi.org/10.1186/s12859-020-3450-9" class="external-link">10.1186/s12859-020-3450-9</a>.</li>
+<li>Gerard, D (2020). “Data-based RNA-seq simulations by binomial
+thinning.” <em>BMC Bioinformatics</em>. 21(1), 206. doi: <a href="https://doi.org/10.1186/s12859-020-3450-9" class="external-link">10.1186/s12859-020-3450-9</a>.</li>
 </ul>
 </div>
   </div>
@@ -333,7 +382,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>
